@@ -1,0 +1,61 @@
+<!--
+  INJECTABLE FRAGMENT — paste into a rendered slide; do not use as a full page.
+
+  A GIF levity beat. Pin the direct media URL (not a page URL — see
+  references/levity.md). Swap the example content below for the real GIF, alt
+  text, and caption before shipping. Do not ship the example verbatim.
+-->
+<figure class="dv-levity" role="group" aria-label="Levity beat">
+  <picture>
+    <!-- prefers-reduced-motion: swap the animated GIF for a static poster frame -->
+    <source srcset="REPLACE_WITH_STILL_POSTER_URL.jpg" media="(prefers-reduced-motion: reduce)">
+    <img
+      class="dv-levity__media"
+      src="https://media.giphy.com/media/REPLACE_WITH_DIRECT_MEDIA_ID/giphy.gif"
+      alt="REPLACE: describe what the GIF shows and why it's here in one sentence."
+      loading="lazy"
+    >
+  </picture>
+  <figcaption class="dv-levity__caption">REPLACE: one short caption line naming the joke.</figcaption>
+</figure>
+
+<style>
+  .dv-levity {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .dv-levity__media {
+    max-width: 480px;
+    width: 100%;
+    /* Reserve space so a slow, blocked, or link-rotted GIF holds the layout
+       instead of collapsing to zero height. aspect-ratio keeps the box even
+       when the image has no intrinsic dimensions; the background shows through
+       until (or if) the GIF loads. */
+    aspect-ratio: 16 / 10;
+    min-height: 180px;
+    object-fit: contain;
+    background: #101d38;
+    border-radius: 12px;
+    display: block;
+  }
+  .dv-levity__caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #93a8c9;
+    text-align: center;
+    max-width: 480px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Belt-and-suspenders: even without a poster-frame <source>, stop CSS-driven
+       motion around the media (e.g. a hover zoom or entrance animation the host
+       page might apply via a shared class). This fragment adds none of its own. */
+    .dv-levity__media {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
