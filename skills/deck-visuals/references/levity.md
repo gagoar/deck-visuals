@@ -2,20 +2,53 @@
 
 A GIF slide is a tension release, not decoration. Use it sparingly and on purpose.
 
-## Ideation — from beat to reference
+## Ideation — from claim to reference
 
-Do not start from "which GIF." Start from the **beat** — the single feeling the
-audience should have at that moment. Facepalm. Relief. Dread. "Here we go again."
-Triumph / mic-drop. Overwhelm / chaos. Skepticism. Waiting / loading. Small-vs-big.
-Name the beat first, in one word or phrase, before searching for anything.
+The concept map from `references/story-discovery.md` is the input here. Every
+levity slot starts from that map's `claim` for the slide, not from a blank search.
 
-Then map the beat to a **reference archetype** — a widely-legible bit that ages
-slowly and travels across audiences. Prefer evergreen references over whatever is
-trending this month: a hyper-current meme dates the deck the moment the trend
-passes, and an external audience often hasn't seen it at all. Evergreen sources
-that hold up: The Office, Parks and Rec, The Simpsons, the "this is fine" dog,
-Drake, distracted boyfriend, Spider-Man pointing at Spider-Man, Picard facepalm,
-Kermit sipping tea.
+### Analogy mode (primary)
+
+Do not start from "which GIF." Start from the slide's **claim** — the concept or
+argument it's making, not the feeling it evokes. Method:
+
+1. **Name the concept's shape.** Strip the claim to the pattern underneath it:
+   excess, momentum-without-control, fragility, over-engineering, recurrence,
+   coordination, slow drift, denial of consequence, cascading failure, and so on.
+2. **Match a specific famous scene that embodies that shape.** Not a genre, not a
+   vague "something funny" — one named scene from one named source.
+3. **Prefer `assets/familiar-sources.md` first.** Read it before reaching anywhere
+   else; it is the user's own curated fluency, and a match from it is more specific
+   and lands harder than a generic reference. Be specific about the scene, not just
+   the franchise — "The Homer," not just "The Simpsons."
+4. **If nothing on that list fits, say so.** Respond "no familiar source fits" and
+   either fall back to reaction mode or skip humor for that slide. Do not reach for
+   an unlisted franchise the user or audience may not actually know — a guessed
+   reference reads worse than none.
+
+Two worked examples, both from claims mapped by `story-discovery.md`:
+
+- Claim: *"too many features isn't always fantastic."* Shape: excess /
+  over-engineering. Match in `familiar-sources.md`: The Simpsons, **"The
+  Homer"** — the car with every conceivable feature bolted on, unsellable as a
+  result. Specific, on-list, lands the point without a word of explanation.
+- Claim: *"moving fast with no brakes."* Shape: momentum without control. Match in
+  `familiar-sources.md`: two candidates on the same list — **Wile E. Coyote**
+  running off the cliff and only falling once he looks down, or a **Formula 1**
+  crash. Either embodies the shape; pick by audience (Coyote travels further
+  externally per the file's flags, F1 crash reads faster to a technical or
+  motorsport-aware room).
+
+The method is not limited to the seed library or to `familiar-sources.md` alone —
+it generates new matches per claim — but it always checks `familiar-sources.md`
+first and prefers what's there.
+
+### Reaction mode (secondary)
+
+Use this when the point of the slide is the **audience's feeling**, not a concept —
+a pure release moment where there's no claim to embody, just a mood to land: relief,
+dread, triumph, overwhelm. Start from the **beat** — the single feeling the audience
+should have — and map it to a widely-legible reference the same way as before.
 
 | Beat | Example archetype | Search term to try |
 |---|---|---|
@@ -28,19 +61,72 @@ Kermit sipping tea.
 | Waiting / loading | The Simpsons "waiting" bench scene | `simpsons waiting bench giphy` |
 | Small-vs-big / mismatch | Distracted boyfriend | `distracted boyfriend giphy` |
 
+Prefer evergreen references over whatever is trending this month: a hyper-current
+meme dates the deck the moment the trend passes, and an external audience often
+hasn't seen it at all.
+
+### Shared rules for both modes
+
 **Audience fit gates the pool.** For an internal team deck, niche and edgy team
 jokes are fair game. For anything external — a client, an exec outside the team —
-cut anything niche or edgy and stay with the most legible archetypes on the list
-above (Picard, Kermit, The Office). When in doubt about whether a reference
-travels, treat the deck as external.
+cut anything niche or edgy, drop any `familiar-sources.md` entry flagged
+`travels-externally: limited` or `no`, and stay with the most legible archetypes.
+When in doubt about whether a reference travels, treat the deck as external.
 
 **Offer options, not a verdict.** For each levity slot, propose 2-3 candidate
-references with the beat and search term for each. The human picks the one with
-the right taste and timing — Claude proposes, the human approves. Never lock in a
-single GIF choice unasked.
+references with the shape/beat and search term for each. The human picks the one
+with the right taste and timing — Claude proposes, the human approves. Never lock
+in a single GIF choice unasked.
+
+**Humor lives in the imagery, not the prose.** The caption names the joke in one
+short line; the slide's own copy stays serious and still routes through `iceberg`
+unchanged. Never rewrite slide text to be jokey so it can carry a reference — the
+image carries the joke, the words carry the argument.
 
 Once a reference is chosen, source and verify the actual URL below before it goes
 anywhere near a fragment.
+
+## Seed library — evergreen concept → scene analogies
+
+A starter set for analogy mode, and a worked example of the method above. Entries
+marked **familiar-sources** are on the user's checked-in list and should be reached
+for first; entries marked **generic evergreen** are broadly legible references
+outside that list, useful when nothing on the user's list fits but a very
+widely-known scene still does. The method is not limited to this table — it
+generates new matches per claim the same way these were built.
+
+| Concept shape | Example claim | Scene analogy | Source |
+|---|---|---|---|
+| Excess / feature bloat | "Too many features isn't always fantastic." | The Simpsons — "The Homer" car | familiar-sources |
+| Momentum without control | "Moving fast with no brakes." | Wile E. Coyote running off the cliff | familiar-sources |
+| Momentum without control (alt) | "We shipped too fast and it broke in prod." | Formula 1 crash | familiar-sources |
+| Denial of consequence | "We knew and shipped anyway." | Coyote looking down after he's already past the edge | familiar-sources |
+| Coordination breakdown under pressure | "The release process fell apart live." | Formula 1 pit-stop chaos | familiar-sources |
+| Avoidance / retreat | "We backed away instead of fixing it." | Homer reversing into the hedge | familiar-sources |
+| Small mistake, big visible mess | "One skipped step and the whole room noticed." | The Office — Kevin's chili on the floor | familiar-sources |
+| Declaring a fix that isn't one | "We said it was handled and it wasn't." | The Office — Michael Scott "I declare bankruptcy" | familiar-sources |
+| Over-engineering | "We built ten times what was needed." | Rube Goldberg machine | generic evergreen |
+| Fragility | "One dependency down and it all falls." | House of cards | generic evergreen |
+| Recurring bugs | "We fix it and it comes back." | Whack-a-mole | generic evergreen |
+| Coordination difficulty | "Getting five teams to agree." | Herding cats | generic evergreen |
+| Slow drift | "Nobody noticed until it was too late." | Boiling frog | generic evergreen |
+| Precarious balance | "One more addition and it tips over." | A Jenga tower mid-collapse | generic evergreen |
+| Diminishing returns / breaking point | "One more ask and it's too much." | The straw that broke the camel's back | generic evergreen |
+| Reinventing effort | "We built this again from scratch." | Reinventing the wheel | generic evergreen |
+| Unseen scale | "The real problem is under the surface." | Tip of the iceberg | generic evergreen |
+| Early warning ignored | "We had the signal and ignored it." | Canary in the coal mine | generic evergreen |
+| Cascading failure | "One part fails and the rest follows." | Toppling dominoes | generic evergreen |
+| Chaotic parallel effort | "Everyone trying everything at once." | Throwing spaghetti at the wall | generic evergreen |
+| Accidental complexity | "The diagram looks like a plate of noodles." | A spaghetti diagram | generic evergreen |
+| Fragmented understanding | "Everyone describes a different system." | The blind men and the elephant | generic evergreen |
+| Shifting requirements | "The target keeps moving." | Moving the goalposts | generic evergreen |
+| Obvious problem nobody names | "Nobody wants to say it out loud." | The elephant in the room | generic evergreen |
+| Persistent thankless effort | "We push the same rock uphill every quarter." | Sisyphus and the boulder | generic evergreen |
+
+If a claim's concept doesn't map cleanly to anything above, run the method fresh —
+name the shape, then search for a scene that fits it — but check
+`familiar-sources.md` first, and say "no familiar source fits" rather than guessing
+at a franchise outside it.
 
 ## Real GIFs, by external URL
 

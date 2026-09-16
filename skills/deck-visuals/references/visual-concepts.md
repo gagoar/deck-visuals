@@ -2,6 +2,12 @@
 
 Every concept slide gets one visual. Pick the flavor with this rule, in order.
 
+The concept map from `references/story-discovery.md` feeds this rule directly: its
+`claim` field is what you're evaluating in the decision rule below, and its
+`visual-intent` field is a first pass at the answer (chart / diagram / icon /
+humor / none) — this file's rule is what confirms or overrides that first pass, not
+humor imagery alone.
+
 ## The decision rule
 
 1. **Does the slide show a relationship, a flow, or an architecture?**

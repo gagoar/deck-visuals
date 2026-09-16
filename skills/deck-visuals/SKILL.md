@@ -29,6 +29,11 @@ shell, the stage, and the animations — never edit that layer from here.
 
 ## The pipeline
 
+0. **Discovery.** Before placing any visual, run `references/story-discovery.md` —
+   interview if the user has no material yet, extract if he brings an outline or
+   draft. Output is a concept map (`claim` / `beat` / `audience` / `visual-intent`
+   per slide). Every step below reads this map; it is what positions charts,
+   diagrams, icons, and humor, not just humor.
 1. **Copy.** Draft slide text. Run `iceberg` on the prose only, never on the
    finished `.html` file — `iceberg` reads markup as prose and will corrupt SVG or
    `<img>` tags.
@@ -45,12 +50,14 @@ shell, the stage, and the animations — never edit that layer from here.
    - single idea needing an anchor → **icon** from `assets/icons/`
    - emotional / hero moment → **deferred**. Drop a placeholder and an image-prompt
      spec; do not fabricate a raster. See `references/visual-concepts.md`.
-5. **Levity injection.** Read `references/levity.md`. Start from the slide's beat,
-   propose 2-3 reference options, and source a verified direct media URL with
-   `WebSearch`/`WebFetch` plus `assets/scripts/check_media_url.py` — never a
-   guessed URL. Insert GIF fragments at a tasteful cadence — openers, section
-   breaks, the payoff. Never every slide. Pin the direct media URL, add alt text,
-   respect `prefers-reduced-motion`. Inject `assets/fragments/levity-slide.html`.
+5. **Levity injection.** Read `references/levity.md`. Match the mapped `claim` to a
+   scene (analogy-first), preferring `assets/familiar-sources.md`; fall back to
+   reaction mode only for slides where the point is the audience's feeling, not a
+   concept. Source a verified direct media URL with `WebSearch`/`WebFetch` plus
+   `assets/scripts/check_media_url.py` — never a guessed URL. Insert GIF fragments
+   at a tasteful cadence — openers, section breaks, the payoff. Never every slide.
+   Pin the direct media URL, add alt text, respect `prefers-reduced-motion`. Inject
+   `assets/fragments/levity-slide.html`.
 6. **Deliver (existing).** Ship through the user's `deliver-doc` flow. This skill
    does not deliver.
 
@@ -70,9 +77,11 @@ shell, the stage, and the animations — never edit that layer from here.
 
 | Need | Read |
 |---|---|
+| Building the concept map (interview vs extract) | `references/story-discovery.md` |
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |
 | Chart rules, `dataviz` handoff | `references/charts.md` |
-| GIF ideation, WebSearch sourcing, cadence, accessibility, taste | `references/levity.md` |
+| Analogy-first levity, reaction mode, WebSearch sourcing, cadence, accessibility, taste | `references/levity.md` |
+| The user's curated analogy source list | `assets/familiar-sources.md` |
 | Deck theme tokens, layer boundaries | `references/brand.md` |
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
 | Icon set | `assets/icons/` |
