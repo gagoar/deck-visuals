@@ -45,10 +45,12 @@ shell, the stage, and the animations — never edit that layer from here.
    - single idea needing an anchor → **icon** from `assets/icons/`
    - emotional / hero moment → **deferred**. Drop a placeholder and an image-prompt
      spec; do not fabricate a raster. See `references/visual-concepts.md`.
-5. **Levity injection.** Read `references/levity.md`. Insert GIF fragments at a
-   tasteful cadence — openers, section breaks, the payoff. Never every slide. Pin
-   the direct media URL, add alt text, respect `prefers-reduced-motion`. Inject
-   `assets/fragments/levity-slide.html`.
+5. **Levity injection.** Read `references/levity.md`. Start from the slide's beat,
+   propose 2-3 reference options, and source a verified direct media URL with
+   `WebSearch`/`WebFetch` plus `assets/scripts/check_media_url.py` — never a
+   guessed URL. Insert GIF fragments at a tasteful cadence — openers, section
+   breaks, the payoff. Never every slide. Pin the direct media URL, add alt text,
+   respect `prefers-reduced-motion`. Inject `assets/fragments/levity-slide.html`.
 6. **Deliver (existing).** Ship through the user's `deliver-doc` flow. This skill
    does not deliver.
 
@@ -59,6 +61,8 @@ shell, the stage, and the animations — never edit that layer from here.
   host page's classes or globals.
 - Every chart ships with a reachable table-view twin.
 - Every GIF has alt text and a `prefers-reduced-motion` fallback.
+- Never embed a GIF/media URL that hasn't passed `check_media_url.py` (or an
+  equivalent manual check) — see `references/levity.md`.
 - Colors come from `assets/brand-palette.md`, not ad hoc hex values.
 - Never run `iceberg:edit` on a rendered `.html` deck.
 
@@ -68,8 +72,9 @@ shell, the stage, and the animations — never edit that layer from here.
 |---|---|
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |
 | Chart rules, `dataviz` handoff | `references/charts.md` |
-| GIF cadence, accessibility, taste | `references/levity.md` |
+| GIF ideation, WebSearch sourcing, cadence, accessibility, taste | `references/levity.md` |
 | Deck theme tokens, layer boundaries | `references/brand.md` |
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
 | Icon set | `assets/icons/` |
 | Injectable fragments | `assets/fragments/` |
+| Verify a GIF/media URL resolves | `assets/scripts/check_media_url.py` |
