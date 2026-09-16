@@ -1,0 +1,118 @@
+<!--
+  INJECTABLE FRAGMENT — paste into a rendered slide; do not use as a full page.
+
+  A chart + its reachable table-view twin, toggled by a visible control. Example
+  data below (quarterly deploy count) shows the shape; replace with the slide's
+  real numbers. Chart form, marks, and interaction follow the built-in `dataviz`
+  skill (see references/charts.md) — colors come from assets/brand-palette.md.
+-->
+<figure class="dv-chart" data-dv-chart>
+  <figcaption class="dv-chart__title">Deploys per quarter, 2025</figcaption>
+
+  <div class="dv-chart__view" data-dv-view="chart">
+    <svg viewBox="0 0 440 220" role="img" aria-label="Bar chart: deploys per quarter, 2025. Q1 41, Q2 58, Q3 67, Q4 89.">
+      <line x1="40" y1="180" x2="420" y2="180" stroke="#93a8c9" stroke-opacity="0.36" stroke-width="1"></line>
+      <!-- bars: brand-palette slot 1 (Signal Blue) for the primary series -->
+      <g fill="#2894eb">
+        <rect x="60"  y="139" width="60" height="41"></rect>
+        <rect x="160" y="106" width="60" height="74"></rect>
+        <rect x="260" y="86"  width="60" height="94"></rect>
+        <rect x="360" y="55"  width="60" height="125"></rect>
+      </g>
+      <g fill="#eef3fb" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">
+        <text x="90"  y="130">41</text>
+        <text x="190" y="97">58</text>
+        <text x="290" y="77">67</text>
+        <text x="390" y="46">89</text>
+      </g>
+      <g fill="#93a8c9" font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
+        <text x="90"  y="198">Q1</text>
+        <text x="190" y="198">Q2</text>
+        <text x="290" y="198">Q3</text>
+        <text x="390" y="198">Q4</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dv-chart__view" data-dv-view="table" hidden>
+    <table>
+      <thead>
+        <tr><th scope="col">Quarter</th><th scope="col">Deploys</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Q1</th><td>41</td></tr>
+        <tr><th scope="row">Q2</th><td>58</td></tr>
+        <tr><th scope="row">Q3</th><td>67</td></tr>
+        <tr><th scope="row">Q4</th><td>89</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button type="button" class="dv-chart__toggle" data-dv-toggle aria-pressed="false">
+    Show as table
+  </button>
+</figure>
+
+<style>
+  .dv-chart {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #eef3fb;
+    max-width: 460px;
+  }
+  .dv-chart__title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .dv-chart__view svg {
+    width: 100%;
+    height: auto;
+  }
+  .dv-chart table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .dv-chart th, .dv-chart td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(147,168,201,0.18);
+  }
+  .dv-chart__toggle {
+    margin-top: 12px;
+    background: #101d38;
+    color: #eef3fb;
+    border: 1px solid rgba(147,168,201,0.36);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .dv-chart__toggle:hover {
+    border-color: #3ea6ff;
+  }
+</style>
+
+<script>
+(function () {
+  // Scoped to this fragment instance only — safe to inject multiple charts per deck.
+  document.querySelectorAll('[data-dv-chart]').forEach(function (fig) {
+    if (fig.dataset.dvBound) return;
+    fig.dataset.dvBound = '1';
+    var toggle = fig.querySelector('[data-dv-toggle]');
+    var chartView = fig.querySelector('[data-dv-view="chart"]');
+    var tableView = fig.querySelector('[data-dv-view="table"]');
+    toggle.addEventListener('click', function () {
+      var showingTable = !tableView.hidden;
+      tableView.hidden = showingTable;
+      chartView.hidden = !showingTable;
+      toggle.setAttribute('aria-pressed', String(!showingTable));
+      toggle.textContent = showingTable ? 'Show as table' : 'Show as chart';
+    });
+  });
+})();
+</script>

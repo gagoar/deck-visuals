@@ -1,0 +1,33 @@
+Icon set — provenance and license
+==================================
+
+These 16 icons are drawn in the Lucide (https://lucide.dev) visual style: 24x24
+viewBox, stroke="currentColor", stroke-width="2", round caps and joins, no fill.
+Lucide ships under the ISC license (a permissive license functionally
+equivalent to MIT):
+
+  ISC License
+
+  Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part
+  of Feather (MIT). All other copyright for Lucide are held by Lucide Contributors
+  2022-present.
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+  FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+
+Provenance note: these particular SVG files were authored for this plugin in the
+Lucide style (same viewBox, stroke conventions, and glyph concepts as Lucide's
+published set) rather than copied byte-for-byte from the Lucide package, because
+this build had no package registry or network access to vendor the originals
+directly. If exact upstream fidelity matters, replace any file here with the
+corresponding icon from `lucide-static` (npm) — same filename, same 24x24 stroke
+convention, drop-in compatible.
