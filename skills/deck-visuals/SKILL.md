@@ -10,6 +10,10 @@ description: >
   gif/levity slide", "inject a diagram", "this slide needs an icon", "visualize this
   data in the deck".
 
+  It also owns onboarding — a one-off, out-of-band flow that rebuilds the presenter's
+  pop-culture profile by swipe. Trigger phrases: "onboard me", "set up / update my
+  familiar sources", "build my pop-culture profile".
+
   Division of labor: `frontend-slides` renders the deck — shell, stage, theme,
   animations. This skill never touches that. It reads the deck content, decides
   where a visual belongs and which kind, builds that one visual as a small
@@ -26,6 +30,15 @@ description: >
 This skill decides **where** a visual belongs on a slide and **which kind**, then
 hands back an injectable fragment. It does not render. `frontend-slides` owns the
 shell, the stage, and the animations — never edit that layer from here.
+
+## Onboarding (out-of-band)
+
+Separate from the pipeline below, this skill maintains the presenter's analogy
+profile (`assets/familiar-sources.md`). A swipe picker collects what he recognizes;
+recognizing a show means he gets the jokes around it, so it earns a place. Run it on
+its own — "onboard me", "update my familiar sources" — not as part of building a
+deck. The pipeline's step 0 (audience familiarity) and step 5 (levity) then *read*
+the refreshed profile. Full flow: `references/onboarding.md`.
 
 ## The pipeline
 
@@ -72,11 +85,21 @@ shell, the stage, and the animations — never edit that layer from here.
   equivalent manual check) — see `references/levity.md`.
 - Colors come from `assets/brand-palette.md`, not ad hoc hex values.
 - Never run `iceberg:edit` on a rendered `.html` deck.
+- The onboarding picker (`assets/onboarding/picker.html`, compiled into the local
+  binary) is the one full HTML page this skill owns — a local tool, never a deck
+  artifact, never injected or delivered. The "fragments only" rule governs deck
+  output, not this tool.
 
 ## Reference map
 
 | Need | Read |
 |---|---|
+| Rebuilding the presenter profile by swipe | `references/onboarding.md` |
+| The swipe catalog (config) | `assets/show-catalog.md` |
+| Meme fallback for when no familiar source fits | `assets/meme-library.md` |
+| The onboarding picker page (local tool) | `assets/onboarding/picker.html` |
+| The runtime-free picker server + prebuilt binaries | `assets/onboarding/server/`, `assets/onboarding/bin/` |
+| Coverage check — 3 options per concept shape | `assets/scripts/coverage_report.py` |
 | Building the concept map (interview vs extract) | `references/story-discovery.md` |
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |
 | Chart rules, `dataviz` handoff | `references/charts.md` |

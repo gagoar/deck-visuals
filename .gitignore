@@ -3,3 +3,7 @@
 .env
 .env.local
 node_modules/
+
+# Build-time copy of the picker for go:embed (canonical lives at
+# assets/onboarding/picker.html); build.sh copies it in, then removes it.
+skills/deck-visuals/assets/onboarding/server/picker.html
