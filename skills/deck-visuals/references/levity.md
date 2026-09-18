@@ -21,9 +21,11 @@ argument it's making, not the feeling it evokes. Method:
    else; it is the user's own curated fluency, and a match from it is more specific
    and lands harder than a generic reference. Be specific about the scene, not just
    the franchise — "The Homer," not just "The Simpsons."
-4. **If nothing on that list fits, say so.** Respond "no familiar source fits" and
-   either fall back to reaction mode or skip humor for that slide. Do not reach for
-   an unlisted franchise the user or audience may not actually know — a guessed
+4. **If nothing on that list fits, walk the fallback chain.** In order:
+   `assets/familiar-sources.md` (above) → the **generic evergreen** rows in the seed
+   library below → `assets/meme-library.md` (see "Meme fallback") → reaction mode →
+   skip. Say "no familiar source fits" before stepping past the profile, and never
+   reach for an unlisted franchise the user or audience may not know — a guessed
    reference reads worse than none.
 
 Two worked examples, both from claims mapped by `story-discovery.md`:
@@ -127,6 +129,18 @@ If a claim's concept doesn't map cleanly to anything above, run the method fresh
 name the shape, then search for a scene that fits it — but check
 `familiar-sources.md` first, and say "no familiar source fits" rather than guessing
 at a franchise outside it.
+
+## Meme fallback
+
+When no familiar source and no generic-evergreen row fits, but the slide still wants
+an image, reach for `assets/meme-library.md` — a small pool of broadly-legible
+internet references (this-is-fine dog, distracted boyfriend, toppling dominoes). It
+is ungated by recognition, unlike `assets/familiar-sources.md`: these land without a
+shared back-catalog. It stores **search terms, not URLs**, so source and verify the
+direct media URL at use exactly as below. Apply the same audience-fit gate — drop any
+entry flagged `travels-externally: limited` or `no` for an external deck. Prefer a
+familiar-source or evergreen match when one exists; the meme library is the step
+before reaction mode, not the first reach.
 
 ## Real GIFs, by external URL
 
