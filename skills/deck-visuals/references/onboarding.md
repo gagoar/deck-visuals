@@ -22,6 +22,9 @@ pop-culture profile" — independent of any deck.
    hand-built URL. Verify in batches with
    `python3 assets/scripts/check_media_url.py <url> …`; only PASS URLs are used. This
    is the same gate levity uses, no new verifier.
+   - **Prefer a small rendition.** Use a lightweight variant (e.g. Giphy's
+     `200w.gif`), not the original `giphy.gif` — originals can be tens of MB and read
+     as an empty card while they load. A swipe deck of ~50 needs fast tiles.
    - **Degrade gracefully.** GIF fails → image-only card. Both fail → `degraded: true`
      title-only card. Never write an unverified URL. Write the verified set to a
      `cards.json` in an OS temp dir — that file is the per-run cache.

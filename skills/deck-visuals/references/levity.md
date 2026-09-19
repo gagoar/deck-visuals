@@ -223,7 +223,8 @@ per slot. Two surfaces, same rule — **Claude proposes, the human approves:**
 ```
 
 Only pin `gif_url`s that passed `check_media_url.py`; a candidate with a null
-`gif_url` still shows (label only). `selections.json` comes back as
+`gif_url` still shows (label only). Prefer a small rendition (e.g. Giphy `200w.gif`)
+over the original so the tiles load fast rather than reading as empty. `selections.json` comes back as
 `{"selections":[{"slot_id","chosen_index","chosen_label","chosen_gif_url","skipped"}]}`
 — inject each chosen GIF into its slide's `assets/fragments/levity-slide.html`.
 

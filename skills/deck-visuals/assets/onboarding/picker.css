@@ -68,9 +68,15 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
 body {
+  min-height: 100vh;
+  /* Layered aurora/mesh: cool blue + violet glows anchored in the corners over the
+     deep navy base — depth without a flat "blue plane". */
   background:
-    radial-gradient(120% 80% at 50% -10%, #0e1c3a 0%, transparent 60%),
+    radial-gradient(900px 520px at 12% -12%, rgba(62, 166, 255, 0.16), transparent 60%),
+    radial-gradient(820px 520px at 112% 6%, rgba(144, 133, 233, 0.14), transparent 55%),
+    radial-gradient(760px 620px at 50% 118%, rgba(40, 148, 235, 0.10), transparent 60%),
     var(--bg-base);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 15px;
@@ -79,11 +85,56 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: var(--sp-7) var(--sp-4);
+  padding: var(--sp-6) var(--sp-4) var(--sp-8);
+}
+/* Fine grid texture, faded out toward the edges so it never reads as a table. */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 20%, #000 40%, transparent 78%);
+  mask-image: radial-gradient(120% 90% at 50% 20%, #000 40%, transparent 78%);
+}
+/* Vignette to seat the content and darken the corners. */
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 0%, transparent 55%, rgba(3, 8, 20, 0.55) 100%);
 }
 
-.dv-app { width: 100%; max-width: 600px; }
+.dv-app { width: 100%; max-width: 600px; position: relative; }
 .dv-app--wide { max-width: 1040px; }
+
+/* Page chrome — top bar + footer, shared by both pickers */
+.dv-topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.dv-wordmark { display: flex; align-items: center; gap: var(--sp-2); font-weight: 700; letter-spacing: -0.01em; font-size: 15px; }
+.dv-wordmark__mark {
+  width: 22px; height: 22px; border-radius: 7px;
+  background: var(--accent-gradient);
+  box-shadow: 0 2px 10px -2px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.dv-wordmark__mark--sparkle { position: relative; }
+.dv-wordmark__mark--sparkle::after {
+  content: ""; position: absolute; inset: 6px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), transparent 60%);
+  border-radius: 2px;
+}
+.dv-topbar__tag { color: var(--text-muted); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
+.dv-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted); font-size: 12px; text-align: center; letter-spacing: 0.01em;
+}
+.dv-footer strong { color: var(--text-secondary); font-weight: 600; }
 
 /* Stage — holds the soft accent glow behind the active content */
 .dv-stage { position: relative; isolation: isolate; }
