@@ -70,7 +70,9 @@ the refreshed profile. Full flow: `references/onboarding.md`.
    `assets/scripts/check_media_url.py` — never a guessed URL. Insert GIF fragments
    at a tasteful cadence — openers, section breaks, the payoff. Never every slide.
    Pin the direct media URL, add alt text, respect `prefers-reduced-motion`. Inject
-   `assets/fragments/levity-slide.html`.
+   `assets/fragments/levity-slide.html`. Let the human pick among the 2-3 candidates
+   per slot either in chat or via the visual levity picker
+   (`dv-onboard --form levity`) — see `references/levity.md`.
 6. **Deliver (existing).** Ship through the user's `deliver-doc` flow. This skill
    does not deliver.
 
@@ -85,10 +87,10 @@ the refreshed profile. Full flow: `references/onboarding.md`.
   equivalent manual check) — see `references/levity.md`.
 - Colors come from `assets/brand-palette.md`, not ad hoc hex values.
 - Never run `iceberg:edit` on a rendered `.html` deck.
-- The onboarding picker (`assets/onboarding/picker.html`, compiled into the local
-  binary) is the one full HTML page this skill owns — a local tool, never a deck
-  artifact, never injected or delivered. The "fragments only" rule governs deck
-  output, not this tool.
+- The picker pages (`assets/onboarding/picker.html` and `levity-picker.html`,
+  compiled into the local binary) are the full HTML pages this skill owns — local
+  tools, never deck artifacts, never injected or delivered. The "fragments only" rule
+  governs deck output, not these tools.
 
 ## Reference map
 
@@ -97,8 +99,9 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | Rebuilding the presenter profile by swipe | `references/onboarding.md` |
 | The swipe catalog (config) | `assets/show-catalog.md` |
 | Meme fallback for when no familiar source fits | `assets/meme-library.md` |
-| The onboarding picker page (local tool) | `assets/onboarding/picker.html` |
-| The runtime-free picker server + prebuilt binaries | `assets/onboarding/server/`, `assets/onboarding/bin/` |
+| The onboarding + levity picker pages (local tools) | `assets/onboarding/picker.html`, `assets/onboarding/levity-picker.html` |
+| Shared picker styling (both pages) | `assets/onboarding/picker.css` |
+| The runtime-free picker server (`--form onboard`/`levity`) + prebuilt binaries | `assets/onboarding/server/`, `assets/onboarding/bin/` |
 | Coverage check — 3 options per concept shape | `assets/scripts/coverage_report.py` |
 | Building the concept map (interview vs extract) | `references/story-discovery.md` |
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |

@@ -70,10 +70,16 @@ skills/deck-visuals/
     icons/                    curated Lucide-style icon set
     fragments/                injectable HTML fragments
     onboarding/
-      picker.html             self-contained local swipe page
+      picker.html             onboarding swipe page (local tool)
+      levity-picker.html      deck-time levity GIF chooser (local tool)
+      picker.css              shared premium dark styling for both
       server/                 Go source for the runtime-free picker binary
       bin/                    prebuilt picker binaries (no runtime needed)
 ```
+
+The same runtime-free binary also powers a **deck-time levity picker**: once Claude
+proposes 2-3 candidate GIFs per slide, run it with `--form levity` to choose each one
+visually instead of in chat.
 
 ## Onboard your references
 

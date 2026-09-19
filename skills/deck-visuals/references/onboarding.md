@@ -28,8 +28,10 @@ pop-culture profile" — independent of any deck.
 3. **Launch the binary.** Pick the prebuilt binary matching the platform
    (`uname -s` / `uname -m`) from `assets/onboarding/bin/`, e.g.
    `dv-onboard-darwin-arm64`. Run it:
-   `dv-onboard --cards <cards.json> --out <results.json> --port 0`. It needs no Go
-   and no interpreter. Hand the user the `http://127.0.0.1:<port>/` it prints.
+   `dv-onboard --form onboard --data <cards.json> --out <results.json> --port 0`. It
+   needs no Go and no interpreter. Hand the user the `http://127.0.0.1:<port>/` it
+   prints. (The same binary serves the deck-time levity picker with
+   `--form levity` — see `references/levity.md`.)
 4. **The user swipes.** Yes / No / Skip per card, then suggests anything missed. The
    binary takes one POST, writes `results.json`, and shuts down on its own.
 5. **Read results.** Parse `results.json` (shape below).

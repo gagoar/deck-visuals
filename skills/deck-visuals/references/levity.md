@@ -196,6 +196,37 @@ ID or guess at a slug-to-URL mapping — every direct URL in a shipped deck must
 have come from a search result that was fetched and verified, not assembled from
 memory.
 
+## Picking among candidates — chat or webpage
+
+Once each levity slot has its 2-3 sourced, verified candidates, the human picks one
+per slot. Two surfaces, same rule — **Claude proposes, the human approves:**
+
+- **In chat (default).** List the 2-3 candidates per slot with shape/beat and the
+  chosen scene; the human picks by replying. Best for a slot or two, or a quick pass.
+- **In a webpage.** For several slots, or when the GIFs should be seen side by side
+  before deciding, serve the visual picker — the same runtime-free binary and design
+  as onboarding, with `--form levity`:
+  `dv-onboard --form levity --data <slots.json> --out <selections.json> --port 0`.
+  Hand the user the printed `127.0.0.1` URL; they pick one GIF per slide (or skip a
+  slide), and it writes `selections.json`, then shuts down.
+
+`slots.json` — one entry per levity slot, each with its verified candidates:
+
+```json
+{"slots":[
+  {"id":"slide-3","slide":"Feature comparison","claim":"Too many features isn't always fantastic","shape":"Excess / feature bloat",
+   "candidates":[
+     {"label":"The Simpsons — The Homer","gif_url":"https://media.giphy.com/media/<id>/giphy.gif","caption":"every feature bolted on"},
+     {"label":"Rube Goldberg machine","gif_url":null,"caption":"ten steps for a one-step job"}
+   ]}
+]}
+```
+
+Only pin `gif_url`s that passed `check_media_url.py`; a candidate with a null
+`gif_url` still shows (label only). `selections.json` comes back as
+`{"selections":[{"slot_id","chosen_index","chosen_label","chosen_gif_url","skipped"}]}`
+— inject each chosen GIF into its slide's `assets/fragments/levity-slide.html`.
+
 ## Cadence
 
 Default cadence, tune per deck length:

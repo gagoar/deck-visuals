@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+  deck-visuals levity picker — LOCAL TOOLING, NOT A DECK FRAGMENT.
+
+  The deck-time companion to the onboarding picker. Served by the runtime-free
+  dv-onboard binary (`--form levity`) on 127.0.0.1. For each levity slot Claude
+  proposed, it shows the 2-3 candidate GIFs side by side and lets the presenter pick
+  one (or skip the slot). It is the visual alternative to choosing in chat — same
+  "Claude proposes, the human approves" rule, different surface. Never injected into
+  a deck or delivered; the chosen GIF is what Claude then injects.
+
+  Styling comes from the shared /picker.css. Slot data is injected at serve time: the
+  binary replaces the token in the window.DV_DATA line with the contents of --data.
+  Selections POST to /submit; the server stamps submitted_at and writes results.json.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>deck-visuals — pick the levity</title>
+<link rel="stylesheet" href="/picker.css">
+</head>
+<body>
+<div class="dv-app" role="application" aria-label="Levity GIF picker">
+
+  <section class="dv-screen is-active" id="screen-pick">
+    <div class="dv-eyebrow">Levity</div>
+    <h1 id="pick-title">Pick the joke for each slide</h1>
+    <p class="dv-lead" id="pick-lead">
+      For each slide, choose the GIF that lands best — or skip it. You can pick one per
+      slide; the rest stay serious.
+    </p>
+    <p class="dv-motion-note" id="motion-note" style="margin-bottom:16px">Reduced-motion is on — GIFs may still animate; pick by the label if you prefer.</p>
+
+    <div id="slots"></div>
+
+    <button class="dv-btn dv-btn-primary dv-btn-block" id="btn-submit">Use these picks</button>
+  </section>
+
+  <section class="dv-screen dv-done" id="screen-done" aria-labelledby="done-title">
+    <div class="dv-eyebrow">Sent</div>
+    <h1 id="done-title">Done — you can close this tab.</h1>
+    <p class="dv-lead">Your picks were sent back. Claude will inject each chosen GIF into its slide.</p>
+  </section>
+
+</div>
+
+<script>
+  // Slot data injected by the server at serve time.
+  window.DV_DATA = REPLACE_DATA_JSON;
+
+  (function () {
+    "use strict";
+    var data = window.DV_DATA || {};
+    var slots = Array.isArray(data) ? data : (data.slots || []);
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) document.getElementById("motion-note").style.display = "block";
+
+    // selections[slotId] = { chosen_index: n|null, skipped: bool }
+    var selections = {};
+
+    function el(id) { return document.getElementById(id); }
+    function show(id) {
+      var s = document.querySelectorAll(".dv-screen");
+      for (var j = 0; j < s.length; j++) s[j].classList.remove("is-active");
+      el(id).classList.add("is-active");
+    }
+
+    function candidateMedia(cand, slotTitle) {
+      if (cand.gif_url) {
+        var img = document.createElement("img");
+        img.src = cand.gif_url;
+        img.alt = (cand.label || "Candidate") + " — for " + (slotTitle || "this slide");
+        img.loading = "lazy";
+        img.onerror = function () {
+          var ph = document.createElement("div");
+          ph.className = "dv-media--empty";
+          ph.textContent = "clip unavailable";
+          img.replaceWith(ph);
+        };
+        return img;
+      }
+      var ph = document.createElement("div");
+      ph.className = "dv-media--empty";
+      ph.textContent = "no clip yet — go by the label";
+      return ph;
+    }
+
+    function renderSlots() {
+      var wrap = el("slots");
+      slots.forEach(function (slot, si) {
+        selections[slot.id] = { chosen_index: null, skipped: false };
+
+        var section = document.createElement("div");
+        section.className = "dv-slot";
+
+        var meta = document.createElement("p");
+        meta.className = "dv-slot__meta";
+        meta.textContent = slot.slide ? ("Slide: " + slot.slide) : ("Slot " + (si + 1));
+        section.appendChild(meta);
+
+        var claim = document.createElement("p");
+        claim.className = "dv-slot__claim";
+        claim.textContent = slot.claim || "(no claim)";
+        if (slot.shape) {
+          var shape = document.createElement("span");
+          shape.className = "dv-shape";
+          shape.textContent = slot.shape;
+          claim.appendChild(shape);
+        }
+        section.appendChild(claim);
+
+        var grid = document.createElement("div");
+        grid.className = "dv-candidates";
+        grid.setAttribute("role", "radiogroup");
+        grid.setAttribute("aria-label", "Candidates for " + (slot.slide || ("slot " + (si + 1))));
+
+        var cands = slot.candidates || [];
+        cands.forEach(function (cand, ci) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "dv-candidate";
+          btn.setAttribute("role", "radio");
+          btn.setAttribute("aria-checked", "false");
+          btn.setAttribute("aria-pressed", "false");
+
+          var media = document.createElement("div");
+          media.className = "dv-media";
+          media.appendChild(candidateMedia(cand, slot.slide));
+          btn.appendChild(media);
+
+          var label = document.createElement("div");
+          label.className = "dv-candidate__label";
+          label.textContent = cand.label || ("Option " + (ci + 1));
+          btn.appendChild(label);
+
+          if (cand.caption) {
+            var cap = document.createElement("div");
+            cap.className = "dv-candidate__caption";
+            cap.textContent = cand.caption;
+            btn.appendChild(cap);
+          }
+
+          btn.addEventListener("click", function () { selectCandidate(slot.id, grid, skipChip, ci); });
+          grid.appendChild(btn);
+        });
+        section.appendChild(grid);
+
+        var skipChip = document.createElement("button");
+        skipChip.type = "button";
+        skipChip.className = "dv-btn dv-btn-ghost";
+        skipChip.style.marginTop = "12px";
+        skipChip.textContent = "Skip this slide (no GIF)";
+        skipChip.setAttribute("aria-pressed", "false");
+        skipChip.addEventListener("click", function () { skipSlot(slot.id, grid, skipChip); });
+        section.appendChild(skipChip);
+
+        wrap.appendChild(section);
+      });
+    }
+
+    function selectCandidate(slotId, grid, skipChip, index) {
+      var btns = grid.querySelectorAll(".dv-candidate");
+      for (var b = 0; b < btns.length; b++) {
+        var on = b === index;
+        btns[b].setAttribute("aria-pressed", on ? "true" : "false");
+        btns[b].setAttribute("aria-checked", on ? "true" : "false");
+      }
+      skipChip.setAttribute("aria-pressed", "false");
+      skipChip.classList.remove("dv-btn-skip");
+      selections[slotId] = { chosen_index: index, skipped: false };
+    }
+
+    function skipSlot(slotId, grid, skipChip) {
+      var btns = grid.querySelectorAll(".dv-candidate");
+      for (var b = 0; b < btns.length; b++) {
+        btns[b].setAttribute("aria-pressed", "false");
+        btns[b].setAttribute("aria-checked", "false");
+      }
+      skipChip.setAttribute("aria-pressed", "true");
+      skipChip.classList.add("dv-btn-skip");
+      selections[slotId] = { chosen_index: null, skipped: true };
+    }
+
+    function submit() {
+      var out = slots.map(function (slot) {
+        var sel = selections[slot.id] || { chosen_index: null, skipped: false };
+        var cand = (sel.chosen_index != null && slot.candidates) ? slot.candidates[sel.chosen_index] : null;
+        return {
+          slot_id: slot.id,
+          chosen_index: sel.chosen_index,
+          chosen_label: cand ? (cand.label || null) : null,
+          chosen_gif_url: cand ? (cand.gif_url || null) : null,
+          skipped: !!sel.skipped
+        };
+      });
+      el("btn-submit").disabled = true;
+      fetch("/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ selections: out }) })
+        .then(function (res) { return res.json(); })
+        .then(function (d) {
+          if (d && d.ok) show("screen-done");
+          else { el("btn-submit").disabled = false; alert("Could not save — try again."); }
+        })
+        .catch(function () { el("btn-submit").disabled = false; alert("Could not reach the local server. Is it still running?"); });
+    }
+
+    el("btn-submit").addEventListener("click", submit);
+    if (!slots.length) {
+      el("pick-lead").textContent = "No levity slots were loaded.";
+      el("btn-submit").disabled = true;
+    } else {
+      renderSlots();
+    }
+  })();
+</script>
+</body>
+</html>

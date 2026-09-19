@@ -2,253 +2,168 @@
 <!--
   deck-visuals onboarding picker — LOCAL TOOLING, NOT A DECK FRAGMENT.
 
-  This is the one full HTML page the deck-visuals skill owns. It is served by the
-  runtime-free onboarding binary (assets/onboarding/server, compiled from Go) on
-  127.0.0.1, swiped through once, and never injected into a slide, rendered into a
-  frontend-slides deck, or delivered to an audience. The "fragments only" hard rule
-  in SKILL.md governs deck output; it does not govern this tool. Do not "fix" this
-  into a fragment.
+  The one full HTML page the deck-visuals skill owns for onboarding. Served by the
+  runtime-free dv-onboard binary (`--form onboard`) on 127.0.0.1, swiped once, never
+  injected into a slide, rendered into a frontend-slides deck, or delivered. The
+  "fragments only" hard rule governs deck output, not this tool.
 
-  Card data is injected at serve time: the binary replaces the cards-JSON token in
-  the window.DV_CARDS line below with the contents of the --cards file. Answers POST
-  to /submit; the server stamps submitted_at, writes results.json, and shuts down.
+  Styling comes from the shared /picker.css served by the same binary. Card data is
+  injected at serve time: the binary replaces the cards-JSON token in the
+  window.DV_DATA line below with the contents of the --data file. Answers POST to
+  /submit; the server stamps submitted_at, writes results.json, and shuts down.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>deck-visuals — what do you recognize?</title>
-<style>
-  :root {
-    --bg: #0a1428;
-    --panel: #101d38;
-    --ink: #e8eefc;
-    --muted: #93a8c9;
-    --accent: #2894eb;
-    --yes: #34d399;
-    --no: #ff5470;
-    --skip: #ffb020;
-    --radius: 14px;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 32px 16px;
-  }
-  .dv-app { width: 100%; max-width: 560px; }
-  h1 { font-size: 22px; margin: 0 0 6px; }
-  p.lead { color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
-  .dv-screen { display: none; }
-  .dv-screen.is-active { display: block; }
-
-  label { display: block; font-size: 14px; margin: 18px 0 6px; }
-  input[type="number"], input[type="text"], textarea {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid #24365c;
-    border-radius: 10px;
-    color: var(--ink);
-    padding: 12px;
-    font-size: 15px;
-    font-family: inherit;
-  }
-  textarea { min-height: 96px; resize: vertical; }
-  .hint { color: var(--muted); font-size: 13px; margin-top: 6px; line-height: 1.45; }
-
-  button {
-    font-family: inherit;
-    font-size: 15px;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    cursor: pointer;
-    color: #06101f;
-    background: var(--accent);
-    font-weight: 600;
-  }
-  button.ghost { background: transparent; color: var(--muted); border: 1px solid #24365c; font-weight: 500; }
-  .dv-primary { margin-top: 24px; width: 100%; }
-
-  .dv-progress { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
-  .dv-card {
-    background: var(--panel);
-    border: 1px solid #24365c;
-    border-radius: var(--radius);
-    padding: 18px;
-    touch-action: pan-y;
-  }
-  .dv-domain { color: var(--accent); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
-  .dv-media { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-  .dv-media img {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    border-radius: 10px;
-    background: #06101f;
-    display: block;
-  }
-  .dv-card h2 { font-size: 20px; margin: 0 0 6px; }
-  .dv-recognize { color: var(--muted); font-size: 15px; margin: 0 0 16px; }
-  .dv-motion-note { color: var(--skip); font-size: 12px; display: none; }
-
-  .dv-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .dv-actions button { color: #06101f; }
-  .dv-yes { background: var(--yes); }
-  .dv-no { background: var(--no); color: #fff; }
-  .dv-skip { background: var(--skip); }
-  .dv-kbd { color: var(--muted); font-size: 12px; text-align: center; margin-top: 12px; }
-
-  .dv-suggest-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .dv-suggest-row input { flex: 1; }
-  .dv-done { text-align: center; padding: 40px 0; }
-  .dv-done h2 { font-size: 22px; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .dv-card { transition: none !important; }
-  }
-</style>
+<link rel="stylesheet" href="/picker.css">
 </head>
 <body>
 <div class="dv-app" role="application" aria-label="Pop-culture recognition picker">
 
   <!-- INTRO -->
   <section class="dv-screen is-active" id="screen-intro" aria-labelledby="intro-title">
-    <h1 id="intro-title">Let's find what you recognize</h1>
-    <p class="lead">
-      You'll swipe through some shows, films, and games. For each one, say whether you
-      recognize it — recognizing it means you'd get the jokes built around it. Two
-      quick questions first.
-    </p>
+    <div class="dv-stage">
+      <div class="dv-card dv-card--hero">
+        <div class="dv-eyebrow">Onboarding</div>
+        <h1 id="intro-title">Let's find what you recognize</h1>
+        <p class="dv-lead">
+          Swipe through some shows, films, and games. For each one, say whether you
+          recognize it — recognizing it means you'd get the jokes built around it. Two
+          quick questions first.
+        </p>
 
-    <label for="duration">How long is your talk? (minutes)</label>
-    <input type="number" id="duration" min="1" max="600" step="1" placeholder="e.g. 30" inputmode="numeric">
-    <p class="hint">This sets how many levity beats are tasteful — a short slot gets fewer.</p>
+        <label for="duration">How long is your talk? (minutes)</label>
+        <input type="number" id="duration" min="1" max="600" step="1" placeholder="e.g. 30" inputmode="numeric">
+        <p class="dv-hint">Sets how many levity beats are tasteful — a short slot gets fewer.</p>
 
-    <label for="audience">Who's in the room?</label>
-    <textarea id="audience" placeholder="In your own words…"></textarea>
-    <p class="hint">
-      Describe who'll be there — role, how technical, internal or external, anything
-      that matters. Write it however you'd say it. We won't guess or assume for you,
-      and there are no wrong answers here.
-    </p>
+        <label for="audience">Who's in the room?</label>
+        <textarea id="audience" placeholder="In your own words…"></textarea>
+        <p class="dv-hint">
+          Describe who'll be there — role, how technical, internal or external,
+          anything that matters. Write it however you'd say it. We won't guess or
+          assume for you, and there are no wrong answers here.
+        </p>
 
-    <button class="dv-primary" id="btn-start">Start</button>
+        <button class="dv-btn dv-btn-primary dv-btn-block" id="btn-start">Start swiping</button>
+      </div>
+    </div>
   </section>
 
   <!-- DECK -->
   <section class="dv-screen" id="screen-deck" aria-labelledby="deck-title" aria-live="polite">
-    <div class="dv-progress" id="progress" aria-hidden="false">0 / 0</div>
-    <div class="dv-card" id="card">
-      <div class="dv-domain" id="card-domain"></div>
-      <div class="dv-media" id="card-media"></div>
-      <h2 id="deck-title">—</h2>
-      <p class="dv-recognize">Do you recognize this show?</p>
-      <p class="dv-motion-note" id="motion-note">Motion paused — showing a still. (Reduced-motion is on.)</p>
-      <div class="dv-actions">
-        <button class="dv-yes" id="btn-yes" aria-label="Yes, I recognize this">Yes</button>
-        <button class="dv-no" id="btn-no" aria-label="No, I don't recognize this">No</button>
-        <button class="dv-skip" id="btn-skip" aria-label="Skip this one">Skip</button>
+    <div class="dv-progress-wrap">
+      <div class="dv-progress"><i id="progress-bar"></i></div>
+      <div class="dv-progress-label" id="progress-label">0 / 0</div>
+    </div>
+    <div class="dv-stage" id="stage">
+      <div class="dv-card dv-card--hero" id="card">
+        <div class="dv-eyebrow" id="card-domain"></div>
+        <div class="dv-media" id="card-media"></div>
+        <h2 class="dv-card-title" id="deck-title">—</h2>
+        <p class="dv-caption">Do you recognize this show?</p>
+        <p class="dv-motion-note" id="motion-note">Motion paused — showing a still. (Reduced-motion is on.)</p>
+        <div class="dv-actions">
+          <button class="dv-btn dv-btn-yes" id="btn-yes" aria-label="Yes, I recognize this">Yes</button>
+          <button class="dv-btn dv-btn-no" id="btn-no" aria-label="No, I don't recognize this">No</button>
+          <button class="dv-btn dv-btn-skip" id="btn-skip" aria-label="Skip this one">Skip</button>
+        </div>
+        <div class="dv-kbd">→ yes&nbsp;&nbsp;·&nbsp;&nbsp;← no&nbsp;&nbsp;·&nbsp;&nbsp;↓ or space skip&nbsp;&nbsp;·&nbsp;&nbsp;or swipe</div>
       </div>
-      <div class="dv-kbd">→ yes&nbsp;&nbsp;·&nbsp;&nbsp;← no&nbsp;&nbsp;·&nbsp;&nbsp;↓ or space skip&nbsp;&nbsp;·&nbsp;&nbsp;or swipe</div>
     </div>
   </section>
 
   <!-- OUTRO -->
   <section class="dv-screen" id="screen-outro" aria-labelledby="outro-title">
-    <h1 id="outro-title">Anything we missed?</h1>
-    <p class="lead">
-      Add any shows, films, sports, or games you'd reference that didn't come up. Skip
-      this if nothing comes to mind.
-    </p>
-    <div id="suggestions"></div>
-    <button class="ghost" id="btn-add-suggestion" type="button">+ Add another</button>
-    <button class="dv-primary" id="btn-submit">Submit</button>
+    <div class="dv-stage">
+      <div class="dv-card dv-card--hero">
+        <div class="dv-eyebrow">Almost done</div>
+        <h1 id="outro-title">Anything we missed?</h1>
+        <p class="dv-lead">
+          Add any shows, films, sports, or games you'd reference that didn't come up.
+          Skip this if nothing comes to mind.
+        </p>
+        <div id="suggestions"></div>
+        <button class="dv-btn dv-btn-ghost" id="btn-add-suggestion" type="button">+ Add another</button>
+        <button class="dv-btn dv-btn-primary dv-btn-block" id="btn-submit">Submit</button>
+      </div>
+    </div>
   </section>
 
   <!-- DONE -->
   <section class="dv-screen dv-done" id="screen-done" aria-labelledby="done-title">
-    <h2 id="done-title">Done — you can close this tab.</h2>
-    <p class="lead">Your picks were sent back. Head back to Claude to build your profile.</p>
+    <div class="dv-eyebrow">Sent</div>
+    <h1 id="done-title">Done — you can close this tab.</h1>
+    <p class="dv-lead">Your picks were sent back. Head back to Claude to build your profile.</p>
   </section>
 
 </div>
 
 <script>
   // Card data injected by the server at serve time.
-  window.DV_CARDS = REPLACE_CARDS_JSON;
+  window.DV_DATA = REPLACE_DATA_JSON;
 
   (function () {
     "use strict";
-    var cards = Array.isArray(window.DV_CARDS) ? window.DV_CARDS
-              : (window.DV_CARDS && window.DV_CARDS.cards) || [];
+    var data = window.DV_DATA || {};
+    var cards = Array.isArray(data) ? data : (data.cards || []);
     var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    var state = {
-      i: 0,
-      recognized: [],
-      not_recognized: [],
-      skipped: []
-    };
-
-    function show(id) {
-      var screens = document.querySelectorAll(".dv-screen");
-      for (var s = 0; s < screens.length; s++) screens[s].classList.remove("is-active");
-      document.getElementById(id).classList.add("is-active");
-    }
+    var state = { i: 0, recognized: [], not_recognized: [], skipped: [] };
 
     function el(id) { return document.getElementById(id); }
+    function show(id) {
+      var s = document.querySelectorAll(".dv-screen");
+      for (var j = 0; j < s.length; j++) s[j].classList.remove("is-active");
+      el(id).classList.add("is-active");
+    }
 
     function renderCard() {
-      if (state.i >= cards.length) { toOutro(); return; }
+      if (state.i >= cards.length) { show("screen-outro"); return; }
       var c = cards[state.i];
-      el("progress").textContent = (state.i + 1) + " / " + cards.length;
+      var pct = Math.round((state.i / cards.length) * 100);
+      el("progress-bar").style.width = pct + "%";
+      el("progress-label").textContent = (state.i + 1) + " / " + cards.length;
       el("card-domain").textContent = c.domain || "";
       el("deck-title").textContent = c.title || "(untitled)";
 
       var media = el("card-media");
       media.innerHTML = "";
-      var motionNote = el("motion-note");
-      motionNote.style.display = "none";
+      el("motion-note").style.display = "none";
 
-      // Still image, when we have one.
+      var hasMedia = false;
       if (c.image_url) {
+        hasMedia = true;
         var img = document.createElement("img");
-        img.src = c.image_url;
-        img.alt = "Still from " + (c.title || "the show");
+        img.src = c.image_url; img.alt = "Still from " + (c.title || "the show");
         img.onerror = function () { img.remove(); };
         media.appendChild(img);
       }
-      // Signature GIF. Under reduced motion, don't animate — lean on the still and
-      // note the pause. If there's no still to fall back to, show the GIF's URL as
-      // a static poster is not available, so we simply skip the animated media.
       if (c.gif_url) {
         if (reduceMotion) {
-          motionNote.style.display = "block";
+          el("motion-note").style.display = "block";
           if (!c.image_url) {
-            // No still to show; render the gif but rely on the note. Browsers still
-            // honor prefers-reduced-motion for the user's own comfort.
+            hasMedia = true;
             var gstill = document.createElement("img");
-            gstill.src = c.gif_url;
-            gstill.alt = "Clip from " + (c.title || "the show") + " (motion paused)";
+            gstill.src = c.gif_url; gstill.alt = "Clip from " + (c.title || "the show") + " (motion paused)";
             gstill.onerror = function () { gstill.remove(); };
             media.appendChild(gstill);
           }
         } else {
+          hasMedia = true;
           var gif = document.createElement("img");
-          gif.src = c.gif_url;
-          gif.alt = "Signature clip from " + (c.title || "the show");
+          gif.src = c.gif_url; gif.alt = "Signature clip from " + (c.title || "the show");
           gif.onerror = function () { gif.remove(); };
           media.appendChild(gif);
         }
       }
-      // Degraded / title-only card: nothing to show but the title. Already handled —
-      // media stays empty, no broken <img>.
+      if (!hasMedia) {
+        var ph = document.createElement("div");
+        ph.className = "dv-media--empty";
+        ph.textContent = "no clip — go by the name";
+        media.appendChild(ph);
+      }
     }
 
     function advance(choice) {
@@ -257,14 +172,13 @@
       if (choice === "yes") state.recognized.push(id);
       else if (choice === "no") state.not_recognized.push(id);
       else state.skipped.push(id);
+      el("stage").removeAttribute("data-lean");
       state.i++;
-      if (state.i >= cards.length) toOutro();
+      if (state.i >= cards.length) show("screen-outro");
       else renderCard();
     }
 
-    function toOutro() { show("screen-outro"); }
-
-    // ---- suggestions ----
+    // suggestions
     function addSuggestionRow() {
       var wrap = el("suggestions");
       var row = document.createElement("div");
@@ -278,10 +192,8 @@
       row.appendChild(title); row.appendChild(note);
       wrap.appendChild(row);
     }
-
     function collectSuggestions() {
-      var out = [];
-      var rows = document.querySelectorAll(".dv-suggest-row");
+      var out = [], rows = document.querySelectorAll(".dv-suggest-row");
       for (var r = 0; r < rows.length; r++) {
         var t = rows[r].querySelector(".js-sug-title").value.trim();
         var n = rows[r].querySelector(".js-sug-note").value.trim();
@@ -301,36 +213,37 @@
         suggestions: collectSuggestions()
       };
       el("btn-submit").disabled = true;
-      fetch("/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        if (data && data.ok) show("screen-done");
-        else { el("btn-submit").disabled = false; alert("Could not save — try Submit again."); }
-      }).catch(function () {
-        el("btn-submit").disabled = false;
-        alert("Could not reach the local server. Is it still running?");
-      });
+      fetch("/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(function (res) { return res.json(); })
+        .then(function (d) {
+          if (d && d.ok) show("screen-done");
+          else { el("btn-submit").disabled = false; alert("Could not save — try Submit again."); }
+        })
+        .catch(function () { el("btn-submit").disabled = false; alert("Could not reach the local server. Is it still running?"); });
     }
 
-    // ---- swipe ----
+    // swipe
     var startX = 0, startY = 0, tracking = false;
     var card = el("card");
     card.addEventListener("pointerdown", function (e) { tracking = true; startX = e.clientX; startY = e.clientY; });
+    card.addEventListener("pointermove", function (e) {
+      if (!tracking) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 24) el("stage").setAttribute("data-lean", dx > 0 ? "yes" : "no");
+      else el("stage").removeAttribute("data-lean");
+    });
     card.addEventListener("pointerup", function (e) {
       if (!tracking) return;
       tracking = false;
       var dx = e.clientX - startX, dy = e.clientY - startY;
       var absX = Math.abs(dx), absY = Math.abs(dy);
-      if (Math.max(absX, absY) < 40) return; // a tap, not a swipe
+      el("stage").removeAttribute("data-lean");
+      if (Math.max(absX, absY) < 40) return;
       if (absX > absY) advance(dx > 0 ? "yes" : "no");
       else if (dy > 0) advance("skip");
     });
 
-    // ---- keyboard ----
+    // keyboard
     document.addEventListener("keydown", function (e) {
       if (!el("screen-deck").classList.contains("is-active")) return;
       if (e.key === "ArrowRight") { e.preventDefault(); advance("yes"); }
@@ -338,19 +251,17 @@
       else if (e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); advance("skip"); }
     });
 
-    // ---- wiring ----
+    // wiring
     el("btn-start").addEventListener("click", function () {
       if (!cards.length) { alert("No cards were loaded."); return; }
-      show("screen-deck");
-      renderCard();
+      show("screen-deck"); renderCard();
     });
     el("btn-yes").addEventListener("click", function () { advance("yes"); });
     el("btn-no").addEventListener("click", function () { advance("no"); });
     el("btn-skip").addEventListener("click", function () { advance("skip"); });
     el("btn-add-suggestion").addEventListener("click", addSuggestionRow);
     el("btn-submit").addEventListener("click", submit);
-
-    addSuggestionRow(); // start the outro with one empty row
+    addSuggestionRow();
   })();
 </script>
 </body>
