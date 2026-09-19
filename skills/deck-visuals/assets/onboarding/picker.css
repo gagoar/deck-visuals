@@ -83,6 +83,7 @@ body {
 }
 
 .dv-app { width: 100%; max-width: 600px; }
+.dv-app--wide { max-width: 1040px; }
 
 /* Stage — holds the soft accent glow behind the active content */
 .dv-stage { position: relative; isolation: isolate; }
@@ -209,31 +210,82 @@ textarea { min-height: 104px; resize: vertical; }
 .dv-progress-label { color: var(--text-muted); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
 
 /* Levity: slots + candidate chooser */
-.dv-slot { margin-bottom: var(--sp-6); }
-.dv-slot__meta { color: var(--text-muted); font-size: 13px; margin: 0 0 var(--sp-3); }
-.dv-slot__claim { font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 var(--sp-4); }
-.dv-shape { display: inline-block; margin-left: var(--sp-2); padding: 2px 10px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; color: var(--accent); background: var(--accent-soft); letter-spacing: 0.02em; }
+.dv-slot {
+  position: relative;
+  margin-bottom: var(--sp-5);
+  padding: var(--sp-5);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 30%), var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner);
+}
+/* lit top bezel — the "gradient hairline" flourish */
+.dv-slot::before {
+  content: "";
+  position: absolute; left: 10%; right: 10%; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.6;
+}
+.dv-slot__head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-1); }
+.dv-slot__index {
+  flex: none;
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px; border-radius: var(--r-full);
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); border: 1px solid var(--accent-soft);
+}
+.dv-slot__meta { color: var(--text-muted); font-size: 13px; letter-spacing: 0.02em; }
+.dv-slot__claim { font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 var(--sp-4); }
+.dv-shape { display: inline-block; margin-left: var(--sp-2); padding: 2px 10px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; color: var(--accent); background: var(--accent-soft); letter-spacing: 0.02em; white-space: nowrap; }
 
-.dv-candidates { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-4); }
+/* Exactly 3 across on desktop, then 2, then 1 */
+.dv-candidates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+@media (max-width: 860px) { .dv-candidates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .dv-candidates { grid-template-columns: 1fr; } }
+
 .dv-candidate {
+  position: relative;
   text-align: left;
-  background: var(--surface);
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner);
   padding: var(--sp-3);
   cursor: pointer;
+  overflow: hidden;
   transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.dv-candidate:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-float), inset 0 1px 0 var(--border-inner); }
+.dv-candidate .dv-media { margin-bottom: var(--sp-3); }
+.dv-candidate .dv-media img, .dv-candidate .dv-media--empty { aspect-ratio: 1 / 1; }
+.dv-candidate:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-float), inset 0 1px 0 var(--border-inner); }
 .dv-candidate:focus-visible { outline: none; box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner), 0 0 0 3px var(--accent-ring); }
 .dv-candidate[aria-pressed="true"] {
   border-color: var(--accent);
-  box-shadow: var(--shadow-float), inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 0 0 1px var(--accent-soft), 0 0 40px -8px var(--accent-glow);
-  background: linear-gradient(180deg, var(--accent-soft) 0%, rgba(255, 255, 255, 0) 45%), var(--surface);
+  box-shadow: var(--shadow-float), inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 0 0 1px var(--accent-soft), 0 0 44px -8px var(--accent-glow);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, rgba(255, 255, 255, 0) 45%), var(--surface-2);
 }
-.dv-candidate__label { font-size: 14px; font-weight: 600; margin: var(--sp-3) 0 2px; }
-.dv-candidate__caption { color: var(--text-muted); font-size: 12px; }
+/* selected check badge */
+.dv-candidate[aria-pressed="true"]::after {
+  content: "✓";
+  position: absolute; top: 10px; right: 10px;
+  width: 24px; height: 24px; border-radius: var(--r-full);
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: var(--text-on-accent);
+  background: var(--accent-gradient);
+  box-shadow: 0 2px 8px -2px var(--accent-glow);
+}
+.dv-candidate__label { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
+.dv-candidate__caption { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+.dv-slot__skip { margin-top: var(--sp-4); }
+
+/* Sticky action bar for the levity page (many slots) */
+.dv-actionbar {
+  position: sticky; bottom: 0;
+  margin-top: var(--sp-5);
+  padding: var(--sp-4) 0;
+  background: linear-gradient(0deg, var(--bg-base) 60%, transparent);
+}
+.dv-actionbar .dv-btn { width: 100%; padding: 14px 18px; }
 
 /* Suggestions */
 .dv-suggest-row { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }

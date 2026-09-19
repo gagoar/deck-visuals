@@ -4,7 +4,7 @@
 
   The deck-time companion to the onboarding picker. Served by the runtime-free
   dv-onboard binary (`--form levity`) on 127.0.0.1. For each levity slot Claude
-  proposed, it shows the 2-3 candidate GIFs side by side and lets the presenter pick
+  proposed, it shows the 2-3 candidate GIFs three-across and lets the presenter pick
   one (or skip the slot). It is the visual alternative to choosing in chat — same
   "Claude proposes, the human approves" rule, different surface. Never injected into
   a deck or delivered; the chosen GIF is what Claude then injects.
@@ -21,20 +21,24 @@
 <link rel="stylesheet" href="/picker.css">
 </head>
 <body>
-<div class="dv-app" role="application" aria-label="Levity GIF picker">
+<div class="dv-app dv-app--wide" role="application" aria-label="Levity GIF picker">
 
   <section class="dv-screen is-active" id="screen-pick">
-    <div class="dv-eyebrow">Levity</div>
-    <h1 id="pick-title">Pick the joke for each slide</h1>
-    <p class="dv-lead" id="pick-lead">
-      For each slide, choose the GIF that lands best — or skip it. You can pick one per
-      slide; the rest stay serious.
-    </p>
-    <p class="dv-motion-note" id="motion-note" style="margin-bottom:16px">Reduced-motion is on — GIFs may still animate; pick by the label if you prefer.</p>
+    <div class="dv-stage">
+      <div class="dv-eyebrow">Levity · pick the joke</div>
+      <h1 id="pick-title">One GIF per slide</h1>
+      <p class="dv-lead" id="pick-lead">
+        For each slide, tap the GIF that lands best — or skip it. The rest of the deck
+        stays serious.
+      </p>
+      <p class="dv-motion-note" id="motion-note" style="margin-bottom:16px">Reduced-motion is on — GIFs may still animate; pick by the label if you prefer.</p>
 
-    <div id="slots"></div>
+      <div id="slots"></div>
 
-    <button class="dv-btn dv-btn-primary dv-btn-block" id="btn-submit">Use these picks</button>
+      <div class="dv-actionbar">
+        <button class="dv-btn dv-btn-primary" id="btn-submit">Use these picks</button>
+      </div>
+    </div>
   </section>
 
   <section class="dv-screen dv-done" id="screen-done" aria-labelledby="done-title">
@@ -94,10 +98,17 @@
         var section = document.createElement("div");
         section.className = "dv-slot";
 
-        var meta = document.createElement("p");
+        var head = document.createElement("div");
+        head.className = "dv-slot__head";
+        var idx = document.createElement("span");
+        idx.className = "dv-slot__index";
+        idx.textContent = si + 1;
+        head.appendChild(idx);
+        var meta = document.createElement("span");
         meta.className = "dv-slot__meta";
-        meta.textContent = slot.slide ? ("Slide: " + slot.slide) : ("Slot " + (si + 1));
-        section.appendChild(meta);
+        meta.textContent = slot.slide ? slot.slide : ("Slot " + (si + 1));
+        head.appendChild(meta);
+        section.appendChild(head);
 
         var claim = document.createElement("p");
         claim.className = "dv-slot__claim";
@@ -141,44 +152,43 @@
             btn.appendChild(cap);
           }
 
-          btn.addEventListener("click", function () { selectCandidate(slot.id, grid, skipChip, ci); });
+          btn.addEventListener("click", function () { selectCandidate(slot.id, grid, skipBtn, ci); });
           grid.appendChild(btn);
         });
         section.appendChild(grid);
 
-        var skipChip = document.createElement("button");
-        skipChip.type = "button";
-        skipChip.className = "dv-btn dv-btn-ghost";
-        skipChip.style.marginTop = "12px";
-        skipChip.textContent = "Skip this slide (no GIF)";
-        skipChip.setAttribute("aria-pressed", "false");
-        skipChip.addEventListener("click", function () { skipSlot(slot.id, grid, skipChip); });
-        section.appendChild(skipChip);
+        var skipBtn = document.createElement("button");
+        skipBtn.type = "button";
+        skipBtn.className = "dv-btn dv-btn-ghost dv-slot__skip";
+        skipBtn.textContent = "Skip this slide (no GIF)";
+        skipBtn.setAttribute("aria-pressed", "false");
+        skipBtn.addEventListener("click", function () { skipSlot(slot.id, grid, skipBtn); });
+        section.appendChild(skipBtn);
 
         wrap.appendChild(section);
       });
     }
 
-    function selectCandidate(slotId, grid, skipChip, index) {
+    function selectCandidate(slotId, grid, skipBtn, index) {
       var btns = grid.querySelectorAll(".dv-candidate");
       for (var b = 0; b < btns.length; b++) {
         var on = b === index;
         btns[b].setAttribute("aria-pressed", on ? "true" : "false");
         btns[b].setAttribute("aria-checked", on ? "true" : "false");
       }
-      skipChip.setAttribute("aria-pressed", "false");
-      skipChip.classList.remove("dv-btn-skip");
+      skipBtn.setAttribute("aria-pressed", "false");
+      skipBtn.classList.remove("dv-btn-skip");
       selections[slotId] = { chosen_index: index, skipped: false };
     }
 
-    function skipSlot(slotId, grid, skipChip) {
+    function skipSlot(slotId, grid, skipBtn) {
       var btns = grid.querySelectorAll(".dv-candidate");
       for (var b = 0; b < btns.length; b++) {
         btns[b].setAttribute("aria-pressed", "false");
         btns[b].setAttribute("aria-checked", "false");
       }
-      skipChip.setAttribute("aria-pressed", "true");
-      skipChip.classList.add("dv-btn-skip");
+      skipBtn.setAttribute("aria-pressed", "true");
+      skipBtn.classList.add("dv-btn-skip");
       selections[slotId] = { chosen_index: null, skipped: true };
     }
 
