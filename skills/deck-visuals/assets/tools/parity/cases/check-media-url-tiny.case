@@ -1,0 +1,3 @@
+# check-media-url: a valid but <1024-byte gif -> FAIL (size), exit 1
+SUBCOMMAND="check-media-url"
+ARGS=("{BASE}/tiny.gif")

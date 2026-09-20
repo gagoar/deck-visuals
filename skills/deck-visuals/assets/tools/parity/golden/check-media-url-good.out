@@ -1,0 +1,2 @@
+[PASS] http://127.0.0.1:62915/good.gif
+        status=200 content-type=image/gif 13321 bytes read/declared

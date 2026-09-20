@@ -1,0 +1,5 @@
+# coverage: results mode against the REAL levity.md + show-catalog.md, scoped to a
+# small recognized_ids set (fixtures/results.json) -> some shapes fall below target,
+# so this should report GAP(s) and exit 1.
+SUBCOMMAND="coverage"
+ARGS=("--levity" "../../../references/levity.md" "--catalog" "../../show-catalog.md" "--results" "fixtures/results.json")

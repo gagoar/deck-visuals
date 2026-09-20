@@ -1,0 +1,5 @@
+# validate-palette: a deliberately failing palette — two near-identical blues,
+# one bit apart in the last hex byte, so CVD separation and the normal-vision
+# floor both hard-FAIL -> exit 1.
+SUBCOMMAND="validate-palette"
+ARGS=("#2894eb,#2894ec" "--mode" "dark" "--surface" "#1a1a19")

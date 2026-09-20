@@ -1,0 +1,28 @@
+Coverage report — scope: catalog capacity (all titles), target: >= 3 per shape
+
+[OK ] Accidental complexity: 3
+[OK ] Avoidance / retreat: 3
+[OK ] Cascading failure: 9
+[OK ] Chaotic parallel effort: 4
+[OK ] Coordination breakdown under pressure: 4
+[OK ] Coordination difficulty: 5
+[OK ] Declaring a fix that isn't one: 3
+[OK ] Denial of consequence: 6
+[OK ] Diminishing returns / breaking point: 3
+[OK ] Early warning ignored: 7
+[OK ] Excess / feature bloat: 3
+[OK ] Fragility: 3
+[OK ] Fragmented understanding: 4
+[OK ] Momentum without control: 6
+[OK ] Obvious problem nobody names: 6
+[OK ] Over-engineering: 5
+[OK ] Persistent thankless effort: 7
+[OK ] Precarious balance: 6
+[OK ] Recurring bugs: 6
+[OK ] Reinventing effort: 4
+[OK ] Shifting requirements: 4
+[OK ] Slow drift: 4
+[OK ] Small mistake, big visible mess: 3
+[OK ] Unseen scale: 4
+
+24 shapes, 0 gap(s), 0 drift tag(s).

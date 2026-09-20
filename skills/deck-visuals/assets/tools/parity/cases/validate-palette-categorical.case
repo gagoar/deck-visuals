@@ -1,0 +1,4 @@
+# validate-palette: the real brand categorical 8-slot dark palette + surface,
+# per assets/brand-palette.md -> ALL CHECKS PASS, exit 0.
+SUBCOMMAND="validate-palette"
+ARGS=("#2894eb,#d95926,#199e70,#c98500,#d55181,#008300,#9085e9,#e66767" "--mode" "dark" "--surface" "#1a1a19")

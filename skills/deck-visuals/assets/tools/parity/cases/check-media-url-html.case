@@ -1,0 +1,3 @@
+# check-media-url: a 200 text/html page -> FAIL (content-type), exit 1
+SUBCOMMAND="check-media-url"
+ARGS=("{BASE}/page.html")

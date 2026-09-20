@@ -1,0 +1,13 @@
+Coverage report — scope: catalog capacity (all titles), target: >= 3 per shape
+
+[GAP] Excess: 2
+        only 2 title(s) carry this shape: Show A, Show B — extend show-catalog.md
+[GAP] Fragility: 2
+        only 2 title(s) carry this shape: Show A, Show C — extend show-catalog.md
+[GAP] Recurring bugs: 2
+        only 2 title(s) carry this shape: Show B, Show C — extend show-catalog.md
+
+Drift — catalog shape tags with no match in levity.md:
+  'Not A Real Shape' (in: Show C)
+
+3 shapes, 3 gap(s), 1 drift tag(s).

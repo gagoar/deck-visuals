@@ -41,9 +41,9 @@ building any chart.
 - Mark and axis specs.
 - Interaction rules (hover, focus, tooltip behavior).
 - The color-formula math. Validate a palette with the **built-in `dataviz`
-  skill's validator first** — it is the authority. `assets/scripts/
-  validate_palette.js` / `.py` are an independent MIT reimplementation of the
-  same checks (same thresholds, same CLI shape), kept in agreement with the
-  built-in validator, for use only when that skill isn't reachable — a
-  standalone shell, CI, or a PR review outside a Claude Code session. See
-  either script's header for detail.
+  skill's validator first** — it is the authority. `assets/tools/dv-tools
+  validate-palette` is an independent MIT reimplementation of the same checks
+  (same thresholds, same CLI shape), kept in agreement with the built-in
+  validator, for use only when that skill isn't reachable — a standalone
+  shell, CI, or a PR review outside a Claude Code session. See
+  `assets/tools/palette.go`'s header for detail.

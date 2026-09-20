@@ -67,7 +67,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
    scene (analogy-first), preferring `assets/familiar-sources.md`; fall back to
    reaction mode only for slides where the point is the audience's feeling, not a
    concept. Source a verified direct media URL with `WebSearch`/`WebFetch` plus
-   `assets/scripts/check_media_url.py` — never a guessed URL. Insert GIF fragments
+   `assets/tools/dv-tools check-media-url` — never a guessed URL. Insert GIF fragments
    at a tasteful cadence — openers, section breaks, the payoff. Never every slide.
    Pin the direct media URL, add alt text, respect `prefers-reduced-motion`. Inject
    `assets/fragments/levity-slide.html`. Let the human pick among the 2-3 candidates
@@ -83,7 +83,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
   host page's classes or globals.
 - Every chart ships with a reachable table-view twin.
 - Every GIF has alt text and a `prefers-reduced-motion` fallback.
-- Never embed a GIF/media URL that hasn't passed `check_media_url.py` (or an
+- Never embed a GIF/media URL that hasn't passed `dv-tools check-media-url` (or an
   equivalent manual check) — see `references/levity.md`.
 - Colors come from `assets/brand-palette.md`, not ad hoc hex values.
 - Never run `iceberg:edit` on a rendered `.html` deck.
@@ -102,7 +102,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | The onboarding + levity picker pages (local tools) | `assets/onboarding/picker.html`, `assets/onboarding/levity-picker.html` |
 | Shared picker styling (both pages) | `assets/onboarding/picker.css` |
 | The runtime-free picker server (`--form onboard`/`levity`) + prebuilt binaries | `assets/onboarding/server/`, `assets/onboarding/bin/` |
-| Coverage check — 3 options per concept shape | `assets/scripts/coverage_report.py` |
+| Coverage check — 3 options per concept shape | `assets/tools/dv-tools coverage` |
 | Building the concept map (interview vs extract) | `references/story-discovery.md` |
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |
 | Chart rules, `dataviz` handoff | `references/charts.md` |
@@ -112,4 +112,4 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
 | Icon set | `assets/icons/` |
 | Injectable fragments | `assets/fragments/` |
-| Verify a GIF/media URL resolves | `assets/scripts/check_media_url.py` |
+| Verify a GIF/media URL resolves | `assets/tools/dv-tools check-media-url` |

@@ -1,0 +1,8 @@
+
+Palette (dark, surface #1a1a19, ordinal ramp): 5 slot(s)
+  [PASS] Lightness monotone     reads light→dark (or reverse)
+  [PASS] Adjacent ΔL            all steps >= 0.06 (gaps = 0.079, 0.081, 0.079, 0.081)
+  [PASS] Light-end contrast     #035590 at 2.24:1 vs surface
+  [PASS] Single hue             hue spread 0°
+
+  → ALL CHECKS PASS

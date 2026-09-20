@@ -1,0 +1,5 @@
+# coverage: synthetic drift case, same fixture pair as coverage-gap but with
+# --target 1 so every mini shape clears target (0 gaps) and the only thing left
+# to report is the Drift section (the "Not A Real Shape" catalog tag).
+SUBCOMMAND="coverage"
+ARGS=("--levity" "fixtures/mini-levity.md" "--catalog" "fixtures/mini-catalog.md" "--target" "1")

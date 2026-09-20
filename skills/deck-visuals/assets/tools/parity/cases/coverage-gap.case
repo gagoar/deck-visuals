@@ -1,0 +1,6 @@
+# coverage: synthetic gap case. mini-catalog.md gives every mini shape only 2
+# carriers, so at the default target (3) every shape is a GAP. The mini catalog
+# also carries a tag with no levity match, so Drift shows up here too — that's
+# realistic (a real catalog can have both problems at once), not a bug.
+SUBCOMMAND="coverage"
+ARGS=("--levity" "fixtures/mini-levity.md" "--catalog" "fixtures/mini-catalog.md")

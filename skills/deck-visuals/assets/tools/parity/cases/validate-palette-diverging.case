@@ -1,0 +1,4 @@
+# validate-palette: the real brand diverging pair (cool pole vs warm pole),
+# per assets/brand-palette.md -> PASS, exit 0.
+SUBCOMMAND="validate-palette"
+ARGS=("#2894eb,#e66767" "--mode" "dark" "--surface" "#1a1a19")

@@ -1,0 +1,3 @@
+# validate-palette: an invalid hex token -> usage error on stderr, exit 2.
+SUBCOMMAND="validate-palette"
+ARGS=("#2894eb,not-a-hex" "--mode" "dark")

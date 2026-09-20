@@ -7,7 +7,7 @@ gated by recognition — these are broadly-known internet references chosen beca
 they land without a shared back-catalog.
 
 **Store search terms, not URLs.** Same rule as the rest of levity: the direct media
-URL is sourced and verified at use (`WebSearch` → resolve → `check_media_url.py`),
+URL is sourced and verified at use (`WebSearch` → resolve → `dv-tools check-media-url`),
 never pinned here, so the library never link-rots. Keep it to references that have
 stayed legible for a few years — a hyper-current meme dates a deck the moment the
 trend passes, and an external audience often hasn't seen it.

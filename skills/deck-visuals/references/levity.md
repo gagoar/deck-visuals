@@ -176,7 +176,7 @@ Follow every step; do not skip the verify step because a URL "looks right."
      target — do not hand-construct it from the view-page slug, Tenor's media
      paths are not derivable from the slug alone.
 3. **Verify before embedding.** Never embed a URL that hasn't been checked. Run
-   the checker: `python3 assets/scripts/check_media_url.py <url>`. It requires
+   the checker: `assets/tools/dv-tools check-media-url <url>`. It requires
    HTTP 200 and a `Content-Type` of `image/*` or `video/*` and a non-trivial body
    size, and exits 1 if any URL fails. No script handy? `curl -sIL <url>` and
    confirm the same three things by eye. If it fails, go back to step 1 — do not
@@ -222,7 +222,7 @@ per slot. Two surfaces, same rule — **Claude proposes, the human approves:**
 ]}
 ```
 
-Only pin `gif_url`s that passed `check_media_url.py`; a candidate with a null
+Only pin `gif_url`s that passed `dv-tools check-media-url`; a candidate with a null
 `gif_url` still shows (label only). Prefer a small rendition (e.g. Giphy `200w.gif`)
 over the original so the tiles load fast rather than reading as empty. `selections.json` comes back as
 `{"selections":[{"slot_id","chosen_index","chosen_label","chosen_gif_url","skipped"}]}`
@@ -265,7 +265,7 @@ has 12 slides, 2-3 GIF slides is the right order of magnitude, not 6.
 ## Link-rot note
 
 External GIF hosts remove content. Before delivery, re-check every pinned URL
-still resolves — run `check_media_url.py` again on every URL in the deck. If a
+still resolves — run `dv-tools check-media-url` again on every URL in the deck. If a
 link has gone dead, re-source it: the HTML comment left by step 5 of Sourcing
 above has the original search term, so re-sourcing starts from step 1, not from
 scratch. Do not leave a broken image in a shipped deck. This is a real, recurring
