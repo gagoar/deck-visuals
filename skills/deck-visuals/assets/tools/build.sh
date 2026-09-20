@@ -9,12 +9,16 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bin="$here/bin"
 mkdir -p "$bin"
 
+# Build from inside the module dir so `go build` finds go.mod regardless of the
+# caller's working directory.
+cd "$here"
+
 build() {
   local goos="$1" goarch="$2" ext="${3:-}"
   echo "building $goos/$goarch..."
   GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 \
     go build -trimpath -ldflags "-s -w" \
-    -o "$bin/dv-tools-$goos-$goarch$ext" "$here"
+    -o "$bin/dv-tools-$goos-$goarch$ext" .
 }
 
 build darwin arm64
