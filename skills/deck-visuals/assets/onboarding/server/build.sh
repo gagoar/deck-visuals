@@ -16,12 +16,16 @@ embedded=(picker.html levity-picker.html picker.css)
 for f in "${embedded[@]}"; do cp "$here/../$f" "$here/$f"; done
 trap 'for f in "${embedded[@]}"; do rm -f "$here/$f"; done' EXIT
 
+# Build from inside the module dir so `go build` finds go.mod regardless of the
+# caller's working directory (CI runs this script from the repo root).
+cd "$here"
+
 build() {
   local goos="$1" goarch="$2" ext="${3:-}"
   echo "building $goos/$goarch..."
   GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 \
     go build -trimpath -ldflags "-s -w" \
-    -o "$bin/dv-onboard-$goos-$goarch$ext" "$here"
+    -o "$bin/dv-onboard-$goos-$goarch$ext" .
 }
 
 build darwin arm64
