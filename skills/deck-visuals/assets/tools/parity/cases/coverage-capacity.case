@@ -1,0 +1,4 @@
+# coverage: capacity mode (no --results) against the REAL levity.md + show-catalog.md
+# Expect: every seed-library shape has >= 3 catalog carriers -> all OK, exit 0.
+SUBCOMMAND="coverage"
+ARGS=("--levity" "../../../references/levity.md" "--catalog" "../../show-catalog.md")

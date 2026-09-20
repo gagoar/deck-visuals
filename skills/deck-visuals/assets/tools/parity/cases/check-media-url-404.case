@@ -1,0 +1,3 @@
+# check-media-url: a missing path -> FAIL (status 404), exit 1
+SUBCOMMAND="check-media-url"
+ARGS=("{BASE}/missing")

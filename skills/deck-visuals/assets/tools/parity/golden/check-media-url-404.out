@@ -1,0 +1,2 @@
+[FAIL] http://127.0.0.1:62915/missing
+        status=404 content-type=text/plain 19 bytes read/declared

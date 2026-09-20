@@ -9,14 +9,14 @@ on:
     branches: [main]
     paths:
       - 'skills/deck-visuals/assets/onboarding/**'
-      - 'skills/deck-visuals/assets/scripts/coverage_report.py'
+      - 'skills/deck-visuals/assets/tools/**'
       - 'skills/deck-visuals/assets/show-catalog.md'
       - 'skills/deck-visuals/references/levity.md'
       - '.github/workflows/onboarding-server.yml'
   pull_request:
     paths:
       - 'skills/deck-visuals/assets/onboarding/**'
-      - 'skills/deck-visuals/assets/scripts/coverage_report.py'
+      - 'skills/deck-visuals/assets/tools/**'
       - 'skills/deck-visuals/assets/show-catalog.md'
       - 'skills/deck-visuals/references/levity.md'
       - '.github/workflows/onboarding-server.yml'
@@ -35,14 +35,25 @@ jobs:
         with:
           go-version-file: skills/deck-visuals/assets/onboarding/server/go.mod
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: skills/deck-visuals/assets/tools/go.mod
+
       - name: Smoke test the server (serve → submit → shutdown)
         run: skills/deck-visuals/assets/onboarding/server/smoke_test.sh
 
       - name: Cross-compile all target binaries (verify they still build)
         run: skills/deck-visuals/assets/onboarding/server/build.sh
 
-      - name: Catalog coverage — >=3 options per concept shape, no drift
+      - name: dv-tools — vet and test
+        working-directory: skills/deck-visuals/assets/tools
         run: |
-          python3 skills/deck-visuals/assets/scripts/coverage_report.py \
-            --levity skills/deck-visuals/references/levity.md \
-            --catalog skills/deck-visuals/assets/show-catalog.md
+          go vet ./...
+          go test ./...
+
+      - name: Catalog coverage — >=3 options per concept shape, no drift
+        working-directory: skills/deck-visuals/assets/tools
+        run: |
+          go run . coverage \
+            --levity ../../references/levity.md \
+            --catalog ../show-catalog.md

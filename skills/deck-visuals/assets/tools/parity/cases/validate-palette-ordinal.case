@@ -1,0 +1,4 @@
+# validate-palette: the real brand sequential ramp (--ordinal), per
+# assets/brand-palette.md -> ALL CHECKS PASS, exit 0.
+SUBCOMMAND="validate-palette"
+ARGS=("#035590,#0a6cb3,#0b84da,#359df5,#6db7fd" "--ordinal" "--mode" "dark" "--surface" "#1a1a19")

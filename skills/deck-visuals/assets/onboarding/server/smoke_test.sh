@@ -5,7 +5,7 @@
 # after changing the server, and in CI on every change
 # (see .github/workflows/onboarding-server.yml).
 #
-# Needs: go, curl, python3. Exits non-zero on any failed check.
+# Needs: go, curl. Exits non-zero on any failed check.
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,9 +30,15 @@ echo "==> go vet"
 echo "==> build (host platform)"
 ( cd "$here" && CGO_ENABLED=0 go build -trimpath -o "$work/dv-onboard" . )
 
-# run_form <form> <data-file> <post-body> <grep-in-page> <python-asserts>
+# assert_grep <file> <pattern> <message> — fail unless pattern appears in file.
+assert_grep() {
+  local file="$1" pattern="$2" msg="$3"
+  grep -q -- "$pattern" "$file" || fail "$msg"
+}
+
+# run_form <form> <data-file> <post-body> <grep-in-page>
 run_form() {
-  local form="$1" data="$2" body="$3" needle="$4" pyfile="$5"
+  local form="$1" data="$2" body="$3" needle="$4"
   echo "==> [$form] launch on a random loopback port"
   local out="$work/results-$form.json"
   "$work/dv-onboard" --form "$form" --data "$data" --out "$out" --port 0 --timeout 20 \
@@ -65,9 +71,6 @@ run_form() {
   echo "==> [$form] server shuts down after one submit (exit 0)"
   wait "$srvpid"; local code=$?; srvpid=""
   [ "$code" -eq 0 ] || fail "[$form] server exited $code, expected 0"
-
-  echo "==> [$form] results.json is well-formed"
-  python3 "$pyfile" "$out"
 }
 
 # ---- onboard form ----
@@ -77,18 +80,17 @@ cat > "$work/cards.json" <<'JSON'
   {"id":"breaking-bad","title":"Breaking Bad","domain":"TV drama","image_url":null,"gif_url":null,"degraded":true}
 ]}
 JSON
-cat > "$work/assert_onboard.py" <<'PY'
-import json, sys
-r = json.load(open(sys.argv[1]))
-assert r.get("submitted_at"), "missing submitted_at"
-assert r["talk"]["duration_minutes"] == 30, "duration not recorded"
-assert r["audience"]["description"] == "internal eng team", "audience not verbatim"
-assert r["recognized_ids"] == ["the-office"], "recognized_ids wrong"
-print("    onboard results OK")
-PY
 run_form onboard "$work/cards.json" \
   '{"talk":{"duration_minutes":30},"audience":{"description":"internal eng team"},"recognized_ids":["the-office"],"not_recognized_ids":["breaking-bad"],"skipped_ids":[],"suggestions":[]}' \
-  "Breaking Bad" "$work/assert_onboard.py"
+  "Breaking Bad"
+
+echo "==> [onboard] results.json is well-formed"
+out_onboard="$work/results-onboard.json"
+assert_grep "$out_onboard" '"submitted_at"' "[onboard] missing submitted_at"
+assert_grep "$out_onboard" '"duration_minutes": 30' "[onboard] duration not recorded"
+assert_grep "$out_onboard" '"description": "internal eng team"' "[onboard] audience not verbatim"
+assert_grep "$out_onboard" '"the-office"' "[onboard] recognized_ids wrong"
+echo "    onboard results OK"
 
 # ---- levity form ----
 cat > "$work/slots.json" <<'JSON'
@@ -99,17 +101,15 @@ cat > "$work/slots.json" <<'JSON'
   ]}
 ]}
 JSON
-cat > "$work/assert_levity.py" <<'PY'
-import json, sys
-r = json.load(open(sys.argv[1]))
-assert r.get("submitted_at"), "missing submitted_at"
-sel = r["selections"][0]
-assert sel["slot_id"] == "s3", "slot_id wrong"
-assert sel["chosen_index"] == 0, "chosen_index wrong"
-print("    levity results OK")
-PY
 run_form levity "$work/slots.json" \
   '{"selections":[{"slot_id":"s3","chosen_index":0,"chosen_label":"The Simpsons — The Homer","chosen_gif_url":null,"skipped":false}]}' \
-  "Feature comparison" "$work/assert_levity.py"
+  "Feature comparison"
+
+echo "==> [levity] results.json is well-formed"
+out_levity="$work/results-levity.json"
+assert_grep "$out_levity" '"submitted_at"' "[levity] missing submitted_at"
+assert_grep "$out_levity" '"slot_id": "s3"' "[levity] slot_id wrong"
+assert_grep "$out_levity" '"chosen_index": 0' "[levity] chosen_index wrong"
+echo "    levity results OK"
 
 echo "SMOKE PASS"

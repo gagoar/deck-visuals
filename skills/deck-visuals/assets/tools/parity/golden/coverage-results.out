@@ -1,0 +1,50 @@
+Coverage report — scope: recognized, target: >= 3 per shape
+
+[GAP] Accidental complexity: 0
+        could add: Arrested Development, Inception, It's Always Sunny in Philadelphia
+[GAP] Avoidance / retreat: 2
+        could add: Mad Men
+[GAP] Cascading failure: 0
+        could add: Back to the Future, Chernobyl, Game of Thrones, Jurassic Park, Olympic relay, Rick and Morty, Stranger Things, Tetris, The Last of Us
+[GAP] Chaotic parallel effort: 0
+        could add: Community, Minecraft, Rick and Morty, Tetris
+[GAP] Coordination breakdown under pressure: 0
+        could add: Formula 1, Mission: Impossible, Olympic relay, Succession
+[GAP] Coordination difficulty: 0
+        could add: Brooklyn Nine-Nine, Chess, Ocean's Eleven, Parks and Recreation, Star Trek
+[OK ] Declaring a fix that isn't one: 3
+[GAP] Denial of consequence: 2
+        could add: Chernobyl, Jurassic Park, The Sopranos, Titanic
+[GAP] Diminishing returns / breaking point: 0
+        could add: Futurama, Seinfeld, Star Trek
+[GAP] Early warning ignored: 2
+        could add: Chernobyl, Game of Thrones, Jurassic Park, Stranger Things, Titanic
+[GAP] Excess / feature bloat: 1
+        could add: Rick and Morty, The Sims
+[GAP] Fragility: 1
+        could add: Jenga, The Last of Us
+[GAP] Fragmented understanding: 0
+        could add: Inception, It's Always Sunny in Philadelphia, Severance, The Wire
+[OK ] Momentum without control: 3
+[GAP] Obvious problem nobody names: 1
+        could add: Curb Your Enthusiasm, Seinfeld, South Park, Succession, The Matrix
+[GAP] Over-engineering: 0
+        could add: Community, Ocean's Eleven, Rick and Morty, South Park, The Sims
+[GAP] Persistent thankless effort: 0
+        could add: Bob's Burgers, Marathon running, Parks and Recreation, SpongeBob SquarePants, The Lord of the Rings, The Wire, Whack-a-Mole
+[GAP] Precarious balance: 0
+        could add: Avatar: The Last Airbender, Chess, Jenga, Mission: Impossible, The Lord of the Rings, Titanic
+[GAP] Recurring bugs: 0
+        could add: Arrested Development, Brooklyn Nine-Nine, Pac-Man, SpongeBob SquarePants, The Sopranos, Whack-a-Mole
+[GAP] Reinventing effort: 0
+        could add: Futurama, Mad Men, Minecraft, The Good Place
+[GAP] Shifting requirements: 0
+        could add: Back to the Future, Game of Thrones, Mario Kart, The Good Place
+[GAP] Slow drift: 0
+        could add: Avatar: The Last Airbender, Mad Men, Marathon running, Severance
+[GAP] Small mistake, big visible mess: 1
+        could add: Bob's Burgers, Curb Your Enthusiasm
+[GAP] Unseen scale: 2
+        could add: Severance, The Matrix
+
+24 shapes, 22 gap(s), 0 drift tag(s).

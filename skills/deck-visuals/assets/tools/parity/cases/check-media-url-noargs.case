@@ -1,0 +1,3 @@
+# check-media-url: no URLs given -> usage on stderr, exit 2
+SUBCOMMAND="check-media-url"
+ARGS=()
