@@ -93,7 +93,8 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 - Visuals render in the deck's subject idiom (concept-map `visual through-line`) so
   they read as one set — but the idiom drives form/metaphor only, never color or
   legibility. Never ask the user to name colors; a per-deck palette is a validated
-  preset picked from swatches (`dv-onboard --form palette`).
+  accent theme picked from swatches (`dv-onboard --form palette`) — every theme
+  shares the same validated data palette, only the accent varies.
 - Never run `iceberg:edit` on a rendered `.html` deck.
 - The picker pages (`assets/onboarding/picker.html` and `levity-picker.html`,
   compiled into the local binary) are the full HTML pages this skill owns — local
@@ -118,7 +119,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | The user's curated analogy source list | `assets/familiar-sources.md` |
 | Deck theme tokens, layer boundaries, subject-idiom layer | `references/brand.md` |
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
-| Per-deck palette presets (swatch-picked, validated) | `assets/palette-presets.md`, `dv-onboard --form palette` |
+| Per-deck accent themes (swatch-picked, validated, shared data palette) | `assets/palette-presets.md`, `dv-onboard --form palette` |
 | Icon set | `assets/icons/` |
 | Injectable fragments | `assets/fragments/` |
 | Verify a GIF/media URL resolves | `assets/tools/dv-tools check-media-url` |

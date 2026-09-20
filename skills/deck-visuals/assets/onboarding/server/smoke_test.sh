@@ -115,7 +115,10 @@ echo "    levity results OK"
 # ---- palette form ----
 cat > "$work/presets.json" <<'JSON'
 {"presets":[
-  {"id":"house","subject":"brand default","mode":"dark","surface":"#1a1a19","slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]}
+  {"id":"house","subject":"brand default","accent":"#3ea6ff","bg":"#0a1428","data_slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]},
+  {"id":"space","subject":"space / night sky","accent":"#6a87f0","bg":"#0a1428","data_slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]},
+  {"id":"architecture","subject":"architecture","accent":"#00a4a4","bg":"#0a1428","data_slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]},
+  {"id":"sunrise","subject":"warm / keynote","accent":"#ffb020","bg":"#0a1428","data_slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]}
 ]}
 JSON
 run_form palette "$work/presets.json" \

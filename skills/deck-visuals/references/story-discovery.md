@@ -61,7 +61,7 @@ It has a **deck-level header** and then one row per slide or section.
 | Field | What it captures |
 |---|---|
 | `visual through-line` | The subject idiom + a one-line motif — e.g. "space → nodes as planets on orbital rings; edges as orbits". Empty = clean house idiom. From question 6; the user-supplied mapping wins over an inferred one. |
-| `palette` | The chosen palette preset id, if the user picked one from shown swatches (see "Never name colors"); default = the house palette. Never a color name. |
+| `palette` | The chosen accent theme id, if the user picked one from shown swatches (see "Never name colors"); default = the house theme. Every theme shares the same validated data palette — only the accent varies. Never a color name. |
 
 **Per-slide rows:**
 
@@ -99,10 +99,18 @@ map is what hands those claims to that step.
 Do not ask the user to name or describe colors — people rarely know their palette or
 how to name it. The intake asks about the **subject world** (question 6), not colors.
 The default is the validated house palette (`assets/brand-palette.md`). If a per-deck
-palette variant fits the subject, it is chosen by **showing swatches to pick from**
-(the `dv-onboard --form palette` chooser, presets in `assets/palette-presets.md`),
-and only the picked preset id is recorded on the concept-map header — never a color
-name.
+accent theme fits the subject, it is chosen by **showing swatches to pick from**
+(the `dv-onboard --form palette` chooser, themes in `assets/palette-presets.md` —
+every theme shares the same validated data palette and only the accent color
+varies), and only the picked theme id is recorded on the concept-map header — never
+a color name.
+
+The themes shown are **the user's pinned favorites (always) + themes matched to the
+shows they recognized** during onboarding — a Matrix-green for someone who knows The
+Matrix, Grand Budapest pink for a Wes Anderson fan. Claude builds the picker's `--data`
+by joining `recognized_ids` (from `results.json` / `assets/familiar-sources.md`) against
+the `match:` ids in `assets/palette-presets.md`, always including the Favorites. So the
+palette nods to pop culture the presenter actually loves, not a generic swatch grid.
 
 ## Audience familiarity, layered per deck
 

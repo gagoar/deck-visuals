@@ -3,15 +3,17 @@
   deck-visuals palette picker — LOCAL TOOLING, NOT A DECK FRAGMENT.
 
   The deck-time companion to the levity picker, for the other axis of "Claude
-  proposes, the human approves": which validated categorical palette a deck
-  should ship with. Served by the runtime-free dv-onboard binary
-  (`--form palette`) on 127.0.0.1. Each preset in `assets/palette-presets.md`
-  already passed `dv-tools validate-palette` before it ever reaches this page —
-  this picker never re-validates, it only lets a human pick among presets
-  Claude has already cleared. Never injected into a deck or delivered; the
-  chosen preset id is what Claude then applies.
+  proposes, the human approves": which accent theme a deck should ship with.
+  Served by the runtime-free dv-onboard binary (`--form palette`) on
+  127.0.0.1. Every theme in `assets/palette-presets.md` shares the exact same
+  validated house 8-slot data palette — only the accent color varies per
+  theme, drawn from a hue family already run through
+  `assets/tools/dv-tools validate-palette`. This picker never re-validates,
+  it only lets a human pick among accent themes Claude has already cleared.
+  Never injected into a deck or delivered; the chosen theme id is what Claude
+  then applies.
 
-  Styling comes from the shared /picker.css. Preset data is injected at serve
+  Styling comes from the shared /picker.css. Theme data is injected at serve
   time: the binary replaces the token in the window.DV_DATA line with the
   contents of --data. The choice POSTs to /submit; the server stamps
   submitted_at and writes results.json.
@@ -20,30 +22,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>deck-visuals — pick the palette</title>
+<title>deck-visuals — pick the accent theme</title>
 <link rel="stylesheet" href="/picker.css">
 </head>
 <body>
-<div class="dv-app dv-app--wide" role="application" aria-label="Palette swatch picker">
+<div class="dv-app dv-app--wide" role="application" aria-label="Accent theme picker">
 
   <header class="dv-topbar">
     <span class="dv-wordmark"><span class="dv-wordmark__mark dv-wordmark__mark--sparkle"></span>deck-visuals</span>
-    <span class="dv-topbar__tag">Palette · pick a scheme</span>
+    <span class="dv-topbar__tag">Palette · pick an accent theme</span>
   </header>
 
   <section class="dv-screen is-active" id="screen-pick">
     <div class="dv-stage">
-      <div class="dv-eyebrow">Palette · pick a scheme</div>
-      <h1 id="pick-title">Choose the deck's palette</h1>
+      <div class="dv-eyebrow">Palette · pick an accent theme</div>
+      <h1 id="pick-title">Choose the deck's accent theme</h1>
       <p class="dv-lead" id="pick-lead">
-        Every option here already passed the categorical palette validator — pick
-        the one that fits the deck's subject best.
+        Every theme here shares the same validated data palette — the 8 colors
+        charts and diagrams use never change. Pick the accent that fits the
+        deck's subject; it colors headings, underlines, and chart callouts.
       </p>
 
-      <div class="dv-candidates" id="presets" role="radiogroup" aria-label="Palette presets"></div>
+      <div class="dv-candidates" id="presets" role="radiogroup" aria-label="Accent themes"></div>
 
       <div class="dv-actionbar">
-        <button class="dv-btn dv-btn-primary" id="btn-submit" disabled>Use this palette</button>
+        <button class="dv-btn dv-btn-primary" id="btn-submit" disabled>Use this theme</button>
       </div>
     </div>
   </section>
@@ -51,7 +54,7 @@
   <section class="dv-screen dv-done" id="screen-done" aria-labelledby="done-title">
     <div class="dv-eyebrow">Sent</div>
     <h1 id="done-title">Done — you can close this tab.</h1>
-    <p class="dv-lead">Your pick was sent back. Claude will apply this palette to the deck.</p>
+    <p class="dv-lead">Your pick was sent back. Claude will apply this accent theme to the deck.</p>
   </section>
 
   <footer class="dv-footer">Runs on your machine · nothing leaves it · <strong>deck-visuals</strong></footer>
@@ -59,7 +62,7 @@
 </div>
 
 <script>
-  // Preset data injected by the server at serve time.
+  // Theme data injected by the server at serve time.
   window.DV_DATA = REPLACE_DATA_JSON;
 
   (function () {
@@ -75,24 +78,86 @@
       el(id).classList.add("is-active");
     }
 
-    function swatchRow(preset) {
+    // The mini mock-slide: a rounded rect in the deck bg color with a heading
+    // line + underline in the accent, two dim placeholder text lines, and a
+    // little row of 3 bars in the accent (opacity 1.0/0.6/0.35) to suggest a
+    // chart. This is what makes each theme's card look clearly different from
+    // its siblings — the accent dominates the preview instead of hiding in a
+    // single small swatch.
+    function mockSlide(preset) {
+      var accent = preset.accent || "#3ea6ff";
+      var bg = preset.bg || "#0a1428";
+
+      var slide = document.createElement("div");
+      slide.className = "dv-mockslide";
+      slide.style.background = bg;
+
+      var heading = document.createElement("div");
+      heading.className = "dv-mockslide__heading";
+      heading.style.color = accent;
+      heading.textContent = "Slide heading";
+      slide.appendChild(heading);
+
+      var underline = document.createElement("div");
+      underline.className = "dv-mockslide__underline";
+      underline.style.background = accent;
+      slide.appendChild(underline);
+
+      var lines = document.createElement("div");
+      lines.className = "dv-mockslide__lines";
+      for (var l = 0; l < 2; l++) {
+        var line = document.createElement("div");
+        line.className = "dv-mockslide__line";
+        lines.appendChild(line);
+      }
+      slide.appendChild(lines);
+
+      var bars = document.createElement("div");
+      bars.className = "dv-mockslide__bars";
+      // A theme may carry an `accent_set` (2-4 colors) for a genuine multi-color
+      // palette like Wes Anderson; those color the bars directly. Otherwise the
+      // single accent is stepped in opacity.
+      var set = Array.isArray(preset.accent_set) && preset.accent_set.length
+        ? preset.accent_set : null;
+      var opacities = [1, 0.6, 0.35];
+      opacities.forEach(function (o, i) {
+        var bar = document.createElement("span");
+        bar.className = "dv-mockslide__bar";
+        if (set) { bar.style.background = set[i % set.length]; bar.style.opacity = "1"; }
+        else { bar.style.background = accent; bar.style.opacity = String(o); }
+        bar.style.height = (18 + i * 10) + "px";
+        bars.appendChild(bar);
+      });
+      slide.appendChild(bars);
+
+      return slide;
+    }
+
+    // The de-emphasized shared-data-palette row — reuses the existing
+    // .dv-swatches/.dv-swatch chips so it's clear these never change per
+    // theme.
+    function sharedSwatchRow(preset) {
+      var wrap = document.createElement("div");
+      wrap.className = "dv-shared-palette";
+      wrap.setAttribute("aria-hidden", "true");
+
+      var caption = document.createElement("div");
+      caption.className = "dv-shared-palette__caption";
+      caption.textContent = "shared data palette";
+      wrap.appendChild(caption);
+
       var row = document.createElement("div");
-      row.className = "dv-swatches";
-      row.setAttribute("aria-hidden", "true");
-      var slots = Array.isArray(preset.slots) ? preset.slots : [];
+      row.className = "dv-swatches dv-swatches--small";
+      var slots = Array.isArray(preset.data_slots) ? preset.data_slots : [];
       slots.forEach(function (hex) {
         var chip = document.createElement("span");
         chip.className = "dv-swatch";
         chip.style.background = hex || "transparent";
         row.appendChild(chip);
       });
-      if (preset.surface) {
-        var surf = document.createElement("span");
-        surf.className = "dv-swatch dv-swatch--surface";
-        surf.style.background = preset.surface;
-        row.appendChild(surf);
-      }
-      return row;
+      wrap.appendChild(row);
+
+      return wrap;
     }
 
     function renderPresets() {
@@ -104,25 +169,25 @@
         btn.setAttribute("role", "radio");
         btn.setAttribute("aria-checked", "false");
         btn.setAttribute("aria-pressed", "false");
-        var name = preset.subject || preset.id || ("Preset " + (pi + 1));
-        btn.setAttribute("aria-label", name + (preset.mode ? (" — " + preset.mode + " mode") : ""));
+        var name = preset.subject || preset.id || ("Theme " + (pi + 1));
+        btn.setAttribute("aria-label", name + (preset.accent ? (" — accent " + preset.accent) : ""));
 
         var media = document.createElement("div");
         media.className = "dv-media";
-        media.appendChild(swatchRow(preset));
+        media.appendChild(mockSlide(preset));
         btn.appendChild(media);
 
         var label = document.createElement("div");
         label.className = "dv-candidate__label";
-        label.textContent = preset.id || ("preset-" + (pi + 1));
+        label.textContent = preset.subject || ("theme-" + (pi + 1));
         btn.appendChild(label);
 
-        if (preset.subject) {
-          var cap = document.createElement("div");
-          cap.className = "dv-candidate__caption";
-          cap.textContent = preset.subject + (preset.mode ? (" · " + preset.mode) : "");
-          btn.appendChild(cap);
-        }
+        var cap = document.createElement("div");
+        cap.className = "dv-candidate__caption";
+        cap.textContent = (preset.id || ("preset-" + (pi + 1))) + (preset.accent ? (" · " + preset.accent) : "");
+        btn.appendChild(cap);
+
+        btn.appendChild(sharedSwatchRow(preset));
 
         btn.addEventListener("click", function () { selectPreset(preset.id, wrap, btn); });
         wrap.appendChild(btn);
@@ -154,7 +219,7 @@
 
     el("btn-submit").addEventListener("click", submit);
     if (!presets.length) {
-      el("pick-lead").textContent = "No palette presets were loaded.";
+      el("pick-lead").textContent = "No accent themes were loaded.";
       el("btn-submit").disabled = true;
     } else {
       renderPresets();

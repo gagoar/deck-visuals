@@ -41,11 +41,12 @@ Being "on-brand" here has two layers, and they must not be confused:
   via `references/visual-concepts.md`. It is a skin over the same primitives; it never
   overrides the tokens or the legibility bar.
 
-The only case color varies per deck is a **validated palette preset** the user picked
-from shown swatches (`dv-onboard --form palette`, presets in
-`assets/palette-presets.md`, each passing `dv-tools validate-palette`). Colors are
-never named in prose — always picked from swatches. See story-discovery's "Never name
-colors".
+The only case color varies per deck is a **validated accent theme** the user picked
+from shown swatches (`dv-onboard --form palette`, themes in
+`assets/palette-presets.md`). Every theme shares the same validated 8-slot data
+palette; only the accent color — drawn from an already-validated hue family — varies
+per theme. Colors are never named in prose — always picked from swatches. See
+story-discovery's "Never name colors".
 
 ## Where each layer sits
 
