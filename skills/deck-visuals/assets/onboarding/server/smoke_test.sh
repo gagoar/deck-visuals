@@ -10,7 +10,7 @@ set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 work="$(mktemp -d)"
-embedded=(picker.html levity-picker.html picker.css)
+embedded=(picker.html levity-picker.html palette-picker.html picker.css)
 cleanup() {
   for f in "${embedded[@]}"; do rm -f "$here/$f"; done
   [ -n "${srvpid:-}" ] && kill "$srvpid" 2>/dev/null || true
@@ -111,5 +111,21 @@ assert_grep "$out_levity" '"submitted_at"' "[levity] missing submitted_at"
 assert_grep "$out_levity" '"slot_id": "s3"' "[levity] slot_id wrong"
 assert_grep "$out_levity" '"chosen_index": 0' "[levity] chosen_index wrong"
 echo "    levity results OK"
+
+# ---- palette form ----
+cat > "$work/presets.json" <<'JSON'
+{"presets":[
+  {"id":"house","subject":"brand default","mode":"dark","surface":"#1a1a19","slots":["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"]}
+]}
+JSON
+run_form palette "$work/presets.json" \
+  '{"chosen_preset_id":"house"}' \
+  "house"
+
+echo "==> [palette] results.json is well-formed"
+out_palette="$work/results-palette.json"
+assert_grep "$out_palette" '"submitted_at"' "[palette] missing submitted_at"
+assert_grep "$out_palette" '"chosen_preset_id": "house"' "[palette] chosen_preset_id wrong"
+echo "    palette results OK"
 
 echo "SMOKE PASS"

@@ -44,9 +44,10 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 
 0. **Discovery.** Before placing any visual, run `references/story-discovery.md` —
    interview if the user has no material yet, extract if he brings an outline or
-   draft. Output is a concept map (`claim` / `beat` / `audience` / `visual-intent`
-   per slide). Every step below reads this map; it is what positions charts,
-   diagrams, icons, and humor, not just humor.
+   draft. Output is a concept map: a deck-level header (`visual through-line` +
+   `palette`) plus per-slide `claim` / `beat` / `story-role` / `audience` /
+   `visual-intent`. Every step below reads this map; the `visual through-line` is the
+   subject idiom every visual renders in. Never ask the user to name colors.
 1. **Copy.** Draft slide text. Run `iceberg` on the prose only, never on the
    finished `.html` file — `iceberg` reads markup as prose and will corrupt SVG or
    `<img>` tags.
@@ -63,6 +64,9 @@ the refreshed profile. Full flow: `references/onboarding.md`.
    - single idea needing an anchor → **icon** from `assets/icons/`
    - emotional / hero moment → **deferred**. Drop a placeholder and an image-prompt
      spec; do not fabricate a raster. See `references/visual-concepts.md`.
+   Render the chosen flavor in the concept map's `visual through-line` (subject idiom)
+   and let each visual carry its `story-role`, so the deck's visuals read as one set —
+   idiom drives form/metaphor, brand tokens still drive color.
 5. **Levity injection.** Read `references/levity.md`. Match the mapped `claim` to a
    scene (analogy-first), preferring `assets/familiar-sources.md`; fall back to
    reaction mode only for slides where the point is the audience's feeling, not a
@@ -86,6 +90,10 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 - Never embed a GIF/media URL that hasn't passed `dv-tools check-media-url` (or an
   equivalent manual check) — see `references/levity.md`.
 - Colors come from `assets/brand-palette.md`, not ad hoc hex values.
+- Visuals render in the deck's subject idiom (concept-map `visual through-line`) so
+  they read as one set — but the idiom drives form/metaphor only, never color or
+  legibility. Never ask the user to name colors; a per-deck palette is a validated
+  preset picked from swatches (`dv-onboard --form palette`).
 - Never run `iceberg:edit` on a rendered `.html` deck.
 - The picker pages (`assets/onboarding/picker.html` and `levity-picker.html`,
   compiled into the local binary) are the full HTML pages this skill owns — local
@@ -108,8 +116,9 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | Chart rules, `dataviz` handoff | `references/charts.md` |
 | Analogy-first levity, reaction mode, WebSearch sourcing, cadence, accessibility, taste | `references/levity.md` |
 | The user's curated analogy source list | `assets/familiar-sources.md` |
-| Deck theme tokens, layer boundaries | `references/brand.md` |
+| Deck theme tokens, layer boundaries, subject-idiom layer | `references/brand.md` |
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
+| Per-deck palette presets (swatch-picked, validated) | `assets/palette-presets.md`, `dv-onboard --form palette` |
 | Icon set | `assets/icons/` |
 | Injectable fragments | `assets/fragments/` |
 | Verify a GIF/media URL resolves | `assets/tools/dv-tools check-media-url` |

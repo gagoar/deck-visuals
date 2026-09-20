@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+  deck-visuals palette picker — LOCAL TOOLING, NOT A DECK FRAGMENT.
+
+  The deck-time companion to the levity picker, for the other axis of "Claude
+  proposes, the human approves": which validated categorical palette a deck
+  should ship with. Served by the runtime-free dv-onboard binary
+  (`--form palette`) on 127.0.0.1. Each preset in `assets/palette-presets.md`
+  already passed `dv-tools validate-palette` before it ever reaches this page —
+  this picker never re-validates, it only lets a human pick among presets
+  Claude has already cleared. Never injected into a deck or delivered; the
+  chosen preset id is what Claude then applies.
+
+  Styling comes from the shared /picker.css. Preset data is injected at serve
+  time: the binary replaces the token in the window.DV_DATA line with the
+  contents of --data. The choice POSTs to /submit; the server stamps
+  submitted_at and writes results.json.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>deck-visuals — pick the palette</title>
+<link rel="stylesheet" href="/picker.css">
+</head>
+<body>
+<div class="dv-app dv-app--wide" role="application" aria-label="Palette swatch picker">
+
+  <header class="dv-topbar">
+    <span class="dv-wordmark"><span class="dv-wordmark__mark dv-wordmark__mark--sparkle"></span>deck-visuals</span>
+    <span class="dv-topbar__tag">Palette · pick a scheme</span>
+  </header>
+
+  <section class="dv-screen is-active" id="screen-pick">
+    <div class="dv-stage">
+      <div class="dv-eyebrow">Palette · pick a scheme</div>
+      <h1 id="pick-title">Choose the deck's palette</h1>
+      <p class="dv-lead" id="pick-lead">
+        Every option here already passed the categorical palette validator — pick
+        the one that fits the deck's subject best.
+      </p>
+
+      <div class="dv-candidates" id="presets" role="radiogroup" aria-label="Palette presets"></div>
+
+      <div class="dv-actionbar">
+        <button class="dv-btn dv-btn-primary" id="btn-submit" disabled>Use this palette</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="dv-screen dv-done" id="screen-done" aria-labelledby="done-title">
+    <div class="dv-eyebrow">Sent</div>
+    <h1 id="done-title">Done — you can close this tab.</h1>
+    <p class="dv-lead">Your pick was sent back. Claude will apply this palette to the deck.</p>
+  </section>
+
+  <footer class="dv-footer">Runs on your machine · nothing leaves it · <strong>deck-visuals</strong></footer>
+
+</div>
+
+<script>
+  // Preset data injected by the server at serve time.
+  window.DV_DATA = REPLACE_DATA_JSON;
+
+  (function () {
+    "use strict";
+    var data = window.DV_DATA || {};
+    var presets = Array.isArray(data) ? data : (data.presets || []);
+    var chosenId = null;
+
+    function el(id) { return document.getElementById(id); }
+    function show(id) {
+      var s = document.querySelectorAll(".dv-screen");
+      for (var j = 0; j < s.length; j++) s[j].classList.remove("is-active");
+      el(id).classList.add("is-active");
+    }
+
+    function swatchRow(preset) {
+      var row = document.createElement("div");
+      row.className = "dv-swatches";
+      row.setAttribute("aria-hidden", "true");
+      var slots = Array.isArray(preset.slots) ? preset.slots : [];
+      slots.forEach(function (hex) {
+        var chip = document.createElement("span");
+        chip.className = "dv-swatch";
+        chip.style.background = hex || "transparent";
+        row.appendChild(chip);
+      });
+      if (preset.surface) {
+        var surf = document.createElement("span");
+        surf.className = "dv-swatch dv-swatch--surface";
+        surf.style.background = preset.surface;
+        row.appendChild(surf);
+      }
+      return row;
+    }
+
+    function renderPresets() {
+      var wrap = el("presets");
+      presets.forEach(function (preset, pi) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "dv-candidate";
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.setAttribute("aria-pressed", "false");
+        var name = preset.subject || preset.id || ("Preset " + (pi + 1));
+        btn.setAttribute("aria-label", name + (preset.mode ? (" — " + preset.mode + " mode") : ""));
+
+        var media = document.createElement("div");
+        media.className = "dv-media";
+        media.appendChild(swatchRow(preset));
+        btn.appendChild(media);
+
+        var label = document.createElement("div");
+        label.className = "dv-candidate__label";
+        label.textContent = preset.id || ("preset-" + (pi + 1));
+        btn.appendChild(label);
+
+        if (preset.subject) {
+          var cap = document.createElement("div");
+          cap.className = "dv-candidate__caption";
+          cap.textContent = preset.subject + (preset.mode ? (" · " + preset.mode) : "");
+          btn.appendChild(cap);
+        }
+
+        btn.addEventListener("click", function () { selectPreset(preset.id, wrap, btn); });
+        wrap.appendChild(btn);
+      });
+    }
+
+    function selectPreset(id, wrap, chosenBtn) {
+      var btns = wrap.querySelectorAll(".dv-candidate");
+      for (var b = 0; b < btns.length; b++) {
+        var on = btns[b] === chosenBtn;
+        btns[b].setAttribute("aria-pressed", on ? "true" : "false");
+        btns[b].setAttribute("aria-checked", on ? "true" : "false");
+      }
+      chosenId = id;
+      el("btn-submit").disabled = false;
+    }
+
+    function submit() {
+      if (!chosenId) return;
+      el("btn-submit").disabled = true;
+      fetch("/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ chosen_preset_id: chosenId }) })
+        .then(function (res) { return res.json(); })
+        .then(function (d) {
+          if (d && d.ok) show("screen-done");
+          else { el("btn-submit").disabled = false; alert("Could not save — try again."); }
+        })
+        .catch(function () { el("btn-submit").disabled = false; alert("Could not reach the local server. Is it still running?"); });
+    }
+
+    el("btn-submit").addEventListener("click", submit);
+    if (!presets.length) {
+      el("pick-lead").textContent = "No palette presets were loaded.";
+      el("btn-submit").disabled = true;
+    } else {
+      renderPresets();
+    }
+  })();
+</script>
+</body>
+</html>

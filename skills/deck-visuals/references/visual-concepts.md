@@ -25,6 +25,39 @@ humor imagery alone.
 
 If a slide fits none of these, it does not need a visual. Not every slide gets one.
 
+## Render in the deck's idiom
+
+Once the flavor is chosen, render it in the concept map's **`visual through-line`**
+(the user-supplied mapping when given, otherwise the inferred-and-approved one; empty
+→ clean house idiom). The flavor stays the same primitive; the idiom changes its skin,
+so the deck's visuals read as one designed set instead of one-offs.
+
+Map each diagram recipe to the idiom:
+
+| Primitive | House (default) | Space idiom | Architecture idiom |
+|---|---|---|---|
+| Hub-and-spoke | central node + satellites | a sun with orbiting planets | a keystone with radiating members |
+| Flow A→B→C | rounded rects + arrows | probes along a trajectory | stages on a blueprint plan line |
+| Layered architecture | horizontal bands | orbital shells | building floors / blueprint elevations |
+| Timeline | line + milestone dots | a flight path with waypoints | a construction schedule / gantt bars |
+| Before/after | two side-by-side states | two orbital configs | plan vs elevation |
+
+Icons lean into the idiom's vocabulary before the generic set (a space deck reaches
+for `rocket`/`sparkles` only when the *claim* is about launch/novelty — the idiom
+guides, it does not license decoration).
+
+**Guardrails — the idiom never wins over these:**
+- Self-contained inline SVG with a scoped `<style>`; no external fonts/images.
+- **Colors come from `assets/brand-palette.md` only** (or a picked preset on the
+  concept-map header) — the idiom drives *shape and metaphor, never color*.
+- ≥2px strokes, ≥14px labels, 3-7 nodes; a relationship diagram must still read as a
+  relationship diagram even when drawn as orbits. If the skin hurts legibility, drop
+  it and use the clean house primitive.
+
+**Coherence rule:** reuse the same idiom primitives across the whole deck — one motif
+family, not a new metaphor per slide. Two diagrams in the same deck should look like
+siblings.
+
 ## Flavor 1: inline-SVG concept diagram
 
 Use for relationship, flow, or architecture slides. Keep every diagram:

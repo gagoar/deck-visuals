@@ -29,6 +29,24 @@ display type. These tokens are read from a real shipped deck
 this same accent family and documents status colors that reuse `--pharos`,
 `--drift`, and `--success` directly rather than inventing new ones.
 
+## Two layers: fixed theme vs per-deck idiom
+
+Being "on-brand" here has two layers, and they must not be confused:
+
+- **Fixed house theme (unchanged).** The color and type tokens above. Every visual
+  uses them; `deck-visuals` never invents ad-hoc colors.
+- **Per-deck visual idiom (story-driven).** The `visual through-line` captured in
+  `references/story-discovery.md` — a subject metaphor (space → orbits, architecture →
+  blueprints) that drives the *forms, composition, and metaphor* of diagrams and icons
+  via `references/visual-concepts.md`. It is a skin over the same primitives; it never
+  overrides the tokens or the legibility bar.
+
+The only case color varies per deck is a **validated palette preset** the user picked
+from shown swatches (`dv-onboard --form palette`, presets in
+`assets/palette-presets.md`, each passing `dv-tools validate-palette`). Colors are
+never named in prose — always picked from swatches. See story-discovery's "Never name
+colors".
+
 ## Where each layer sits
 
 **`frontend-slides` (renderer).** Owns the HTML shell, the fixed 16:9 stage,

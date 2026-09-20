@@ -1,9 +1,10 @@
 // dv-onboard — the runtime-free local server behind the deck-visuals pickers.
 //
-// One static Go binary drives both web pickers this plugin uses:
+// One static Go binary drives all the web pickers this plugin uses:
 //
 //	--form onboard  the show-recognition swipe deck (rebuilds the profile)
 //	--form levity   choose one of 2-3 candidate GIFs per slide, at deck-build time
+//	--form palette  choose one validated categorical palette preset, at deck-build time
 //
 // It serves the chosen page (and one shared stylesheet) on 127.0.0.1, accepts one
 // POST of the user's answers, writes them to a results JSON file, and shuts down.
@@ -15,8 +16,9 @@
 //
 // Usage:
 //
-//	dv-onboard --form onboard --data <cards.json>  --out <results.json> [--port 0] [--timeout 1800]
-//	dv-onboard --form levity  --data <slots.json>  --out <results.json> [--port 0] [--timeout 1800]
+//	dv-onboard --form onboard  --data <cards.json>    --out <results.json> [--port 0] [--timeout 1800]
+//	dv-onboard --form levity   --data <slots.json>    --out <results.json> [--port 0] [--timeout 1800]
+//	dv-onboard --form palette  --data <presets.json>  --out <results.json> [--port 0] [--timeout 1800]
 package main
 
 import (
@@ -40,6 +42,9 @@ var onboardHTML string
 //go:embed levity-picker.html
 var levityHTML string
 
+//go:embed palette-picker.html
+var paletteHTML string
+
 //go:embed picker.css
 var pickerCSS string
 
@@ -49,7 +54,7 @@ const (
 )
 
 func main() {
-	form := flag.String("form", "onboard", "which picker to serve: onboard | levity")
+	form := flag.String("form", "onboard", "which picker to serve: onboard | levity | palette")
 	dataPath := flag.String("data", "", "path to the JSON injected into the page (required)")
 	outPath := flag.String("out", "", "path to write results.json (required)")
 	port := flag.Int("port", 0, "TCP port on 127.0.0.1; 0 lets the OS choose")
@@ -62,8 +67,10 @@ func main() {
 		tmpl = onboardHTML
 	case "levity":
 		tmpl = levityHTML
+	case "palette":
+		tmpl = paletteHTML
 	default:
-		fmt.Fprintf(os.Stderr, "error: --form must be onboard or levity, got %q\n", *form)
+		fmt.Fprintf(os.Stderr, "error: --form must be onboard, levity, or palette, got %q\n", *form)
 		os.Exit(2)
 	}
 	if *dataPath == "" || *outPath == "" {
