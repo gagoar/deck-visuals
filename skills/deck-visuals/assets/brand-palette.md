@@ -9,11 +9,11 @@ between surfaces. Do not use these hexes on a light surface; none of the numbers
 below were checked against one.
 
 The authoritative check is Claude Code's built-in `dataviz` skill validator —
-run that first when it's reachable. `assets/scripts/validate_palette.js` / `.py`
-are an MIT reimplementation of the same checks, kept in agreement with the
+run that first when it's reachable. `assets/tools/dv-tools validate-palette`
+is an MIT reimplementation of the same checks, kept in agreement with the
 built-in validator, for standalone/CI/PR use where the built-in skill isn't
-reachable (see either script's header). Every number below is from the real,
-built-in validator, not the vendored copy.
+reachable (see `assets/tools/palette.go`'s header). Every number below is from
+the real, built-in validator, not the vendored copy.
 
 Derivation: started from dataviz's own validated dark default (`palette.md`)
 and re-anchored slot 1 to a shade of the deck accent (`#3ea6ff`, see
@@ -45,7 +45,7 @@ harder test — see `color-formula.md` in the built-in `dataviz` skill).
 ### Validator command and real result
 
 ```
-node assets/scripts/validate_palette.js \
+assets/tools/dv-tools validate-palette \
   "#2894eb,#d95926,#199e70,#c98500,#d55181,#008300,#9085e9,#e66767" \
   --mode dark --surface "#1a1a19"
 ```
@@ -70,7 +70,7 @@ steps from near-surface (dark) to bright:
 `#035590` → `#0a6cb3` → `#0b84da` → `#359df5` → `#6db7fd`
 
 ```
-node assets/scripts/validate_palette.js \
+assets/tools/dv-tools validate-palette \
   "#035590,#0a6cb3,#0b84da,#359df5,#6db7fd" --mode dark --surface "#1a1a19" --ordinal
 ```
 
@@ -93,7 +93,7 @@ red), with dataviz's own dark neutral gray as the midpoint (`#383835`):
 The two poles, checked pairwise on the real validator:
 
 ```
-node assets/scripts/validate_palette.js "#2894eb,#e66767" --mode dark --surface "#1a1a19"
+assets/tools/dv-tools validate-palette "#2894eb,#e66767" --mode dark --surface "#1a1a19"
 ```
 
 PASS, exit 0 — worst CVD ΔE **19.6** (protanopia), worst normal-vision ΔE
@@ -118,8 +118,8 @@ rather than inventing new ones:
 ## Provenance
 
 The authority for every check on this page is Claude Code's built-in `dataviz`
-skill validator. `assets/scripts/validate_palette.js` / `.py` are an
+skill validator. `assets/tools/dv-tools validate-palette` is an
 independent MIT reimplementation of the same checks (same thresholds, same
 CLI), kept in agreement with the built-in validator for standalone/CI/PR use
-where the built-in skill isn't reachable — see either script's header for
-detail.
+where the built-in skill isn't reachable — see `assets/tools/palette.go`'s
+header for detail.

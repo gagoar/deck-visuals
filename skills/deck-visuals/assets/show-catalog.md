@@ -18,7 +18,7 @@ scripts read:
 - `id:` — kebab-case, stable, unique. The picker and `results.json` key on it.
 - `Shapes:` — semicolon-separated concept shapes this show can carry. **Use the
   exact vocabulary of the "Concept shape" column in `references/levity.md`'s seed
-  library** — that coupling is what `assets/scripts/coverage_report.py` measures.
+  library** — that coupling is what `assets/tools/dv-tools coverage` measures.
 - `Scenes:` — semicolon-separated `scene — the concept it embodies` bullets, in the
   same shape as `familiar-sources.md`. These are copied verbatim when a recognized
   show is written into the profile, so mapping is deterministic, not re-invented.
@@ -30,7 +30,7 @@ scripts read:
 Curate by PR: add a title once it earns a place, remove one that has gone stale,
 retune a `Travels externally` default once tested on a real audience. Keep the union
 of `Shapes:` tags covering each `levity.md` seed shape at least three times so the
-matcher always has options — `coverage_report.py` checks this.
+matcher always has options — `dv-tools coverage` checks this.
 
 ## TV comedy
 

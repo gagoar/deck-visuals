@@ -66,7 +66,10 @@ skills/deck-visuals/
     show-catalog.md           the ~50-title swipe catalog (onboarding)
     meme-library.md           evergreen meme fallback for levity
     familiar-sources.md       the presenter's curated analogy pool
-    scripts/                  palette validator, media-URL check, coverage report
+    tools/                    dv-tools: Go source for the palette validator,
+                              media-URL check, and coverage report
+      dv-tools                POSIX wrapper, picks the right prebuilt binary
+      bin/                    prebuilt dv-tools binaries (no runtime needed)
     icons/                    curated Lucide-style icon set
     fragments/                injectable HTML fragments
     onboarding/

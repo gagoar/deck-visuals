@@ -20,7 +20,7 @@ pop-culture profile" — independent of any deck.
    GIF (use the baked `GIF search`; the still defaults to `"<title> still"`). Resolve
    to **direct** media URLs per `references/levity.md`'s rules — never a guessed or
    hand-built URL. Verify in batches with
-   `python3 assets/scripts/check_media_url.py <url> …`; only PASS URLs are used. This
+   `assets/tools/dv-tools check-media-url <url> …`; only PASS URLs are used. This
    is the same gate levity uses, no new verifier.
    - **Prefer a small rendition.** Use a lightweight variant (e.g. Giphy's
      `200w.gif`), not the original `giphy.gif` — originals can be tens of MB and read
@@ -41,7 +41,7 @@ pop-culture profile" — independent of any deck.
 6. **Merge into the profile.** Rewrite `assets/familiar-sources.md` — merge, preserve,
    flag (see below). Keep its exact format.
 7. **Check coverage.** Run
-   `python3 assets/scripts/coverage_report.py --levity references/levity.md
+   `assets/tools/dv-tools coverage --levity references/levity.md
    --catalog assets/show-catalog.md --results <results.json>`. Relay any GAP and name
    the catalog titles that would close it.
 8. **Review suggestions.** Walk the suggestions with the user one by one; promote only
