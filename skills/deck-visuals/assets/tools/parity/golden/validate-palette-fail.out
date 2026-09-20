@@ -1,0 +1,11 @@
+
+Palette (dark, surface #1a1a19, categorical): 2 slot(s)
+  [PASS] Lightness band         all 2 inside L 0.48–0.67
+  [PASS] Chroma floor           all 2 >= 0.1
+  [FAIL] CVD separation         worst adjacent #2894eb↔#2894ec ΔE 0.2 (protan) · tritan 0.1
+  [FAIL] Normal-vision floor    worst adjacent #2894eb↔#2894ec ΔE 0.2 — below 15.0 floor
+  [PASS] Contrast vs surface    all 2 >= 3.0:1
+
+  → FAILED — fix the marked checks
+  WARN on CVD (6–8 floor band) is legal only with a secondary encoding.
+  WARN on contrast (sub-3:1) obligates a relief channel (labels or table view).
