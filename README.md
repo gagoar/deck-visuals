@@ -16,7 +16,9 @@ decks.
    view.
 3. **Levity.** Real GIFs by direct media URL, at a deliberate cadence — openers,
    section breaks, the payoff — with alt text and a `prefers-reduced-motion`
-   fallback on every one.
+   fallback on every one. A swipe onboarding flow rebuilds the presenter's
+   pop-culture profile so the matcher always has options, backed by a meme library
+   for when nothing else fits.
 
 ## Guidance and injection, not rendering
 
@@ -58,12 +60,38 @@ inject — it does not rewrite the deck's shell or theme.
 skills/deck-visuals/
   SKILL.md                    orchestrator: pipeline + trigger phrases
   references/                 decision rules, per-flavor guidance
+                              (incl. onboarding.md)
   assets/
     brand-palette.md          validated 8-slot categorical palette + ramps
-    scripts/                  palette validator (Node + Python)
+    show-catalog.md           the ~50-title swipe catalog (onboarding)
+    meme-library.md           evergreen meme fallback for levity
+    familiar-sources.md       the presenter's curated analogy pool
+    scripts/                  palette validator, media-URL check, coverage report
     icons/                    curated Lucide-style icon set
     fragments/                injectable HTML fragments
+    onboarding/
+      picker.html             onboarding swipe page (local tool)
+      levity-picker.html      deck-time levity GIF chooser (local tool)
+      picker.css              shared premium dark styling for both
+      server/                 Go source for the runtime-free picker binary
+      bin/                    prebuilt picker binaries (no runtime needed)
 ```
+
+The same runtime-free binary also powers a **deck-time levity picker**: once Claude
+proposes 2-3 candidate GIFs per slide, run it with `--form levity` to choose each one
+visually instead of in chat.
+
+## Onboard your references
+
+```
+"Onboard me" / "update my familiar sources"
+```
+
+Swipe through ~50 shows in a local page — each a still plus a signature GIF —
+marking what you recognize, and give your talk length and audience. The picks feed
+back through a small local-only binary (nothing leaves the machine) and rebuild
+`familiar-sources.md`, with a coverage check that proves the matcher has ~3 options
+per concept shape.
 
 ## License
 

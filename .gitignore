@@ -3,3 +3,9 @@
 .env
 .env.local
 node_modules/
+
+# Build-time copies of the embedded picker assets for go:embed (canonicals live in
+# assets/onboarding/); build.sh copies them in, then removes them.
+skills/deck-visuals/assets/onboarding/server/picker.html
+skills/deck-visuals/assets/onboarding/server/levity-picker.html
+skills/deck-visuals/assets/onboarding/server/picker.css

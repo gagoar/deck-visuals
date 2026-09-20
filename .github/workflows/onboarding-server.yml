@@ -1,0 +1,48 @@
+name: onboarding-server
+
+# Prove the onboarding picker server still works whenever its source, the picker
+# page, the catalog, or the coverage check changes. No secrets or external auth:
+# this only builds Go and smoke-tests a local loopback server.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/deck-visuals/assets/onboarding/**'
+      - 'skills/deck-visuals/assets/scripts/coverage_report.py'
+      - 'skills/deck-visuals/assets/show-catalog.md'
+      - 'skills/deck-visuals/references/levity.md'
+      - '.github/workflows/onboarding-server.yml'
+  pull_request:
+    paths:
+      - 'skills/deck-visuals/assets/onboarding/**'
+      - 'skills/deck-visuals/assets/scripts/coverage_report.py'
+      - 'skills/deck-visuals/assets/show-catalog.md'
+      - 'skills/deck-visuals/references/levity.md'
+      - '.github/workflows/onboarding-server.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: skills/deck-visuals/assets/onboarding/server/go.mod
+
+      - name: Smoke test the server (serve → submit → shutdown)
+        run: skills/deck-visuals/assets/onboarding/server/smoke_test.sh
+
+      - name: Cross-compile all target binaries (verify they still build)
+        run: skills/deck-visuals/assets/onboarding/server/build.sh
+
+      - name: Catalog coverage — >=3 options per concept shape, no drift
+        run: |
+          python3 skills/deck-visuals/assets/scripts/coverage_report.py \
+            --levity skills/deck-visuals/references/levity.md \
+            --catalog skills/deck-visuals/assets/show-catalog.md

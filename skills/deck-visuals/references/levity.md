@@ -21,9 +21,11 @@ argument it's making, not the feeling it evokes. Method:
    else; it is the user's own curated fluency, and a match from it is more specific
    and lands harder than a generic reference. Be specific about the scene, not just
    the franchise — "The Homer," not just "The Simpsons."
-4. **If nothing on that list fits, say so.** Respond "no familiar source fits" and
-   either fall back to reaction mode or skip humor for that slide. Do not reach for
-   an unlisted franchise the user or audience may not actually know — a guessed
+4. **If nothing on that list fits, walk the fallback chain.** In order:
+   `assets/familiar-sources.md` (above) → the **generic evergreen** rows in the seed
+   library below → `assets/meme-library.md` (see "Meme fallback") → reaction mode →
+   skip. Say "no familiar source fits" before stepping past the profile, and never
+   reach for an unlisted franchise the user or audience may not know — a guessed
    reference reads worse than none.
 
 Two worked examples, both from claims mapped by `story-discovery.md`:
@@ -128,6 +130,18 @@ name the shape, then search for a scene that fits it — but check
 `familiar-sources.md` first, and say "no familiar source fits" rather than guessing
 at a franchise outside it.
 
+## Meme fallback
+
+When no familiar source and no generic-evergreen row fits, but the slide still wants
+an image, reach for `assets/meme-library.md` — a small pool of broadly-legible
+internet references (this-is-fine dog, distracted boyfriend, toppling dominoes). It
+is ungated by recognition, unlike `assets/familiar-sources.md`: these land without a
+shared back-catalog. It stores **search terms, not URLs**, so source and verify the
+direct media URL at use exactly as below. Apply the same audience-fit gate — drop any
+entry flagged `travels-externally: limited` or `no` for an external deck. Prefer a
+familiar-source or evergreen match when one exists; the meme library is the step
+before reaction mode, not the first reach.
+
 ## Real GIFs, by external URL
 
 Pin the **direct media URL**, not the page URL.
@@ -181,6 +195,38 @@ This is the only sourcing mechanism this skill uses. Do not fabricate a Giphy/Te
 ID or guess at a slug-to-URL mapping — every direct URL in a shipped deck must
 have come from a search result that was fetched and verified, not assembled from
 memory.
+
+## Picking among candidates — chat or webpage
+
+Once each levity slot has its 2-3 sourced, verified candidates, the human picks one
+per slot. Two surfaces, same rule — **Claude proposes, the human approves:**
+
+- **In chat (default).** List the 2-3 candidates per slot with shape/beat and the
+  chosen scene; the human picks by replying. Best for a slot or two, or a quick pass.
+- **In a webpage.** For several slots, or when the GIFs should be seen side by side
+  before deciding, serve the visual picker — the same runtime-free binary and design
+  as onboarding, with `--form levity`:
+  `dv-onboard --form levity --data <slots.json> --out <selections.json> --port 0`.
+  Hand the user the printed `127.0.0.1` URL; they pick one GIF per slide (or skip a
+  slide), and it writes `selections.json`, then shuts down.
+
+`slots.json` — one entry per levity slot, each with its verified candidates:
+
+```json
+{"slots":[
+  {"id":"slide-3","slide":"Feature comparison","claim":"Too many features isn't always fantastic","shape":"Excess / feature bloat",
+   "candidates":[
+     {"label":"The Simpsons — The Homer","gif_url":"https://media.giphy.com/media/<id>/giphy.gif","caption":"every feature bolted on"},
+     {"label":"Rube Goldberg machine","gif_url":null,"caption":"ten steps for a one-step job"}
+   ]}
+]}
+```
+
+Only pin `gif_url`s that passed `check_media_url.py`; a candidate with a null
+`gif_url` still shows (label only). Prefer a small rendition (e.g. Giphy `200w.gif`)
+over the original so the tiles load fast rather than reading as empty. `selections.json` comes back as
+`{"selections":[{"slot_id","chosen_index","chosen_label","chosen_gif_url","skipped"}]}`
+— inject each chosen GIF into its slide's `assets/fragments/levity-slide.html`.
 
 ## Cadence
 
