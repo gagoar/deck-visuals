@@ -20,13 +20,16 @@
 <title>deck-visuals — pick the levity</title>
 <link rel="stylesheet" href="/picker.css">
 </head>
-<body>
+<body class="is-preload">
+<div class="bg-overlay" aria-hidden="true"></div>
 <div class="dv-app dv-app--wide" role="application" aria-label="Levity GIF picker">
 
+  <div class="dv-intro">
   <header class="dv-topbar">
     <span class="dv-wordmark"><span class="dv-wordmark__mark dv-wordmark__mark--sparkle"></span>deck-visuals</span>
     <span class="dv-topbar__tag">Levity picker · one GIF per slide</span>
   </header>
+  </div>
 
   <section class="dv-screen is-active" id="screen-pick">
     <div class="dv-stage">
@@ -66,6 +69,14 @@
     var slots = Array.isArray(data) ? data : (data.slots || []);
     var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) document.getElementById("motion-note").style.display = "block";
+
+    // Staged intro — same timing as the onboarding picker; skip under reduced motion.
+    (function runIntro() {
+      function lift() { document.body.classList.remove("is-preload"); }
+      if (reduceMotion) { lift(); return; }
+      if (document.readyState === "complete") window.setTimeout(lift, 100);
+      else window.addEventListener("load", function () { window.setTimeout(lift, 100); });
+    })();
 
     // selections[slotId] = { chosen_index: n|null, skipped: bool }
     var selections = {};
@@ -183,6 +194,9 @@
         btns[b].setAttribute("aria-pressed", on ? "true" : "false");
         btns[b].setAttribute("aria-checked", on ? "true" : "false");
       }
+      // The other candidates rack out of focus so the pick pops — the same
+      // depth-of-field mechanic as the swipe deck's card advance.
+      grid.classList.add("has-selection");
       skipBtn.setAttribute("aria-pressed", "false");
       skipBtn.classList.remove("dv-btn-skip");
       selections[slotId] = { chosen_index: index, skipped: false };
@@ -194,6 +208,7 @@
         btns[b].setAttribute("aria-pressed", "false");
         btns[b].setAttribute("aria-checked", "false");
       }
+      grid.classList.remove("has-selection");
       skipBtn.setAttribute("aria-pressed", "true");
       skipBtn.classList.add("dv-btn-skip");
       selections[slotId] = { chosen_index: null, skipped: true };

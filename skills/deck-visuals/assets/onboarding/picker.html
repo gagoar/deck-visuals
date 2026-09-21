@@ -19,13 +19,16 @@
 <title>deck-visuals — what do you recognize?</title>
 <link rel="stylesheet" href="/picker.css">
 </head>
-<body>
+<body class="is-preload">
+<div class="bg-overlay" aria-hidden="true"></div>
 <div class="dv-app" role="application" aria-label="Pop-culture recognition picker">
 
+  <div class="dv-intro">
   <header class="dv-topbar">
     <span class="dv-wordmark"><span class="dv-wordmark__mark dv-wordmark__mark--sparkle"></span>deck-visuals</span>
     <span class="dv-topbar__tag">Onboarding · your pop-culture profile</span>
   </header>
+  </div>
 
   <!-- INTRO -->
   <section class="dv-screen is-active" id="screen-intro" aria-labelledby="intro-title">
@@ -119,6 +122,15 @@
 
     var state = { i: 0, recognized: [], not_recognized: [], skipped: [] };
 
+    // Staged intro — Dimension's real timing, halved for the background reveal
+    // per user feedback. Reduced motion: skip straight to the loaded state.
+    function runIntro() {
+      if (reduceMotion) { document.body.classList.remove("is-preload"); return; }
+      window.setTimeout(function () { document.body.classList.remove("is-preload"); }, 100);
+    }
+    if (document.readyState === "complete") runIntro();
+    else window.addEventListener("load", runIntro);
+
     function el(id) { return document.getElementById(id); }
     function show(id) {
       var s = document.querySelectorAll(".dv-screen");
@@ -181,8 +193,22 @@
       else state.skipped.push(id);
       el("stage").removeAttribute("data-lean");
       state.i++;
-      if (state.i >= cards.length) show("screen-outro");
-      else renderCard();
+
+      // Focus-rack: the outgoing card racks out of focus, content swaps while
+      // blurred, then the incoming card racks back into focus. This is the
+      // depth-of-field mechanic — which card is "current" is shown by focus
+      // itself. Reduced motion: swap instantly, no blur.
+      if (reduceMotion) {
+        if (state.i >= cards.length) show("screen-outro"); else renderCard();
+        return;
+      }
+      var cardEl = el("card");
+      cardEl.classList.add("is-racked");
+      window.setTimeout(function () {
+        if (state.i >= cards.length) { show("screen-outro"); return; }
+        renderCard();
+        cardEl.classList.remove("is-racked");
+      }, 160);
     }
 
     // suggestions
