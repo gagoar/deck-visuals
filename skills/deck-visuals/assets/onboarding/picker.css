@@ -415,6 +415,18 @@ textarea { min-height: 104px; resize: vertical; }
 .dv-suggest-row { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
 .dv-suggest-row input { flex: 1; }
 
+/* Custom brand accent (user-provided) */
+.dv-custom { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--border); }
+.dv-custom label { margin-top: 0; }
+.dv-custom__row { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
+.dv-custom__preview {
+  width: 34px; height: 34px; flex: none; border-radius: var(--r-sm);
+  border: 1px solid var(--border); box-shadow: inset 0 1px 0 var(--border-inner);
+  background: transparent;
+}
+.dv-custom__row input { flex: 1; font-family: var(--font-mono, monospace); }
+.dv-custom__row .dv-btn { flex: none; }
+
 /* Done */
 .dv-done { text-align: center; padding: var(--sp-8) 0; }
 
