@@ -1,156 +1,172 @@
 /*
-  deck-visuals picker — shared design system.
+  deck-visuals picker — shared design system, v2.
 
-  One stylesheet for BOTH local pickers (onboarding swipe deck + deck-time levity
-  chooser), served by the dv-onboard binary at /picker.css. Premium dark UI tuned to
-  the deck brand: luminance-stepped navy surfaces, white-alpha hairlines as the depth
-  cue, one accent with a soft glow, custom easings, and a reduced-motion path that
-  keeps every state legible without movement. Self-contained: no fonts/CDNs.
+  One stylesheet for all local pickers (onboarding swipe deck, deck-time levity
+  chooser, palette accent picker), served by the dv-onboard binary at /picker.css.
+
+  This is a deliberate port of html5up's "Dimension" template's real CSS values
+  (fetched and quoted directly, not approximated): a charcoal base (#1b1f22, not
+  navy), a full-bleed photo + dark overlay instead of a CSS gradient, flat 4px
+  panels instead of large glowing rounded cards, light-weight type, and depth
+  shown by a focus-rack blur (the active thing is sharp, everything else is out of
+  focus) instead of a color glow. Monochrome white/black/alpha does almost all the
+  work — only the existing semantic yes/no/skip keep color. A staged intro (same
+  source, timing halved per user feedback) plays once on load. Self-contained: no
+  fonts/CDNs; the background photo is go:embed'd, served at /bg.jpg.
 */
 
 :root {
-  /* Background layers — luminance-stepped, cool navy */
-  --bg-base: #0a1428;
-  --bg-sunken: #070f1f;
-  --surface: #101d38;
-  --surface-2: #16264a;
-  --surface-hover: #1b2e57;
-  --surface-active: #21376a;
-  --surface-glass: rgba(22, 38, 74, 0.55);
+  /* Background / surface — charcoal, not navy */
+  --bg: #1b1f22;
+  --bg-sunken: #14171a;
+  --panel: rgba(27, 31, 34, 0.85);
+  --panel-2: rgba(35, 40, 44, 0.9);
 
-  /* Hairlines — semi-transparent white = primary depth cue */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  /* Hairlines — white-alpha depth cue, unchanged idea, new values */
+  --border: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.35);
   --border-inner: rgba(255, 255, 255, 0.06);
 
   /* Text */
-  --text: #f4f7ff;
-  --text-secondary: #b7c2da;
-  --text-muted: #7d8aa8;
-  --text-on-accent: #08111f;
+  --text: #ffffff;
+  --text-dim: rgba(255, 255, 255, 0.55);
+  --text-faint: rgba(255, 255, 255, 0.35);
+  --text-on-light: #14171a;
 
-  /* Accent + glow */
-  --accent: #3ea6ff;
-  --accent-hover: #62b8ff;
-  --accent-press: #2894eb;
-  --accent-soft: rgba(62, 166, 255, 0.14);
-  --accent-ring: rgba(62, 166, 255, 0.45);
-  --accent-gradient: linear-gradient(135deg, #3ea6ff 0%, #2894eb 100%);
-  --accent-glow: rgba(62, 166, 255, 0.35);
+  /* No accent gradient. One neutral ring for focus states. */
+  --ring: rgba(255, 255, 255, 0.5);
 
-  /* Semantic */
-  --yes: #34d399;   --yes-soft: rgba(52, 211, 153, 0.16);
-  --no: #ff5470;    --no-soft: rgba(255, 84, 112, 0.16);
-  --skip: #ffb020;  --skip-soft: rgba(255, 176, 32, 0.16);
+  /* Semantic — the only color left */
+  --yes: #6fcf97;   --yes-soft: rgba(111, 207, 151, 0.14);
+  --no: #eb6f6f;    --no-soft: rgba(235, 111, 111, 0.14);
+  --skip: #d8b46a;  --skip-soft: rgba(216, 180, 106, 0.14);
 
-  /* Type */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Avenir Next", "Segoe UI", var(--font-sans);
+  /* Type — light body, heavier headings, offline-safe stacks */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  /* Spacing (4px scale) */
+  /* Spacing (unchanged 4px scale) */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
 
-  /* Radii */
-  --r-sm: 8px; --r-md: 12px; --r-lg: 20px; --r-xl: 28px; --r-full: 999px;
+  /* Radii — flat, small. Dimension's real panels are 4px, not 20-28px. */
+  --r-sm: 3px; --r-md: 4px; --r-lg: 4px; --r-xl: 6px; --r-full: 999px;
 
-  /* Elevation — cool-tinted, two-part */
-  --shadow-card: 0 1px 2px rgba(2, 6, 18, 0.40), 0 8px 24px rgba(2, 6, 18, 0.45);
-  --shadow-float: 0 2px 4px rgba(2, 6, 18, 0.45), 0 18px 48px rgba(2, 6, 18, 0.60);
-  --shadow-overlay: 0 4px 8px rgba(2, 6, 18, 0.50), 0 32px 80px rgba(2, 6, 18, 0.70);
+  /* Elevation — minimal; flat translucent panels do most of the work */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.28);
+  --shadow-float: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 36px rgba(0, 0, 0, 0.4);
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-fast: 120ms; --dur-base: 220ms; --dur-enter: 280ms;
+
+  /* Focus-rack — Dimension's real depth-of-field values */
+  --blur-focus: 0.22rem;
+  --dur-rack: 0.325s;
+
+  /* Staged intro — Dimension's real header-fade timing (.325s), and its real
+     background-reveal timing (2.5s/.75s delay) HALVED 2x per user feedback that
+     the source timing felt slow for this use case. */
+  --dur-intro-header: 0.325s;
+  --dur-intro-bg: 1.25s;
+  --delay-intro-bg: 0.375s;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
+
+/* Nothing animates until the staged intro explicitly allows it. */
+body.is-preload *, body.is-preload *::before, body.is-preload *::after {
+  transition: none !important; animation: none !important;
+}
+
 body {
   min-height: 100vh;
-  /* Layered aurora/mesh: cool blue + violet glows anchored in the corners over the
-     deep navy base — depth without a flat "blue plane". */
-  background:
-    radial-gradient(900px 520px at 12% -12%, rgba(62, 166, 255, 0.16), transparent 60%),
-    radial-gradient(820px 520px at 112% 6%, rgba(144, 133, 233, 0.14), transparent 55%),
-    radial-gradient(760px 620px at 50% 118%, rgba(40, 148, 235, 0.10), transparent 60%),
-    var(--bg-base);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
+  font-weight: 300;
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: var(--sp-6) var(--sp-4) var(--sp-8);
+  position: relative;
 }
-/* Fine grid texture, faded out toward the edges so it never reads as a table. */
+
+/* The scene — a real photo + dark overlay (Dimension's actual #bg technique),
+   not a CSS gradient. Served locally by the same binary at /bg.jpg (go:embed'd,
+   never a live network hotlink). */
 body::before {
   content: "";
-  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  position: fixed; inset: 0; z-index: -3; pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 46px 46px;
-  -webkit-mask-image: radial-gradient(120% 90% at 50% 20%, #000 40%, transparent 78%);
-  mask-image: radial-gradient(120% 90% at 50% 20%, #000 40%, transparent 78%);
+    linear-gradient(rgba(19, 21, 25, 0.6), rgba(19, 21, 25, 0.78)),
+    url('/bg.jpg');
+  background-size: cover; background-position: center; background-attachment: fixed;
 }
-/* Vignette to seat the content and darken the corners. */
+/* Subtle grain on top of the photo, offline (inline SVG data-URI, no request). */
 body::after {
   content: "";
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: radial-gradient(130% 100% at 50% 0%, transparent 55%, rgba(3, 8, 20, 0.55) 100%);
+  opacity: 0.3; mix-blend-mode: overlay;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)" opacity="0.5"/></svg>');
 }
+/* The animated intro overlay — starts solid black, fades away to reveal the
+   photo+grain beneath. Sits between the photo (-3) and the grain (-1). */
+.bg-overlay {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-color: #000;
+  transition: background-color var(--dur-intro-bg) ease-in-out;
+  transition-delay: var(--delay-intro-bg);
+}
+body:not(.is-preload) .bg-overlay { background-color: rgba(19, 21, 25, 0); }
+
+/* The header/intro region on every page — starts blurred + hidden, clears once
+   is-preload lifts. */
+.dv-intro { filter: blur(0.125rem); }
+.dv-intro > * { opacity: 0; transition: opacity var(--dur-intro-header) ease-in-out; }
+body:not(.is-preload) .dv-intro { filter: none; transition: filter var(--dur-intro-header) ease-in-out; }
+body:not(.is-preload) .dv-intro > * { opacity: 1; }
 
 .dv-app { width: 100%; max-width: 600px; position: relative; }
 .dv-app--wide { max-width: 1040px; }
 
-/* Page chrome — top bar + footer, shared by both pickers */
+/* Page chrome — top bar + footer */
 .dv-topbar {
   display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
   margin-bottom: var(--sp-6);
   padding-bottom: var(--sp-4);
   border-bottom: 1px solid var(--border);
 }
-.dv-wordmark { display: flex; align-items: center; gap: var(--sp-2); font-weight: 700; letter-spacing: -0.01em; font-size: 15px; }
+.dv-wordmark { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; letter-spacing: 0.01em; font-size: 15px; }
 .dv-wordmark__mark {
-  width: 22px; height: 22px; border-radius: 7px;
-  background: var(--accent-gradient);
-  box-shadow: 0 2px 10px -2px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  width: 20px; height: 20px; flex: none;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  position: relative;
 }
-.dv-wordmark__mark--sparkle { position: relative; }
 .dv-wordmark__mark--sparkle::after {
   content: ""; position: absolute; inset: 6px;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), transparent 60%);
-  border-radius: 2px;
+  background: var(--text); opacity: 0.85; border-radius: 1px;
 }
-.dv-topbar__tag { color: var(--text-muted); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
+.dv-topbar__tag { color: var(--text-dim); font-size: 11px; font-weight: 400; letter-spacing: 0.15rem; text-transform: uppercase; }
 .dv-footer {
   margin-top: var(--sp-7);
   padding-top: var(--sp-4);
   border-top: 1px solid var(--border);
-  color: var(--text-muted); font-size: 12px; text-align: center; letter-spacing: 0.01em;
+  color: var(--text-dim); font-size: 12px; font-weight: 300; text-align: center; letter-spacing: 0.01em;
 }
-.dv-footer strong { color: var(--text-secondary); font-weight: 600; }
+.dv-footer strong { color: var(--text); font-weight: 600; }
 
-/* Stage — holds the soft accent glow behind the active content */
-.dv-stage { position: relative; isolation: isolate; }
-.dv-stage::before {
-  content: "";
-  position: absolute;
-  inset: -12% 4%;
-  z-index: -1;
-  background: radial-gradient(60% 50% at 50% 38%, var(--accent-glow) 0%, transparent 70%);
-  filter: blur(46px);
-  opacity: 0.7;
-  pointer-events: none;
-  transition: background var(--dur-base) var(--ease-out);
-}
-.dv-stage[data-lean="yes"]::before { background: radial-gradient(60% 50% at 50% 38%, var(--yes-soft) 0%, transparent 70%); }
-.dv-stage[data-lean="no"]::before { background: radial-gradient(60% 50% at 50% 38%, var(--no-soft) 0%, transparent 70%); }
+/* Stage — no glow blob (dropped with the aurora tokens). Lean-during-drag is
+   shown by the card's own border tinting semantic yes/no, not an ambient glow. */
+.dv-stage { position: relative; }
+.dv-stage[data-lean="yes"] > .dv-card { border-color: var(--yes); }
+.dv-stage[data-lean="no"] > .dv-card { border-color: var(--no); }
 
 .dv-screen { display: none; }
 .dv-screen.is-active { display: block; animation: dv-enter var(--dur-enter) var(--ease-out); }
@@ -158,19 +174,20 @@ body::after {
 /* Typography */
 h1, .dv-h1 {
   font-family: var(--font-display);
-  font-size: 32px; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+  font-weight: 600;
+  font-size: 30px; line-height: 1.2; letter-spacing: 0.005em;
   margin: 0 0 var(--sp-2);
 }
-.dv-lead { color: var(--text-secondary); margin: 0 0 var(--sp-5); }
+.dv-lead { color: var(--text-dim); font-weight: 300; margin: 0 0 var(--sp-5); }
 .dv-eyebrow {
-  color: var(--accent); font-size: 13px; font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--sp-2);
+  color: var(--text-dim); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2rem; text-transform: uppercase; margin-bottom: var(--sp-2);
 }
-.dv-card-title { font-size: 20px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 var(--sp-1); }
-.dv-caption { color: var(--text-muted); font-size: 13px; line-height: 1.4; letter-spacing: 0.01em; }
+.dv-card-title { font-size: 19px; font-weight: 300; line-height: 1.35; margin: 0 0 var(--sp-1); }
+.dv-caption { color: var(--text-dim); font-size: 13px; font-weight: 300; line-height: 1.4; letter-spacing: 0.01em; }
 
 /* Inputs */
-label { display: block; font-size: 14px; font-weight: 500; margin: var(--sp-4) 0 var(--sp-2); }
+label { display: block; font-size: 13px; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; margin: var(--sp-4) 0 var(--sp-2); color: var(--text-dim); }
 input[type="number"], input[type="text"], textarea {
   width: 100%;
   background: var(--bg-sunken);
@@ -178,54 +195,55 @@ input[type="number"], input[type="text"], textarea {
   border-radius: var(--r-sm);
   color: var(--text);
   padding: 12px 14px;
-  font: 400 15px/1.5 var(--font-sans);
-  box-shadow: inset 0 1px 0 var(--border-inner);
-  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  font: 300 15px/1.5 var(--font-sans);
+  transition: border-color var(--dur-fast) var(--ease-out);
 }
-input::placeholder, textarea::placeholder { color: var(--text-muted); }
-input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+input::placeholder, textarea::placeholder { color: var(--text-faint); }
+input:focus, textarea:focus { outline: none; border-color: var(--text); }
 textarea { min-height: 104px; resize: vertical; }
-.dv-hint { color: var(--text-muted); font-size: 13px; margin-top: var(--sp-2); }
+.dv-hint { color: var(--text-dim); font-size: 12px; font-weight: 300; margin-top: var(--sp-2); }
 
-/* Buttons */
+/* Buttons — bordered, uppercase, letterspaced; a filled variant for primary CTAs */
 .dv-btn {
-  font: 600 14px/1 var(--font-sans); letter-spacing: 0.01em;
-  padding: 11px 18px; border-radius: var(--r-md);
-  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-  box-shadow: inset 0 1px 0 var(--border-inner);
+  font: 400 12px var(--font-sans); letter-spacing: 0.1rem; text-transform: uppercase;
+  padding: 11px 18px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: transparent; color: var(--text);
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out);
+  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.dv-btn:hover { background: var(--surface-hover); border-color: var(--border-strong); }
-.dv-btn:active { background: var(--surface-active); transform: translateY(1px); }
-.dv-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
-.dv-btn:disabled { opacity: 0.5; cursor: default; }
+.dv-btn:hover { border-color: var(--border-strong); background: rgba(255, 255, 255, 0.04); }
+.dv-btn:active { background: rgba(255, 255, 255, 0.08); }
+.dv-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ring); }
+.dv-btn:disabled { opacity: 0.4; cursor: default; }
 
 .dv-btn-primary {
-  background: var(--accent-gradient); border-color: transparent; color: var(--text-on-accent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 8px 24px -8px var(--accent-glow);
+  background: var(--text); border-color: var(--text); color: var(--text-on-light);
+  font-weight: 600;
 }
-.dv-btn-primary:hover { filter: brightness(1.06); background: var(--accent-gradient); border-color: transparent; }
-.dv-btn-ghost { background: transparent; color: var(--text-secondary); }
+.dv-btn-primary:hover { background: var(--text); filter: brightness(0.92); }
+.dv-btn-ghost { color: var(--text-dim); }
 .dv-btn-block { width: 100%; margin-top: var(--sp-5); padding: 13px 18px; }
 
 .dv-btn-yes { color: var(--yes); border-color: var(--yes-soft); background: var(--yes-soft); }
 .dv-btn-no { color: var(--no); border-color: var(--no-soft); background: var(--no-soft); }
 .dv-btn-skip { color: var(--skip); border-color: var(--skip-soft); background: var(--skip-soft); }
-.dv-btn-yes:hover { background: var(--yes-soft); filter: brightness(1.15); }
-.dv-btn-no:hover { background: var(--no-soft); filter: brightness(1.15); }
-.dv-btn-skip:hover { background: var(--skip-soft); filter: brightness(1.15); }
+.dv-btn-yes:hover { filter: brightness(1.2); }
+.dv-btn-no:hover { filter: brightness(1.2); }
+.dv-btn-skip:hover { filter: brightness(1.2); }
 
-/* Card */
+/* Card — flat, translucent, small radius (Dimension's real #main article) */
 .dv-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 40%), var(--surface);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner);
   padding: var(--sp-5);
-  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  transition: filter var(--dur-rack) ease-in-out, transform var(--dur-rack) ease-in-out, opacity var(--dur-rack) ease-in-out, border-color var(--dur-base) var(--ease-out);
 }
 .dv-card--hero { border-radius: var(--r-xl); }
+/* Focus-rack: the card racks out of focus while its content is swapped, then
+   racks back into focus. This IS the depth-of-field mechanic — selection/advance
+   state is shown by focus itself. */
+.dv-card.is-racked { filter: blur(var(--blur-focus)); transform: scale(0.97); opacity: 0.55; }
 
 /* Media */
 .dv-media { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-4); }
@@ -241,53 +259,43 @@ textarea { min-height: 104px; resize: vertical; }
 .dv-media--empty {
   aspect-ratio: 16 / 10;
   border-radius: var(--r-md);
-  background:
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 12px, transparent 12px 24px),
-    var(--bg-sunken);
+  background: var(--bg-sunken);
   display: grid; place-items: center;
-  color: var(--text-muted); font-size: 13px;
+  color: var(--text-dim); font-size: 13px; font-weight: 300;
   box-shadow: inset 0 0 0 1px var(--border);
 }
 .dv-motion-note { color: var(--skip); font-size: 12px; display: none; margin-top: var(--sp-1); }
 
 /* Onboarding actions */
 .dv-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-3); margin-top: var(--sp-4); }
-.dv-kbd { color: var(--text-muted); font-size: 12px; text-align: center; margin-top: var(--sp-3); }
+.dv-kbd { color: var(--text-dim); font-size: 11px; text-align: center; margin-top: var(--sp-3); letter-spacing: 0.02em; }
 
-/* Progress rail */
+/* Progress rail — solid, no glow */
 .dv-progress-wrap { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-4); }
-.dv-progress { flex: 1; height: 3px; border-radius: var(--r-full); background: var(--border); overflow: hidden; }
-.dv-progress > i { display: block; height: 100%; width: 0; background: var(--accent-gradient); box-shadow: 0 0 12px -2px var(--accent-glow); transition: width var(--dur-base) var(--ease-out); }
-.dv-progress-label { color: var(--text-muted); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+.dv-progress { flex: 1; height: 2px; background: var(--border); overflow: hidden; }
+.dv-progress > i { display: block; height: 100%; width: 0; background: var(--text); transition: width var(--dur-base) var(--ease-out); }
+.dv-progress-label { color: var(--text-dim); font-size: 11px; font-weight: 400; letter-spacing: 0.04em; white-space: nowrap; }
 
 /* Levity: slots + candidate chooser */
 .dv-slot {
   position: relative;
   margin-bottom: var(--sp-5);
   padding: var(--sp-5);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 30%), var(--surface);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
-  box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner);
-}
-/* lit top bezel — the "gradient hairline" flourish */
-.dv-slot::before {
-  content: "";
-  position: absolute; left: 10%; right: 10%; top: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.6;
 }
 .dv-slot__head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-1); }
 .dv-slot__index {
   flex: none;
   display: inline-grid; place-items: center;
-  width: 26px; height: 26px; border-radius: var(--r-full);
-  font-size: 12px; font-weight: 700; color: var(--accent);
-  background: var(--accent-soft); border: 1px solid var(--accent-soft);
+  width: 24px; height: 24px; border-radius: var(--r-full);
+  font-size: 11px; font-weight: 600; color: var(--text);
+  border: 1px solid var(--border-strong);
 }
-.dv-slot__meta { color: var(--text-muted); font-size: 13px; letter-spacing: 0.02em; }
-.dv-slot__claim { font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 var(--sp-4); }
-.dv-shape { display: inline-block; margin-left: var(--sp-2); padding: 2px 10px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; color: var(--accent); background: var(--accent-soft); letter-spacing: 0.02em; white-space: nowrap; }
+.dv-slot__meta { color: var(--text-dim); font-size: 12px; letter-spacing: 0.1rem; text-transform: uppercase; }
+.dv-slot__claim { font-size: 18px; font-weight: 300; line-height: 1.35; margin: 0 0 var(--sp-4); }
+.dv-shape { display: inline-block; margin-left: var(--sp-2); padding: 2px 10px; border-radius: var(--r-full); font-size: 11px; font-weight: 400; color: var(--text-dim); border: 1px solid var(--border); letter-spacing: 0.04em; white-space: nowrap; }
 
 /* Exactly 3 across on desktop, then 2, then 1 */
 .dv-candidates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
@@ -297,56 +305,56 @@ textarea { min-height: 104px; resize: vertical; }
 .dv-candidate {
   position: relative;
   text-align: left;
-  background: var(--surface-2);
+  background: var(--panel-2);
   border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner);
+  border-radius: var(--r-md);
   padding: var(--sp-3);
   cursor: pointer;
   overflow: hidden;
-  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  transition: filter var(--dur-rack) ease-in-out, transform var(--dur-base) var(--ease-out), opacity var(--dur-rack) ease-in-out, border-color var(--dur-base) var(--ease-out);
 }
 .dv-candidate .dv-media { margin-bottom: var(--sp-3); }
 .dv-candidate .dv-media img, .dv-candidate .dv-media--empty { aspect-ratio: 1 / 1; }
-.dv-candidate:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-float), inset 0 1px 0 var(--border-inner); }
-.dv-candidate:focus-visible { outline: none; box-shadow: var(--shadow-card), inset 0 1px 0 var(--border-inner), 0 0 0 3px var(--accent-ring); }
-.dv-candidate[aria-pressed="true"] {
-  border-color: var(--accent);
-  box-shadow: var(--shadow-float), inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 0 0 1px var(--accent-soft), 0 0 44px -8px var(--accent-glow);
-  background: linear-gradient(180deg, var(--accent-soft) 0%, rgba(255, 255, 255, 0) 45%), var(--surface-2);
+.dv-candidate:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.dv-candidate:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ring); }
+/* Selected: sharpens + a plain white border. No gradient rim — monochrome
+   restraint is the point. */
+.dv-candidate[aria-pressed="true"] { border-color: var(--text); }
+/* Once a pick is made, the OTHER candidates rack out of focus so the chosen
+   one pops — the same depth-of-field mechanic as the swipe deck, repurposed as
+   selection feedback. */
+.dv-candidates.has-selection .dv-candidate:not([aria-pressed="true"]) {
+  filter: blur(var(--blur-focus)); transform: scale(0.97); opacity: 0.45;
 }
-/* selected check badge */
+/* selected check badge — flat, monochrome */
 .dv-candidate[aria-pressed="true"]::after {
   content: "✓";
   position: absolute; top: 10px; right: 10px;
-  width: 24px; height: 24px; border-radius: var(--r-full);
+  width: 22px; height: 22px; border-radius: var(--r-full);
   display: grid; place-items: center;
-  font-size: 13px; font-weight: 700; color: var(--text-on-accent);
-  background: var(--accent-gradient);
-  box-shadow: 0 2px 8px -2px var(--accent-glow);
+  font-size: 12px; font-weight: 700; color: var(--text-on-light);
+  background: var(--text);
 }
-.dv-candidate__label { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
-.dv-candidate__caption { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+.dv-candidate__label { font-size: 13.5px; font-weight: 400; margin: 0 0 2px; }
+.dv-candidate__caption { color: var(--text-dim); font-size: 12px; font-weight: 300; line-height: 1.4; }
 .dv-slot__skip { margin-top: var(--sp-4); }
 
 /* Palette: preset swatch chips (decorative — the card's accessible name is the
    preset id/subject, set via aria-label on the .dv-candidate button) */
 .dv-swatches { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
 .dv-swatch {
-  width: 28px; height: 28px; flex: none;
+  width: 26px; height: 26px; flex: none;
   border-radius: var(--r-sm);
   box-shadow: inset 0 0 0 1px var(--border-strong);
 }
 .dv-swatch--surface {
   border-radius: var(--r-full);
-  box-shadow: inset 0 0 0 1px var(--border-strong), 0 0 0 2px var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-strong), 0 0 0 2px var(--panel-2);
 }
 
 /* Palette: accent-theme mock-slide preview. Every theme shares the same 8-slot
-   data palette (rendered small and de-emphasized below, see
-   .dv-shared-palette) — the accent is the only thing that varies per theme,
-   so the preview is built to let it dominate: a small "slide" in the deck bg
-   color with a heading + underline + bars all painted in the accent. */
+   data palette (rendered small and de-emphasized below) — the accent is the
+   only thing that varies per theme. */
 .dv-mockslide {
   position: relative;
   border-radius: var(--r-md);
@@ -356,22 +364,20 @@ textarea { min-height: 104px; resize: vertical; }
   flex-direction: column;
   justify-content: center;
   gap: var(--sp-2);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(2, 6, 18, 0.4);
+  box-shadow: inset 0 0 0 1px var(--border);
   overflow: hidden;
 }
 .dv-mockslide__heading {
-  font: 700 15px/1.2 var(--font-display);
-  letter-spacing: -0.01em;
+  font: 600 15px/1.2 var(--font-display);
 }
 .dv-mockslide__underline {
   width: 34%;
-  height: 3px;
-  border-radius: var(--r-full);
+  height: 2px;
 }
 .dv-mockslide__lines { display: flex; flex-direction: column; gap: 6px; margin-top: var(--sp-1); }
 .dv-mockslide__line {
   height: 6px;
-  border-radius: var(--r-full);
+  border-radius: 2px;
   background: rgba(255, 255, 255, 0.16);
   width: 82%;
 }
@@ -385,29 +391,26 @@ textarea { min-height: 104px; resize: vertical; }
 }
 .dv-mockslide__bar {
   width: 12px;
-  border-radius: 3px 3px 0 0;
   flex: none;
 }
 
-/* Palette: the de-emphasized shared-data-palette row under each card's label —
-   small and muted on purpose so it reads as "this doesn't change", in
-   contrast to the accent-forward mock-slide above it. */
+/* Palette: the de-emphasized shared-data-palette row under each card's label */
 .dv-shared-palette { margin-top: var(--sp-2); }
 .dv-shared-palette__caption {
-  color: var(--text-muted);
+  color: var(--text-dim);
   font-size: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1rem;
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-.dv-swatches--small .dv-swatch { width: 14px; height: 14px; border-radius: 4px; }
+.dv-swatches--small .dv-swatch { width: 13px; height: 13px; border-radius: 2px; }
 
 /* Sticky action bar for the levity page (many slots) */
 .dv-actionbar {
   position: sticky; bottom: 0;
   margin-top: var(--sp-5);
   padding: var(--sp-4) 0;
-  background: linear-gradient(0deg, var(--bg-base) 60%, transparent);
+  background: linear-gradient(0deg, var(--bg) 60%, transparent);
 }
 .dv-actionbar .dv-btn { width: 100%; padding: 14px 18px; }
 
@@ -420,21 +423,17 @@ textarea { min-height: 104px; resize: vertical; }
 .dv-custom label { margin-top: 0; }
 .dv-custom__row { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
 .dv-custom__preview {
-  width: 34px; height: 34px; flex: none; border-radius: var(--r-sm);
-  border: 1px solid var(--border); box-shadow: inset 0 1px 0 var(--border-inner);
+  width: 32px; height: 32px; flex: none; border-radius: var(--r-sm);
+  border: 1px solid var(--border);
   background: transparent;
 }
-.dv-custom__row input { flex: 1; font-family: var(--font-mono, monospace); }
+.dv-custom__row input { flex: 1; font-family: var(--font-mono); }
 .dv-custom__row .dv-btn { flex: none; }
 
 /* Done */
 .dv-done { text-align: center; padding: var(--sp-8) 0; }
 
-@keyframes dv-enter { from { opacity: 0; transform: translateY(12px) scale(0.985); } to { opacity: 1; transform: none; } }
-@keyframes dv-commit-yes { to { opacity: 0; transform: translateX(64px) rotate(4deg); } }
-@keyframes dv-commit-no { to { opacity: 0; transform: translateX(-64px) rotate(-4deg); } }
-.dv-card.is-committing-yes { animation: dv-commit-yes var(--dur-base) var(--ease-inout) forwards; }
-.dv-card.is-committing-no { animation: dv-commit-no var(--dur-base) var(--ease-inout) forwards; }
+@keyframes dv-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -444,4 +443,10 @@ textarea { min-height: 104px; resize: vertical; }
     scroll-behavior: auto !important;
   }
   .dv-card:hover, .dv-candidate:hover { transform: none; }
+  /* No blur under reduced motion — static states only (opacity + border),
+     mandatory per plan. */
+  .dv-card.is-racked,
+  .dv-candidates.has-selection .dv-candidate:not([aria-pressed="true"]) {
+    filter: none !important; transform: none !important;
+  }
 }

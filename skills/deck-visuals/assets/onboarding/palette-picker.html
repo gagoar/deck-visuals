@@ -25,13 +25,16 @@
 <title>deck-visuals — pick the accent theme</title>
 <link rel="stylesheet" href="/picker.css">
 </head>
-<body>
+<body class="is-preload">
+<div class="bg-overlay" aria-hidden="true"></div>
 <div class="dv-app dv-app--wide" role="application" aria-label="Accent theme picker">
 
+  <div class="dv-intro">
   <header class="dv-topbar">
     <span class="dv-wordmark"><span class="dv-wordmark__mark dv-wordmark__mark--sparkle"></span>deck-visuals</span>
     <span class="dv-topbar__tag">Palette · pick an accent theme</span>
   </header>
+  </div>
 
   <section class="dv-screen is-active" id="screen-pick">
     <div class="dv-stage">
@@ -83,6 +86,15 @@
     var chosenAccent = null; // set only for the custom brand accent
     var houseSlots = (presets[0] && presets[0].data_slots) ||
       ["#2894eb","#d95926","#199e70","#c98500","#d55181","#008300","#9085e9","#e66767"];
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Staged intro — same timing as the other pickers; skip under reduced motion.
+    (function runIntro() {
+      function lift() { document.body.classList.remove("is-preload"); }
+      if (reduceMotion) { lift(); return; }
+      if (document.readyState === "complete") window.setTimeout(lift, 100);
+      else window.addEventListener("load", function () { window.setTimeout(lift, 100); });
+    })();
 
     // WCAG contrast, for advising on a pasted brand accent (accent-first: the
     // brand color rides as the accent; the chart palette stays the validated set).
@@ -224,6 +236,8 @@
         btns[b].setAttribute("aria-pressed", on ? "true" : "false");
         btns[b].setAttribute("aria-checked", on ? "true" : "false");
       }
+      // The other themes rack out of focus so the pick pops.
+      wrap.classList.add("has-selection");
       chosenId = id;
       chosenAccent = null;
       el("custom-use").setAttribute("aria-pressed", "false");
@@ -255,8 +269,12 @@
     function useCustom(){
       var hex = normHex(el("custom-hex").value);
       if (!hex) return;
-      var btns = el("presets").querySelectorAll(".dv-candidate");
+      var presetsWrap = el("presets");
+      var btns = presetsWrap.querySelectorAll(".dv-candidate");
       for (var b = 0; b < btns.length; b++){ btns[b].setAttribute("aria-pressed","false"); btns[b].setAttribute("aria-checked","false"); }
+      // None of the presets is picked — the custom accent is the focus instead,
+      // so the presets rack out of focus the same way an unpicked candidate would.
+      presetsWrap.classList.add("has-selection");
       chosenId = "custom"; chosenAccent = hex;
       el("custom-use").setAttribute("aria-pressed","true");
       el("custom-use").classList.add("dv-btn-primary");

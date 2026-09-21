@@ -10,7 +10,7 @@ set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 work="$(mktemp -d)"
-embedded=(picker.html levity-picker.html palette-picker.html picker.css)
+embedded=(picker.html levity-picker.html palette-picker.html picker.css bg.jpg)
 cleanup() {
   for f in "${embedded[@]}"; do rm -f "$here/$f"; done
   [ -n "${srvpid:-}" ] && kill "$srvpid" 2>/dev/null || true
@@ -69,6 +69,10 @@ run_form() {
   # itself matched. Capture-then-test lets curl finish first, deterministically.
   local css; css="$(curl -fsS "$base/picker.css")"
   [ -n "$css" ] || fail "[$form] picker.css empty or missing"
+
+  echo "==> [$form] GET /bg.jpg — background photo served"
+  local bg_type; bg_type="$(curl -fsSI "$base/bg.jpg" | tr -d '\r' | grep -i '^content-type:' | awk '{print $2}')"
+  [ "$bg_type" = "image/jpeg" ] || fail "[$form] bg.jpg wrong or missing content-type (got: $bg_type)"
 
   echo "==> [$form] POST /submit — accepted"
   local resp; resp="$(curl -fsS -X POST "$base/submit" -H 'Content-Type: application/json' -d "$body")"

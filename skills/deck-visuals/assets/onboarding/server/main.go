@@ -6,13 +6,13 @@
 //	--form levity   choose one of 2-3 candidate GIFs per slide, at deck-build time
 //	--form palette  choose one validated categorical palette preset, at deck-build time
 //
-// It serves the chosen page (and one shared stylesheet) on 127.0.0.1, accepts one
-// POST of the user's answers, writes them to a results JSON file, and shuts down.
-// Nothing leaves the machine: loopback only, no outbound calls, no interpreter or
-// runtime needed on the machine that runs it. The picker HTML/CSS are compiled in
-// via go:embed, so the shipped binary needs no companion files. build.sh copies the
-// canonical assets next to this source before building (embed can't reach a parent
-// directory).
+// It serves the chosen page (one shared stylesheet, one shared background photo) on
+// 127.0.0.1, accepts one POST of the user's answers, writes them to a results JSON
+// file, and shuts down. Nothing leaves the machine: loopback only, no outbound
+// calls, no interpreter or runtime needed on the machine that runs it. The picker
+// HTML/CSS/photo are compiled in via go:embed, so the shipped binary needs no
+// companion files. build.sh copies the canonical assets next to this source before
+// building (embed can't reach a parent directory).
 //
 // Usage:
 //
@@ -47,6 +47,9 @@ var paletteHTML string
 
 //go:embed picker.css
 var pickerCSS string
+
+//go:embed bg.jpg
+var bgJPEG []byte
 
 const (
 	dataToken    = "REPLACE_DATA_JSON"
@@ -111,6 +114,10 @@ func main() {
 	mux.HandleFunc("/picker.css", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/css; charset=utf-8")
 		_, _ = w.Write([]byte(pickerCSS))
+	})
+	mux.HandleFunc("/bg.jpg", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/jpeg")
+		_, _ = w.Write(bgJPEG)
 	})
 	mux.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
