@@ -29,6 +29,33 @@ seed a domain from a guess at his taste.
 - Travels externally: **yes** — long-running syndicated show, broadly recognized
   even outside the US original.
 
+**Friends**
+- Ross shouting "PIVOT!" while wedging a couch up a stairwell — brute-forcing a
+  change that ignores the constraints and the plan instead of measuring first.
+- "We were on a break!" — an argument that never ends because nobody wrote down
+  what was actually agreed.
+- Monica's one junk-stuffed closet behind an otherwise spotless apartment — a tidy
+  surface with the mess pushed one door out of sight.
+- Travels externally: **yes** — long-running global syndication, broadly recognized.
+
+**It's Always Sunny in Philadelphia**
+- Charlie at the "Pepe Silvia" mailroom wall — string, papers and arrows everywhere,
+  frantically explaining a system nobody else can follow. The reference for an
+  overloaded diagram / incomprehensible complexity that begs to be simplified.
+- Travels externally: **yes** — the conspiracy-board scene is a near-universal
+  internet reference, recognized even by people who haven't seen the show.
+
+## TV drama
+
+**Breaking Bad**
+- Gus Fring's spotless laundromat sitting on top of a hidden industrial lab — a
+  clean, simple front with all the complex machinery deliberately out of view.
+- Walt's quiet "Say my name" — the moment the system finally recognizes who owns
+  the thing, and says so out loud.
+- Walt sure he's in control right up until he isn't — confidence and momentum
+  running well past the brakes.
+- Travels externally: **yes** — a globally distributed, widely-referenced series.
+
 ## Animation
 
 **The Simpsons**
@@ -48,9 +75,36 @@ seed a domain from a guess at his taste.
 - Travels externally: **yes** — near-universal recognition across generations and
   regions.
 
+**Futurama**
+- Bender's "I'm gonna build my own, with blackjack and…" — walking off to rebuild
+  from scratch instead of reusing what's already there.
+- Fry slapping cash on the counter, "shut up and take my money" — demand running
+  ahead of the thing even being ready.
+- Fry's narrow-eyed "not sure if…" squint — polite skepticism, withholding
+  judgment until the evidence shows up.
+- Travels externally: **yes** — widely syndicated animation with meme-level scene
+  recognition.
+
 ## Film
 
-_Add your go-to sources here — none seeded yet._
+**Star Wars**
+- The Death Star's unshielded exhaust port — one small weakness nobody reviewed,
+  and it takes down the entire system.
+- Admiral Ackbar's "It's a trap!" — recognizing a beat too late that you've walked
+  straight into a known failure mode.
+- "These aren't the droids you're looking for" — something waved through a
+  checkpoint without the scrutiny it should have gotten.
+- Travels externally: **yes** — near-universal cultural recognition.
+
+**Star Trek**
+- Picard's "Make it so" — a decision, once made, handed off to be executed without
+  relitigating it.
+- The Kobayashi Maru — a test everyone is expected to face, built to see how you
+  handle it rather than to be simply "passed."
+- Scotty quoting a repair time far longer than he needs, to look like a miracle
+  worker when it lands early — padding an estimate for headroom.
+- Travels externally: **yes** for the marquee lines; deep-cut episode references
+  travel less, so stay with these.
 
 ## Sports
 
