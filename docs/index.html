@@ -3,16 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>deck-visuals — guidance + injection for HTML decks</title>
+<title>deck-visuals — turn your deck into a visual argument</title>
 <style>
 /*
-  This page shares the same design language as the local pickers (see
-  skills/deck-visuals/assets/onboarding/picker.css): a port of html5up's
-  "Dimension" template's real CSS values — charcoal base, a full-bleed photo +
-  dark overlay, flat 4px panels, light-weight type, monochrome restraint (only
-  semantic pass/fail colors survive), and the same staged intro. The background
-  photo is a sibling static file (assets/bg.jpg) — GitHub Pages serves it
-  natively, no external hotlink.
+  deck-visuals marketing landing. Shares the same design language as the local
+  pickers (skills/deck-visuals/assets/onboarding/picker.css) and reference.html:
+  a port of html5up's "Dimension" template's real CSS values — charcoal base, a
+  full-bleed photo + dark overlay, flat 4px panels, light-weight type,
+  monochrome restraint (only semantic pass/fail colors survive), and the same
+  staged intro. This shared <style> block (tokens through the reduced-motion
+  query) is identical across index.html / gallery.html / reference.html by
+  design — touching one means touching all three.
+
+  The mounted specimens under assets/gallery/ use a SEPARATE token system (the
+  deck's own navy theme, references/brand.md) — that's intentional. Only this
+  page's own chrome uses Aurora Depth.
 */
 :root{
   --bg:      #1b1f22;
@@ -23,7 +28,6 @@
   --text-faint: rgba(255, 255, 255, 0.35);
   --border:        rgba(255, 255, 255, 0.18);
   --border-strong: rgba(255, 255, 255, 0.35);
-  /* the only color left — semantic pass/fail, matching the pickers' yes/no */
   --pass: #6fcf97;
   --fail: #eb6f6f;
   --sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -34,6 +38,8 @@
   --dur-intro-header: .325s;
   --dur-intro-bg: 1.25s;
   --delay-intro-bg: .375s;
+  --blur-focus: .22rem;
+  --dur-rack: .325s;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -51,8 +57,6 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
-/* The scene — a real photo + dark overlay (Dimension's actual technique), not a
-   gradient. Sibling static asset, served by GitHub Pages, no hotlink. */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none;
   background-image:
@@ -60,14 +64,11 @@ body::before {
     url('assets/bg.jpg');
   background-size: cover; background-position: center; background-attachment: fixed;
 }
-/* Subtle grain, offline (inline SVG data-URI). */
 body::after {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   opacity: .3; mix-blend-mode: overlay;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)" opacity="0.5"/></svg>');
 }
-/* Staged intro's animated overlay — starts solid black, fades to reveal the
-   photo+grain. Sits between the photo (-3) and the grain (-1). */
 .bg-overlay {
   position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background-color: #000;
@@ -75,248 +76,297 @@ body::after {
   transition-delay: var(--delay-intro-bg);
 }
 body:not(.is-preload) .bg-overlay { background-color: rgba(19, 21, 25, 0); }
-/* The hero region fades/unblurs on load — Dimension's real #header mechanic. */
 .dv-intro { filter: blur(.125rem); }
 .dv-intro > * { opacity: 0; transition: opacity var(--dur-intro-header) ease-in-out; }
 body:not(.is-preload) .dv-intro { filter: none; transition: filter var(--dur-intro-header) ease-in-out; }
 body:not(.is-preload) .dv-intro > * { opacity: 1; }
 
 .page { max-width: 920px; margin: 0 auto; position: relative; }
+
+.site-nav { display: flex; align-items: center; justify-content: space-between; max-width: 920px; margin: 0 auto 40px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.site-nav__brand { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text); text-decoration: none; font-size: 15px; letter-spacing: .01em; }
+.site-nav__mark { width: 18px; height: 18px; flex: none; border: 1px solid var(--border-strong); border-radius: 3px; position: relative; }
+.site-nav__mark::after { content: ""; position: absolute; inset: 5px; background: var(--text); opacity: .85; border-radius: 1px; }
+.site-nav__links { display: flex; gap: 22px; }
+.site-nav__links a { font-family: var(--mono); font-size: 11px; letter-spacing: .1rem; text-transform: uppercase; color: var(--text-dim); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+.site-nav__links a:hover { color: var(--text); }
+.site-nav__links a[aria-current="page"] { color: var(--text); border-bottom-color: var(--text); }
+
 h1 { font-family: var(--sans); font-weight: 600; font-size: 36px; letter-spacing: .005em; line-height: 1.2; color: var(--text); margin-bottom: 14px; }
 h2 { font-family: var(--sans); font-weight: 600; font-size: 22px; color: var(--text); margin-bottom: 10px; }
 h3 { font-family: var(--sans); font-weight: 600; font-size: 16px; color: var(--text); margin-bottom: 6px; }
 p { margin-bottom: 14px; font-weight: 300; }
 p:last-child { margin-bottom: 0; }
-hr.rule { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+hr.rule { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
 .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .15rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; font-weight: 400; }
 code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); padding: 1px 6px; border-radius: 3px; color: var(--text); }
 
-.layout { display: grid; grid-template-columns: 190px 1fr; gap: 56px; }
-@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } .toc { display: none; } }
-.toc { position: sticky; top: 40px; align-self: start; padding-top: 4px; }
-.toc-label { font-family: var(--mono); font-size: 10px; letter-spacing: .15rem; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
-.toc a { display: block; font-size: 13px; font-weight: 300; color: var(--text-dim); text-decoration: none; padding: 5px 12px; border-left: 2px solid var(--border); margin-bottom: 2px; transition: color .1s, border-color .1s; }
-.toc a:hover, .toc a.active { color: var(--text); border-left-color: var(--text); }
-
-.content { min-width: 0; }
-.section { margin-bottom: 56px; }
-
-.hero { margin-bottom: 56px; }
-.hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .15rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; font-weight: 400; }
-.hero-subtitle { font-size: 17px; font-weight: 300; color: var(--text-dim); max-width: 600px; margin-bottom: 20px; line-height: 1.55; }
-.hero-summary { font-size: 15px; font-weight: 300; color: var(--text-dim); max-width: 620px; padding: 16px 20px; background: var(--panel); border: var(--border-rule); border-left: 3px solid var(--border-strong); border-radius: 0 var(--radius-row) var(--radius-row) 0; }
-
 .pillar-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
 @media (max-width: 640px) { .pillar-cards { grid-template-columns: 1fr; } }
-.pillar-card { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); padding: 18px 20px; }
+.pillar-card { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); padding: 18px 20px; transition: filter var(--dur-rack) ease-in-out, transform var(--dur-rack) ease-in-out, opacity var(--dur-rack) ease-in-out, border-color .2s; }
+.pillar-card:hover { border-color: var(--border-strong); }
 .pillar-card .pillar-name { font-family: var(--sans); font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 6px; }
 .pillar-card .pillar-desc { font-size: 13.5px; font-weight: 300; color: var(--text-dim); line-height: 1.55; }
+.pillar-card .pillar-frame { width: 100%; aspect-ratio: 16/10; border: 0; display: block; background: #0a1428; border-radius: var(--radius-row); margin-bottom: 12px; }
+.pillar-cards:hover .pillar-card:not(:hover) { filter: blur(var(--blur-focus)); transform: scale(.97); opacity: .55; }
 
-.layer-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-.layer-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--panel); border: var(--border-rule); border-radius: var(--radius-row); font-family: var(--mono); font-size: 12px; font-weight: 300; color: var(--text-dim); }
-/* Three roles told apart by fill weight, not hue — monochrome restraint. */
-.layer-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text); flex-shrink: 0; }
-.layer-pill .dot.green { background: transparent; border: 1px solid var(--border-strong); }
-.layer-pill .dot.gray { background: var(--text-faint); }
-
-.install-card { background: var(--panel-2); border: var(--border-rule); border-radius: var(--radius-panel); padding: 20px 24px; margin-bottom: 16px; }
+.install-card { background: var(--panel-2); border: var(--border-rule); border-radius: var(--radius-panel); padding: 20px 24px; margin-bottom: 16px; position: relative; }
 .install-card pre { font-family: var(--mono); font-size: 13px; line-height: 1.8; color: var(--text-dim); }
 .install-note { font-size: 13px; font-weight: 300; color: var(--text-dim); padding: 10px 14px; background: var(--panel); border-radius: var(--radius-row); border: var(--border-rule); }
-
-.code-panel { background: var(--panel-2); border: var(--border-rule); border-radius: var(--radius-panel); padding: 18px 22px; overflow-x: auto; margin-bottom: 20px; }
-.code-panel pre { font-family: var(--mono); font-size: 12px; line-height: 1.65; color: var(--text-dim); white-space: pre; }
-/* Syntax "highlighting" in shades of white/gray only — no hue. */
-.cm  { color: var(--text-faint); }
-.kw  { color: var(--text); }
-.str { color: var(--text-dim); }
-.fn  { color: var(--text); font-weight: 600; }
+.copy-btn {
+  position: absolute; top: 14px; right: 16px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--text-dim); background: transparent; border: var(--border-rule); border-radius: var(--radius-row);
+  padding: 5px 10px; cursor: pointer; transition: color .15s, border-color .15s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--border-strong); }
 
 .step-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
 .step-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; }
-.step-num { font-family: var(--mono); font-size: 11px; background: var(--panel-2); color: var(--text); border: 1px solid var(--border); padding: 3px 9px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; font-weight: 400; }
-.step-val { color: var(--text-dim); font-weight: 300; line-height: 1.5; }
+.step-icon { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center; margin-top: 1px; }
+.step-icon svg { width: 14px; height: 14px; stroke: var(--text); }
+.step-val { color: var(--text-dim); font-weight: 300; line-height: 1.5; padding-top: 3px; }
 .step-val .owner { color: var(--text-faint); font-family: var(--mono); font-size: 11.5px; }
 
-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); overflow: hidden; margin-bottom: 20px; }
-th { text-align: left; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .08rem; color: var(--text-dim); background: var(--panel-2); padding: 11px 16px; border-bottom: 1px solid var(--border); }
-td { padding: 11px 16px; font-size: 14px; font-weight: 300; color: var(--text-dim); border-bottom: 1px solid var(--border); vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; vertical-align: -2px; box-shadow: inset 0 0 0 1px var(--border-strong); }
+.stat-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+@media (max-width: 640px) { .stat-tiles { grid-template-columns: repeat(2, 1fr); } }
+.stat-tile { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); padding: 14px 16px; }
+.stat-tile .num { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--pass); }
+.stat-tile .label { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+.credibility-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.credibility-list li { font-size: 13.5px; color: var(--text-dim); padding-left: 18px; position: relative; }
+.credibility-list li::before { content: "—"; position: absolute; left: 0; color: var(--text-faint); }
 
-.gate-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 14px; }
-.gate-badge.pass { background: rgba(111,207,151,.12); border: 1px solid rgba(111,207,151,.4); color: var(--pass); }
-.gate-badge.fail { background: rgba(235,111,111,.12); border: 1px solid rgba(235,111,111,.4); color: var(--fail); }
-.gate-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.personalization-shots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+@media (max-width: 640px) { .personalization-shots { grid-template-columns: 1fr; } }
+.picker-shot { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); overflow: hidden; }
+.picker-shot img { width: 100%; display: block; }
+.picker-shot .placeholder {
+  aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint); font-family: var(--mono); font-size: 12px; text-align: center; padding: 20px;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 12px, transparent 12px 24px), var(--panel-2);
+}
+.picker-shot .caption { padding: 10px 14px; font-size: 11.5px; color: var(--text-faint); font-weight: 300; border-top: var(--border-rule); }
+
+.mini-switcher { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.mini-swatch { width: 28px; height: 28px; border-radius: var(--radius-row); border: 2px solid transparent; cursor: pointer; transition: border-color .15s, transform .15s; }
+.mini-swatch:hover { transform: translateY(-2px); }
+.mini-swatch[aria-pressed="true"] { border-color: var(--text); }
+
+.microflow { display: flex; gap: 20px; margin-top: 18px; flex-wrap: wrap; }
+.microflow div { flex: 1; min-width: 140px; font-size: 13px; color: var(--text-dim); }
+.microflow .n { font-family: var(--mono); color: var(--text-faint); font-size: 11px; display: block; margin-bottom: 4px; }
 
 .footer { border-top: var(--border-rule); padding-top: 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .footer-links { display: flex; gap: 20px; }
 .footer-links a { font-size: 13px; font-weight: 300; color: var(--text-dim); text-decoration: none; }
 .footer-links a:hover { color: var(--text); }
 .footer-meta { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+.footer-privacy { width: 100%; font-size: 12px; font-weight: 300; color: var(--text-faint); margin-top: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .pillar-cards:hover .pillar-card:not(:hover) { filter: none !important; transform: none !important; }
 }
 </style>
 </head>
 <body class="is-preload">
 <div class="bg-overlay" aria-hidden="true"></div>
+<nav class="site-nav">
+  <a class="site-nav__brand" href="index.html"><span class="site-nav__mark"></span>deck-visuals</a>
+  <div class="site-nav__links">
+    <a href="index.html" aria-current="page">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="reference.html">Reference</a>
+    <a href="https://github.com/gagoar/deck-visuals" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</nav>
+
 <div class="page">
 
+  <!-- Hero -->
   <div class="dv-intro">
-  <div class="hero">
-    <div class="hero-eyebrow">Claude Code Plugin</div>
-    <h1>deck-visuals</h1>
-    <p class="hero-subtitle">Decides where a visual belongs and which kind. Never renders the deck.</p>
-    <div class="hero-summary">A guidance-and-injection layer for HTML decks: inline-SVG concept diagrams, dataviz-backed charts with a validated brand palette, icon anchors, and GIF levity — each a self-contained fragment you inject into a deck <code>frontend-slides</code> already built.</div>
-  </div>
-  </div>
+    <div class="hero-eyebrow eyebrow">Claude Code Plugin</div>
+    <h1>Your deck already reads. Make it land.</h1>
+    <p style="font-size:17px;color:var(--text-dim);max-width:600px;margin-bottom:8px">Decides where a visual belongs in an HTML deck and which kind. Never renders the deck.</p>
+    <p style="max-width:600px;margin-bottom:24px">Inline-SVG concept diagrams, dataviz-backed charts, icon anchors, and GIF levity — each a self-contained fragment injected into a deck <code>frontend-slides</code> already built.</p>
 
-  <div class="layout">
-    <nav class="toc" id="toc">
-      <div class="toc-label">Contents</div>
-      <a href="#pillars">Three pillars</a>
-      <a href="#layers">Layer boundaries</a>
-      <a href="#pipeline">The pipeline</a>
-      <a href="#palette">Brand palette</a>
-      <a href="#install">Install</a>
-      <a href="#fragments">Fragments</a>
-    </nav>
-
-    <div class="content">
-
-      <section class="section" id="pillars">
-        <div class="eyebrow">What it does</div>
-        <h2>Three pillars</h2>
-        <div class="pillar-cards">
-          <div class="pillar-card">
-            <div class="pillar-name">Impactful visuals</div>
-            <div class="pillar-desc">Inline-SVG concept diagrams for relationships and flows. Icon anchors for single ideas. Hero-moment illustrations are deferred, not faked.</div>
-          </div>
-          <div class="pillar-card">
-            <div class="pillar-name">Data-viz principles</div>
-            <div class="pillar-desc">Chart form and marks come from the built-in <code>dataviz</code> skill. Color comes from a validated brand palette. Every chart ships a reachable table twin.</div>
-          </div>
-          <div class="pillar-card">
-            <div class="pillar-name">Levity</div>
-            <div class="pillar-desc">Real GIFs by direct media URL, at a deliberate cadence, with alt text and a reduced-motion still on every one.</div>
-          </div>
-        </div>
-      </section>
-
-      <hr class="rule">
-
-      <section class="section" id="layers">
-        <div class="eyebrow">Division of labor</div>
-        <h2>Layer boundaries</h2>
-        <div class="layer-row">
-          <div class="layer-pill"><span class="dot"></span>frontend-slides — renders shell, stage, theme</div>
-          <div class="layer-pill"><span class="dot green"></span>deck-visuals — guides + injects one fragment</div>
-          <div class="layer-pill"><span class="dot gray"></span>iceberg — copy only, never the finished .html</div>
-        </div>
-        <p>Fragments are renderer-agnostic. Each carries its own scoped <code>&lt;style&gt;</code> and assumes nothing about the host page's classes or globals. Injecting one never edits the shell around it.</p>
-      </section>
-
-      <hr class="rule">
-
-      <section class="section" id="pipeline">
-        <div class="eyebrow">How it works</div>
-        <h2>The pipeline</h2>
-        <ul class="step-list">
-          <li><span class="step-num">0</span><span class="step-val">Onboard (out-of-band). A local swipe picker rebuilds the presenter's pop-culture profile so levity always has options. <span class="owner">deck-visuals</span></span></li>
-          <li><span class="step-num">1</span><span class="step-val">Copy. Draft slide text. Run <code>iceberg</code> on the prose only. <span class="owner">iceberg</span></span></li>
-          <li><span class="step-num">2</span><span class="step-val">Render. Build or open the deck. <span class="owner">frontend-slides</span></span></li>
-          <li><span class="step-num">3</span><span class="step-val">Chart injection. <code>dataviz</code> form/marks + brand palette color, inline-SVG + table twin. <span class="owner">deck-visuals</span></span></li>
-          <li><span class="step-num">4</span><span class="step-val">Concept-visual injection. Diagram, icon, or a deferred placeholder — by the decision rule. <span class="owner">deck-visuals</span></span></li>
-          <li><span class="step-num">5</span><span class="step-val">Levity injection. GIF fragments at a tasteful cadence. <span class="owner">deck-visuals</span></span></li>
-          <li><span class="step-num">6</span><span class="step-val">Deliver. Ship to the notes site. <span class="owner">deliver-doc</span></span></li>
-        </ul>
-      </section>
-
-      <hr class="rule">
-
-      <section class="section" id="palette">
-        <div class="eyebrow">Validated, not eyeballed</div>
-        <h2>Brand palette</h2>
-        <span class="gate-badge pass">Dark mode: PASS</span>
-        <p>Eight categorical slots, anchored on the deck accent <code>#3ea6ff</code> family, checked with the built-in <code>dataviz</code> skill's colorblind-safety validator — the authority for these numbers — rather than by eye. Worst adjacent color-vision-deficiency ΔE against the dark surface: <strong>8.4</strong>, clearing the 8.0 target; worst adjacent normal-vision ΔE: <strong>19.3</strong>, clearing the 15.0 floor. This is a dark-only set: the decks this plugin targets are dark-only today, and a light-mode palette is a separate, not-yet-derived selection. See <code>skills/deck-visuals/assets/brand-palette.md</code> for the full validator output.</p>
-        <table>
-          <thead><tr><th>Slot</th><th>Color</th><th>Name</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td><span class="swatch" style="background:#2894eb"></span>#2894eb</td><td>Signal Blue (anchor)</td></tr>
-            <tr><td>2</td><td><span class="swatch" style="background:#d95926"></span>#d95926</td><td>Orange</td></tr>
-            <tr><td>3</td><td><span class="swatch" style="background:#199e70"></span>#199e70</td><td>Aqua</td></tr>
-            <tr><td>4</td><td><span class="swatch" style="background:#c98500"></span>#c98500</td><td>Yellow</td></tr>
-            <tr><td>5</td><td><span class="swatch" style="background:#d55181"></span>#d55181</td><td>Magenta</td></tr>
-            <tr><td>6</td><td><span class="swatch" style="background:#008300"></span>#008300</td><td>Green</td></tr>
-            <tr><td>7</td><td><span class="swatch" style="background:#9085e9"></span>#9085e9</td><td>Violet</td></tr>
-            <tr><td>8</td><td><span class="swatch" style="background:#e66767"></span>#e66767</td><td>Red</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <hr class="rule">
-
-      <section class="section" id="install">
-        <div class="eyebrow">Getting started</div>
-        <h2>Install</h2>
-        <div class="install-card">
-          <pre><span style="color:var(--text-faint)"># Install</span>
+    <div class="install-card">
+      <button class="copy-btn" id="copy-install-1" type="button">Copy</button>
+      <pre><span style="color:var(--text-faint)"># Install</span>
 <span style="color:var(--text)">/plugin marketplace add</span> <span style="color:var(--text-dim)">gagoar/gago-plugins</span>
 <span style="color:var(--text)">/plugin install</span> <span style="color:var(--text-dim)">deck-visuals@gago-plugins</span>
 <span style="color:var(--text)">/reload-plugins</span></pre>
-        </div>
-        <div class="install-note">Ask in natural language once a deck exists — "add visuals to my deck," "chart this," "add a levity slide." The skill reads the deck and returns fragments to inject; it never rewrites the shell.</div>
-      </section>
-
-      <hr class="rule">
-
-      <section class="section" id="fragments">
-        <div class="eyebrow">What ships</div>
-        <h2>Fragments</h2>
-        <div class="code-panel">
-          <pre><span class="fn">skills/deck-visuals/assets/fragments/</span>
-<span class="kw">chart-figure.html</span>      <span class="cm">— inline-SVG chart + table-view twin</span>
-<span class="kw">concept-diagram.html</span>  <span class="cm">— on-brand flow/relationship/architecture diagram</span>
-<span class="kw">levity-slide.html</span>     <span class="cm">— GIF block, alt text, reduced-motion fallback</span></pre>
-        </div>
-        <p>Every fragment is self-contained: its own scoped styles, no dependency on the host page's classes. Icons live alongside them in <code>assets/icons/</code>, a curated Lucide-style set of 16 presentation glyphs.</p>
-      </section>
-
-      <div class="footer">
-        <div class="footer-links">
-          <a href="https://github.com/gagoar/deck-visuals" target="_blank">github.com/gagoar/deck-visuals</a>
-          <a href="https://github.com/gagoar" target="_blank">gagoar</a>
-        </div>
-        <div class="footer-meta">MIT license · deck-visuals v0.2.0</div>
-      </div>
-
     </div>
+    <p style="margin-bottom:28px"><a href="gallery.html" style="color:var(--text);text-decoration:underline">See the gallery →</a></p>
+
+    <iframe class="pillar-frame" style="width:100%;max-width:480px;aspect-ratio:16/10;border:0;display:block;background:#0a1428;border-radius:var(--radius-panel)" src="assets/gallery/chart-mounted.html" title="A real chart the plugin generates" loading="lazy"></iframe>
   </div>
+
+  <hr class="rule">
+
+  <!-- What it generates -->
+  <section id="pillars">
+    <div class="eyebrow">What it generates</div>
+    <h2>Real output, three pillars</h2>
+    <p style="margin-bottom:24px"><strong style="color:var(--text)">5</strong> diagram recipes · <strong style="color:var(--text)">16</strong> presentation icons · <strong style="color:var(--text)">8</strong> validated palette slots.</p>
+    <div class="pillar-cards">
+      <div class="pillar-card">
+        <iframe class="pillar-frame" src="assets/gallery/diagram-hub-spoke.html" title="Concept diagram specimen" loading="lazy"></iframe>
+        <div class="pillar-name">Impactful visuals</div>
+        <div class="pillar-desc">Inline-SVG concept diagrams for relationships and flows. Icon anchors for single ideas.</div>
+      </div>
+      <div class="pillar-card">
+        <iframe class="pillar-frame" src="assets/gallery/beforeafter.html" title="Chart specimen" loading="lazy"></iframe>
+        <div class="pillar-name">Data-viz principles</div>
+        <div class="pillar-desc">Chart form and color come from a validated brand palette. Every chart ships a table twin.</div>
+      </div>
+      <div class="pillar-card">
+        <iframe class="pillar-frame" src="assets/gallery/levity.html" title="Levity specimen" loading="lazy"></iframe>
+        <div class="pillar-name">Levity</div>
+        <div class="pillar-desc">Real GIFs by direct media URL, at a deliberate cadence, verified before they ship.</div>
+      </div>
+    </div>
+    <p style="margin-top:20px"><a href="gallery.html" style="color:var(--text);text-decoration:underline">See the full gallery →</a></p>
+  </section>
+
+  <hr class="rule">
+
+  <!-- How it works -->
+  <section id="pipeline">
+    <div class="eyebrow">How it works</div>
+    <h2>The pipeline</h2>
+    <ul class="step-list">
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><span class="step-val">Onboard (out-of-band). A local swipe picker rebuilds the presenter's pop-culture profile. <span class="owner">deck-visuals</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="step-val">Copy. Draft slide text. Run <code>iceberg</code> on the prose only. <span class="owner">iceberg</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="step-val">Render. Build or open the deck. <span class="owner">frontend-slides</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span class="step-val">Chart injection. <code>dataviz</code> form/marks + brand palette color, inline-SVG + table twin. <span class="owner">deck-visuals</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span class="step-val">Concept-visual injection. Diagram, icon, or a deferred placeholder — by the decision rule. <span class="owner">deck-visuals</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span class="step-val">Levity injection. GIF fragments at a tasteful cadence. <span class="owner">deck-visuals</span></span></li>
+      <li><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span><span class="step-val">Deliver. Ship to the notes site. <span class="owner">deliver-doc</span></span></li>
+    </ul>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Credibility -->
+  <section id="credibility">
+    <div class="eyebrow">Validated, not eyeballed</div>
+    <h2>The rigor is real</h2>
+    <div class="stat-tiles">
+      <div class="stat-tile"><div class="num">8.4</div><div class="label">worst CVD ΔE (clears 8.0)</div></div>
+      <div class="stat-tile"><div class="num">19.3</div><div class="label">worst normal-vision ΔE (clears 15.0)</div></div>
+      <div class="stat-tile"><div class="num">3:1</div><div class="label">minimum contrast, all 8 slots</div></div>
+      <div class="stat-tile"><div class="num">MIT</div><div class="label">license, fully open source</div></div>
+    </div>
+    <ul class="credibility-list">
+      <li>The palette validator (<code>dv-tools</code>) is a real Go binary doing the colorblind-safety math — not eyeballed.</li>
+      <li>Every chart ships with a reachable table-view twin.</li>
+      <li>Every GIF is verified by a direct-URL check before it ships — never a guessed link.</li>
+      <li>The local pickers are zero-runtime binaries: bind <code>127.0.0.1</code> only, no auth, no outbound calls. Nothing leaves the machine.</li>
+    </ul>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Personalization -->
+  <section id="personalization">
+    <div class="eyebrow">It knows what you'd reference</div>
+    <h2>Matches the shows you love</h2>
+    <p>Swipe through <strong style="color:var(--text)">50 shows</strong> and mark what you recognize — recognizing one means you'd get the jokes built around it. What you recognize unlocks accent themes matched to it: <strong style="color:var(--text)">house</strong> default, a pinned <strong style="color:var(--text)">Wes Anderson</strong> theme, and <strong style="color:var(--text)">14 more</strong> matched to shows like The Matrix, Breaking Bad, and Star Wars. It never asks you to name a color — you pick from swatches.</p>
+
+    <div class="mini-switcher" id="mini-switcher" role="radiogroup" aria-label="Accent theme preview"></div>
+
+    <div class="personalization-shots">
+      <div class="picker-shot">
+        <img src="assets/gallery/pickers/onboard.jpg" alt="The onboarding swipe picker's intro screen, asking talk length and who's in the room.">
+        <div class="caption">Local tool — nothing leaves the machine.</div>
+      </div>
+      <div class="picker-shot">
+        <div class="placeholder">Palette picker screenshot<br>— pending —</div>
+        <div class="caption">Local tool — nothing leaves the machine.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Repeat CTA -->
+  <section id="install">
+    <div class="eyebrow">Getting started</div>
+    <h2>Install</h2>
+    <div class="install-card">
+      <button class="copy-btn" id="copy-install-2" type="button">Copy</button>
+      <pre><span style="color:var(--text-faint)"># Install</span>
+<span style="color:var(--text)">/plugin marketplace add</span> <span style="color:var(--text-dim)">gagoar/gago-plugins</span>
+<span style="color:var(--text)">/plugin install</span> <span style="color:var(--text-dim)">deck-visuals@gago-plugins</span>
+<span style="color:var(--text)">/reload-plugins</span></pre>
+    </div>
+    <div class="microflow">
+      <div><span class="n">1</span>Copy the command</div>
+      <div><span class="n">2</span>Paste it in Claude Code</div>
+      <div><span class="n">3</span>Ask it to "add visuals to my deck"</div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div class="footer-links">
+      <a href="gallery.html">Gallery</a>
+      <a href="reference.html">Reference</a>
+      <a href="https://github.com/gagoar/deck-visuals" target="_blank">github.com/gagoar/deck-visuals</a>
+      <a href="https://github.com/gagoar" target="_blank">gagoar</a>
+    </div>
+    <div class="footer-meta">MIT license · deck-visuals v0.2.0</div>
+    <div class="footer-privacy">Local pickers run on your machine — nothing leaves it.</div>
+  </div>
+
 </div>
+
 <script>
-// Staged intro — same real timing as the pickers (Dimension's header-fade at
-// .325s; the background reveal halved 2x from source per user feedback).
 (function () {
   function prefersReduced() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
   function lift() { document.body.classList.remove('is-preload'); }
   function runIntro() { if (prefersReduced()) lift(); else window.setTimeout(lift, 100); }
-  if (document.readyState === 'complete') runIntro();
-  else window.addEventListener('load', runIntro);
+  if (document.readyState === 'complete') runIntro(); else window.addEventListener('load', runIntro);
 })();
 
-const sections = document.querySelectorAll('section[id]');
-const tocLinks = document.querySelectorAll('.toc a');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      tocLinks.forEach(a => a.classList.remove('active'));
-      const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
-      if (active) active.classList.add('active');
-    }
+// Copy-to-clipboard on both install blocks.
+document.querySelectorAll('.copy-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var text = btn.parentElement.querySelector('pre').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var orig = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    });
   });
-}, { rootMargin: '-20% 0px -70% 0px' });
-sections.forEach(s => observer.observe(s));
+});
+
+// Mini accent-theme preview (teaser of the gallery's full switcher).
+(function () {
+  var themes = [
+    { id: "house", label: "House", accent: "#3ea6ff" },
+    { id: "wes-anderson", label: "Wes Anderson", accent: "#f4a8b9" },
+    { id: "the-matrix", label: "The Matrix", accent: "#22e06a" },
+    { id: "breaking-bad", label: "Breaking Bad", accent: "#7cb518" }
+  ];
+  var wrap = document.getElementById("mini-switcher");
+  themes.forEach(function (t, i) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mini-swatch";
+    btn.style.background = t.accent;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+    btn.setAttribute("aria-label", t.label);
+    btn.title = t.label;
+    btn.addEventListener("click", function () {
+      wrap.querySelectorAll(".mini-swatch").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+    });
+    wrap.appendChild(btn);
+  });
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+  Marketing-site specimen wrapper — mounts assets/fragments/concept-diagram.html's
+  real content (copied verbatim, the "Flow" recipe) inside a standalone document
+  for safe <iframe> mounting. See chart-mounted.html for why the wrapper exists.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck-visuals — flow diagram specimen</title>
+<style>
+  html, body { margin: 0; background: #0a1428; }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+</style>
+</head>
+<body>
+
+<figure class="dv-diagram" aria-label="Flow diagram: request, validate, commit.">
+  <svg viewBox="0 0 520 140" role="img">
+    <defs>
+      <marker id="dv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0L10 5L0 10z" fill="#93a8c9"></path>
+      </marker>
+    </defs>
+
+    <g stroke="#93a8c9" stroke-width="2" marker-end="url(#dv-arrow)">
+      <line x1="150" y1="70" x2="210" y2="70"></line>
+      <line x1="330" y1="70" x2="390" y2="70"></line>
+    </g>
+
+    <g font-family="'Inter', sans-serif" font-size="15" text-anchor="middle">
+      <rect x="20"  y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#2894eb" stroke-width="2"></rect>
+      <text x="85" y="75" fill="#eef3fb">Request</text>
+
+      <rect x="210" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#d95926" stroke-width="2"></rect>
+      <text x="275" y="75" fill="#eef3fb">Validate</text>
+
+      <rect x="390" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#199e70" stroke-width="2"></rect>
+      <text x="455" y="75" fill="#eef3fb">Commit</text>
+    </g>
+  </svg>
+  <figcaption class="dv-diagram__caption">The "Flow" recipe — a linear process, A → B → C.</figcaption>
+</figure>
+
+<style>
+  .dv-diagram {
+    margin: 0;
+    max-width: 560px;
+    font-family: 'Inter', sans-serif;
+  }
+  .dv-diagram svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dv-diagram__caption {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #56698a;
+    text-align: center;
+  }
+</style>
+</body>
+</html>

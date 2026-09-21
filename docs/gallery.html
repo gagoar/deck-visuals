@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>deck-visuals — gallery</title>
+<style>
+/* Shared site chrome/tokens — identical to index.html / reference.html. See
+   docs/index.html's <style> header comment for the full design-language note. */
+:root{
+  --bg:      #1b1f22;
+  --panel:   rgba(27, 31, 34, 0.85);
+  --panel-2: rgba(20, 23, 26, 0.9);
+  --text:      #ffffff;
+  --text-dim:  rgba(255, 255, 255, 0.55);
+  --text-faint: rgba(255, 255, 255, 0.35);
+  --border:        rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.35);
+  --pass: #6fcf97;
+  --fail: #eb6f6f;
+  --sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius-panel: 4px;
+  --radius-row:   3px;
+  --border-rule: 1px solid var(--border);
+  --dur-intro-header: .325s;
+  --dur-intro-bg: 1.25s;
+  --delay-intro-bg: .375s;
+  --blur-focus: .22rem;
+  --dur-rack: .325s;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body.is-preload *, body.is-preload *::before, body.is-preload *::after {
+  transition: none !important; animation: none !important;
+}
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  background: var(--bg);
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.65;
+  padding: 56px 24px 96px;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(19,21,25,.62), rgba(19,21,25,.8)),
+    url('assets/bg.jpg');
+  background-size: cover; background-position: center; background-attachment: fixed;
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  opacity: .3; mix-blend-mode: overlay;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)" opacity="0.5"/></svg>');
+}
+.bg-overlay {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-color: #000;
+  transition: background-color var(--dur-intro-bg) ease-in-out;
+  transition-delay: var(--delay-intro-bg);
+}
+body:not(.is-preload) .bg-overlay { background-color: rgba(19, 21, 25, 0); }
+.dv-intro { filter: blur(.125rem); }
+.dv-intro > * { opacity: 0; transition: opacity var(--dur-intro-header) ease-in-out; }
+body:not(.is-preload) .dv-intro { filter: none; transition: filter var(--dur-intro-header) ease-in-out; }
+body:not(.is-preload) .dv-intro > * { opacity: 1; }
+
+.page { max-width: 1040px; margin: 0 auto; position: relative; }
+
+.site-nav { display: flex; align-items: center; justify-content: space-between; max-width: 1040px; margin: 0 auto 40px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.site-nav__brand { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text); text-decoration: none; font-size: 15px; letter-spacing: .01em; }
+.site-nav__mark { width: 18px; height: 18px; flex: none; border: 1px solid var(--border-strong); border-radius: 3px; position: relative; }
+.site-nav__mark::after { content: ""; position: absolute; inset: 5px; background: var(--text); opacity: .85; border-radius: 1px; }
+.site-nav__links { display: flex; gap: 22px; }
+.site-nav__links a { font-family: var(--mono); font-size: 11px; letter-spacing: .1rem; text-transform: uppercase; color: var(--text-dim); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+.site-nav__links a:hover { color: var(--text); }
+.site-nav__links a[aria-current="page"] { color: var(--text); border-bottom-color: var(--text); }
+
+h1 { font-family: var(--sans); font-weight: 600; font-size: 36px; letter-spacing: .005em; line-height: 1.2; color: var(--text); margin-bottom: 14px; }
+h2 { font-family: var(--sans); font-weight: 600; font-size: 20px; color: var(--text); margin-bottom: 4px; }
+p { margin-bottom: 14px; font-weight: 300; }
+p:last-child { margin-bottom: 0; }
+hr.rule { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .15rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; font-weight: 400; }
+code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); padding: 1px 6px; border-radius: 3px; color: var(--text); }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); overflow: hidden; margin-bottom: 20px; }
+th { text-align: left; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .08rem; color: var(--text-dim); background: var(--panel-2); padding: 11px 16px; border-bottom: 1px solid var(--border); }
+td { padding: 11px 16px; font-size: 14px; font-weight: 300; color: var(--text-dim); border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; vertical-align: -2px; box-shadow: inset 0 0 0 1px var(--border-strong); }
+
+.footer { border-top: var(--border-rule); padding-top: 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 13px; font-weight: 300; color: var(--text-dim); text-decoration: none; }
+.footer-links a:hover { color: var(--text); }
+.footer-meta { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+.footer-privacy { width: 100%; font-size: 12px; font-weight: 300; color: var(--text-faint); margin-top: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---- Gallery-page-only styles ---- */
+
+.gallery-stat { font-size: 15px; color: var(--text-dim); margin-bottom: 40px; }
+.gallery-stat strong { color: var(--text); font-weight: 600; }
+
+.gallery-section { margin-bottom: 56px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.gallery-grid--featured { grid-template-columns: 1fr; }
+
+/* The frame every mounted deck-navy specimen sits in — this IS the Aurora Depth
+   card that keeps the two token systems from touching. */
+.specimen-card {
+  background: var(--panel);
+  border: var(--border-rule);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  transition: filter var(--dur-rack) ease-in-out, transform var(--dur-rack) ease-in-out, opacity var(--dur-rack) ease-in-out, border-color .2s;
+}
+.specimen-card:hover { border-color: var(--border-strong); }
+.specimen-frame { width: 100%; aspect-ratio: 16/10; border: 0; display: block; background: #0a1428; }
+.specimen-frame--tall { aspect-ratio: 16/11; }
+.specimen-caption { padding: 14px 16px; border-top: var(--border-rule); }
+.specimen-caption .name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.specimen-caption .desc { font-size: 12.5px; color: var(--text-dim); font-weight: 300; }
+
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+.icon-tile {
+  background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel);
+  padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--text-dim);
+}
+.icon-tile svg { width: 22px; height: 22px; stroke: var(--text); }
+.icon-tile span { font-family: var(--mono); font-size: 9.5px; color: var(--text-faint); text-align: center; word-break: break-all; }
+
+.picker-shot { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); overflow: hidden; }
+.picker-shot img { width: 100%; display: block; }
+.picker-shot .placeholder {
+  aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint); font-family: var(--mono); font-size: 12px; text-align: center; padding: 20px;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 12px, transparent 12px 24px), var(--panel-2);
+}
+.picker-shot .caption { padding: 12px 16px; font-size: 12px; color: var(--text-faint); font-weight: 300; border-top: var(--border-rule); }
+
+.switcher-preview {
+  background: #0a1428; border-radius: var(--radius-panel); padding: 24px;
+  display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;
+}
+.switcher-preview__heading { font: 700 17px/1.2 'Space Grotesk', sans-serif; color: var(--specimen-accent, #3ea6ff); }
+.switcher-preview__underline { width: 30%; height: 3px; background: var(--specimen-accent, #3ea6ff); border-radius: 2px; }
+.switcher-preview__line { height: 7px; border-radius: 3px; background: rgba(255,255,255,.14); width: 82%; }
+.switcher-preview__line:last-child { width: 55%; }
+.switcher-preview__bars { display: flex; align-items: flex-end; gap: 7px; height: 34px; margin-top: 6px; }
+.switcher-preview__bars span { width: 14px; background: var(--specimen-accent, #3ea6ff); }
+.switcher-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.switcher-swatch {
+  width: 34px; height: 34px; border-radius: var(--radius-row); border: 2px solid transparent; cursor: pointer;
+  transition: border-color .15s, transform .15s;
+}
+.switcher-swatch:hover { transform: translateY(-2px); }
+.switcher-swatch[aria-pressed="true"] { border-color: var(--text); }
+.switcher-note { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
+
+/* Focus-rack: hovering one specimen card blurs/dims its siblings within the same
+   grid — the picker's own depth-of-field mechanic, reused as a hover state. */
+.gallery-grid:hover .specimen-card:not(:hover) {
+  filter: blur(var(--blur-focus)); transform: scale(.97); opacity: .55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-grid:hover .specimen-card:not(:hover) { filter: none !important; transform: none !important; }
+  .switcher-preview__heading, .switcher-preview__underline, .switcher-preview__bars span { transition: none !important; }
+}
+</style>
+</head>
+<body class="is-preload">
+<div class="bg-overlay" aria-hidden="true"></div>
+<nav class="site-nav">
+  <a class="site-nav__brand" href="index.html"><span class="site-nav__mark"></span>deck-visuals</a>
+  <div class="site-nav__links">
+    <a href="index.html">Home</a>
+    <a href="gallery.html" aria-current="page">Gallery</a>
+    <a href="reference.html">Reference</a>
+    <a href="https://github.com/gagoar/deck-visuals" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="dv-intro">
+    <div class="eyebrow">Real output, not mockups</div>
+    <h1>The gallery</h1>
+    <p class="gallery-stat"><strong>5</strong> diagram recipes · <strong>16</strong> presentation icons · <strong>8</strong> validated palette slots · <strong>16</strong> accent themes · a <strong>50-show</strong> recognition catalog. Every specimen below is real output the plugin actually produces, mounted in its own frame — the deck's own navy theme inside deck-visuals' own chrome.</p>
+  </div>
+
+  <section class="gallery-section" id="diagrams">
+    <h2>Concept diagrams</h2>
+    <p class="eyebrow" style="margin-bottom:16px">3 of 5 recipes, drawing the same triage-automation system</p>
+    <div class="gallery-grid" style="margin-bottom:18px">
+      <div class="specimen-card">
+        <iframe class="specimen-frame" src="assets/gallery/flow-mounted.html" title="Flow diagram specimen" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">Flow</div><div class="desc">Request → Validate → Commit. Linear process, A → B → C.</div></div>
+      </div>
+      <div class="specimen-card">
+        <iframe class="specimen-frame" src="assets/gallery/diagram-hub-spoke.html" title="Hub and spoke diagram specimen" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">Relationship</div><div class="desc">One system, five things touching it — hub and spokes.</div></div>
+      </div>
+      <div class="specimen-card">
+        <iframe class="specimen-frame" src="assets/gallery/diagram-layered.html" title="Layered architecture diagram specimen" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">Architecture</div><div class="desc">Client / Service / Data bands, edges only between neighbors.</div></div>
+      </div>
+    </div>
+    <div class="gallery-grid gallery-grid--featured">
+      <div class="specimen-card">
+        <iframe class="specimen-frame specimen-frame--tall" src="assets/gallery/beforeafter.html" title="Before and after specimen" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">Before / after</div><div class="desc">The same real numbers — a plain bullet slide, then charted and reframed as a claim.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="gallery-section" id="charts">
+    <h2>Dataviz charts</h2>
+    <p class="eyebrow" style="margin-bottom:16px">Every chart ships a reachable table twin — this one's toggle is live</p>
+    <div class="gallery-grid">
+      <div class="specimen-card">
+        <iframe class="specimen-frame" src="assets/gallery/chart-mounted.html" title="Chart specimen with live table toggle" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">Deploys per quarter</div><div class="desc">Real Signal Blue bars — click "Show as table" inside the frame.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="gallery-section" id="icons">
+    <h2>Icon anchors</h2>
+    <p class="eyebrow" style="margin-bottom:16px">16 Lucide-style glyphs, theme-agnostic — no frame needed</p>
+    <div class="icon-grid" id="icon-grid"></div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="gallery-section" id="levity">
+    <h2>Levity</h2>
+    <p class="eyebrow" style="margin-bottom:16px">A real, verified GIF — never a guessed URL</p>
+    <div class="gallery-grid">
+      <div class="specimen-card">
+        <iframe class="specimen-frame" src="assets/gallery/levity.html" title="Levity GIF specimen" loading="lazy"></iframe>
+        <div class="specimen-caption"><div class="name">"The Homer"</div><div class="desc">Claim: too many features isn't always fantastic. The Simpsons' unsellable, everything-bolted-on car.</div></div>
+      </div>
+      <div class="picker-shot">
+        <div class="placeholder">Levity picker screenshot<br>— pending —</div>
+        <div class="caption">Local tool — binds 127.0.0.1, no auth, no outbound calls. Nothing leaves the machine.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="gallery-section" id="palette">
+    <h2>Palette &amp; personalization</h2>
+    <p class="eyebrow" style="margin-bottom:16px">One validated data palette. The accent is the only thing that changes.</p>
+
+    <div class="switcher-preview">
+      <div class="switcher-preview__heading">Slide heading</div>
+      <div class="switcher-preview__underline"></div>
+      <div class="switcher-preview__line"></div>
+      <div class="switcher-preview__line"></div>
+      <div class="switcher-preview__bars"><span style="height:28px"></span><span style="height:20px;opacity:.6"></span><span style="height:13px;opacity:.35"></span></div>
+    </div>
+    <div class="switcher-swatches" id="accent-switcher" role="radiogroup" aria-label="Accent theme"></div>
+    <p class="switcher-note">The 8-slot data palette below never changes — only this accent does. Recognized shows unlock the ones that match what you love.</p>
+
+    <table style="margin-top:24px">
+      <thead><tr><th>Slot</th><th>Color</th><th>Name</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span class="swatch" style="background:#2894eb"></span>#2894eb</td><td>Signal Blue (anchor)</td></tr>
+        <tr><td>2</td><td><span class="swatch" style="background:#d95926"></span>#d95926</td><td>Orange</td></tr>
+        <tr><td>3</td><td><span class="swatch" style="background:#199e70"></span>#199e70</td><td>Aqua</td></tr>
+        <tr><td>4</td><td><span class="swatch" style="background:#c98500"></span>#c98500</td><td>Yellow</td></tr>
+        <tr><td>5</td><td><span class="swatch" style="background:#d55181"></span>#d55181</td><td>Magenta</td></tr>
+        <tr><td>6</td><td><span class="swatch" style="background:#008300"></span>#008300</td><td>Green</td></tr>
+        <tr><td>7</td><td><span class="swatch" style="background:#9085e9"></span>#9085e9</td><td>Violet</td></tr>
+        <tr><td>8</td><td><span class="swatch" style="background:#e66767"></span>#e66767</td><td>Red</td></tr>
+      </tbody>
+    </table>
+
+    <div class="gallery-grid" style="margin-top:24px">
+      <div class="picker-shot">
+        <img src="assets/gallery/pickers/onboard.jpg" alt="The onboarding swipe picker, showing the intro screen: talk length and audience questions.">
+        <div class="caption">Local tool — binds 127.0.0.1, no auth, no outbound calls. Nothing leaves the machine.</div>
+      </div>
+      <div class="picker-shot">
+        <div class="placeholder">Palette picker screenshot<br>— pending —</div>
+        <div class="caption">Local tool — binds 127.0.0.1, no auth, no outbound calls. Nothing leaves the machine.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="reference.html">Reference</a>
+      <a href="https://github.com/gagoar/deck-visuals" target="_blank">github.com/gagoar/deck-visuals</a>
+      <a href="https://github.com/gagoar" target="_blank">gagoar</a>
+    </div>
+    <div class="footer-meta">MIT license · deck-visuals v0.2.0</div>
+    <div class="footer-privacy">Local pickers run on your machine — nothing leaves it.</div>
+  </div>
+</div>
+
+<script>
+// Staged intro — identical timing to index.html/reference.html.
+(function () {
+  function prefersReduced() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  function lift() { document.body.classList.remove('is-preload'); }
+  function runIntro() { if (prefersReduced()) lift(); else window.setTimeout(lift, 100); }
+  if (document.readyState === 'complete') runIntro(); else window.addEventListener('load', runIntro);
+})();
+
+// 16 real icons, inlined (theme-agnostic monochrome line art — no iframe needed).
+(function () {
+  var icons = ["alert-triangle","arrow-right","check","clock","database","git-branch","layers","lightbulb","rocket","shield","sparkles","target","trending-up","users","x","zap"];
+  var grid = document.getElementById("icon-grid");
+  icons.forEach(function (name) {
+    fetch("assets/icons/" + name + ".svg")
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .then(function (svg) {
+        var tile = document.createElement("div");
+        tile.className = "icon-tile";
+        tile.innerHTML = (svg || "") + "<span>" + name + "</span>";
+        grid.appendChild(tile);
+      })
+      .catch(function () {});
+  });
+})();
+
+// Live accent switcher — real hexes from assets/palette-presets.md. Only the
+// accent CSS custom property changes; the 8-slot data palette above stays fixed.
+(function () {
+  var themes = [
+    { id: "house", label: "House", accent: "#3ea6ff" },
+    { id: "wes-anderson", label: "Wes Anderson", accent: "#f4a8b9" },
+    { id: "the-matrix", label: "The Matrix", accent: "#22e06a" },
+    { id: "breaking-bad", label: "Breaking Bad", accent: "#7cb518" },
+    { id: "the-simpsons", label: "The Simpsons", accent: "#ffd90f" },
+    { id: "star-wars", label: "Star Wars", accent: "#3bd6ff" },
+    { id: "severance", label: "Severance", accent: "#6ab7e6" },
+    { id: "mario-kart", label: "Mario Kart", accent: "#ff5a4d" }
+  ];
+  var wrap = document.getElementById("accent-switcher");
+  var preview = document.querySelector(".switcher-preview");
+  themes.forEach(function (t, i) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "switcher-swatch";
+    btn.style.background = t.accent;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+    btn.setAttribute("aria-label", t.label);
+    btn.title = t.label;
+    btn.addEventListener("click", function () {
+      wrap.querySelectorAll(".switcher-swatch").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      preview.style.setProperty("--specimen-accent", t.accent);
+    });
+    wrap.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>
