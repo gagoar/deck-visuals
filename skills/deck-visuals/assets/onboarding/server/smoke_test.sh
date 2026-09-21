@@ -62,7 +62,13 @@ run_form() {
   echo "$page" | grep -q "REPLACE_DATA_JSON" && fail "[$form] injection token still present"
 
   echo "==> [$form] GET /picker.css — shared stylesheet served"
-  curl -fsS "$base/picker.css" | grep -q "." || fail "[$form] picker.css empty or missing"
+  # Capture into a variable before checking length — piping curl straight into
+  # `grep -q` is racy: grep can exit (and close its end of the pipe) the instant
+  # it matches the first line, before curl finishes writing the rest of the CSS
+  # body, so curl gets SIGPIPE and pipefail fails the pipeline even though grep
+  # itself matched. Capture-then-test lets curl finish first, deterministically.
+  local css; css="$(curl -fsS "$base/picker.css")"
+  [ -n "$css" ] || fail "[$form] picker.css empty or missing"
 
   echo "==> [$form] POST /submit — accepted"
   local resp; resp="$(curl -fsS -X POST "$base/submit" -H 'Content-Type: application/json' -d "$body")"
