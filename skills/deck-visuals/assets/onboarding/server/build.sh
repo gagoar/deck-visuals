@@ -4,15 +4,15 @@
 # needs nothing installed.
 #
 # go:embed cannot reach a parent directory, so we copy the canonical embedded assets
-# (picker.html, levity-picker.html, picker.css) next to main.go before building, then
-# clean them up.
+# (picker.html, levity-picker.html, palette-picker.html, picker.css) next to main.go
+# before building, then clean them up.
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bin="$here/../bin"
 mkdir -p "$bin"
 
-embedded=(picker.html levity-picker.html picker.css)
+embedded=(picker.html levity-picker.html palette-picker.html picker.css)
 for f in "${embedded[@]}"; do cp "$here/../$f" "$here/$f"; done
 trap 'for f in "${embedded[@]}"; do rm -f "$here/$f"; done' EXIT
 
