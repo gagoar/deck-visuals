@@ -1,6 +1,6 @@
 {
   "name": "deck-visuals",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Guide and inject impactful visuals into HTML decks — inline-SVG concept diagrams, dataviz charts, icon anchors, and GIF levity — without rendering the deck itself.",
   "author": {
     "name": "gagoar",
