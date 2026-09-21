@@ -111,7 +111,7 @@ tr:last-child td { border-bottom: none; }
 .gallery-stat strong { color: var(--text); font-weight: 600; }
 
 .gallery-section { margin-bottom: 56px; }
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; gap: 18px; }
 .gallery-grid--featured { grid-template-columns: 1fr; }
 
 /* The frame every mounted deck-navy specimen sits in — this IS the Aurora Depth
@@ -124,8 +124,7 @@ tr:last-child td { border-bottom: none; }
   transition: filter var(--dur-rack) ease-in-out, transform var(--dur-rack) ease-in-out, opacity var(--dur-rack) ease-in-out, border-color .2s;
 }
 .specimen-card:hover { border-color: var(--border-strong); }
-.specimen-frame { width: 100%; aspect-ratio: 16/10; border: 0; display: block; background: #0a1428; }
-.specimen-frame--tall { aspect-ratio: 16/11; }
+.specimen-frame { width: 100%; min-height: 200px; border: 0; display: block; background: #0a1428; }
 .specimen-caption { padding: 14px 16px; border-top: var(--border-rule); }
 .specimen-caption .name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
 .specimen-caption .desc { font-size: 12.5px; color: var(--text-dim); font-weight: 300; }
@@ -149,8 +148,9 @@ tr:last-child td { border-bottom: none; }
 .picker-shot .caption { padding: 12px 16px; font-size: 12px; color: var(--text-faint); font-weight: 300; border-top: var(--border-rule); }
 
 .switcher-preview {
-  background: #0a1428; border-radius: var(--radius-panel); padding: 24px;
+  background: var(--specimen-surface, #0a1428); border-radius: var(--radius-panel); padding: 24px;
   display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;
+  transition: background-color .2s ease-in-out;
 }
 .switcher-preview__heading { font: 700 17px/1.2 'Space Grotesk', sans-serif; color: var(--specimen-accent, #3ea6ff); }
 .switcher-preview__underline { width: 30%; height: 3px; background: var(--specimen-accent, #3ea6ff); border-radius: 2px; }
@@ -174,7 +174,7 @@ tr:last-child td { border-bottom: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .gallery-grid:hover .specimen-card:not(:hover) { filter: none !important; transform: none !important; }
-  .switcher-preview__heading, .switcher-preview__underline, .switcher-preview__bars span { transition: none !important; }
+  .switcher-preview, .switcher-preview__heading, .switcher-preview__underline, .switcher-preview__bars span { transition: none !important; }
 }
 </style>
 </head>
@@ -194,7 +194,7 @@ tr:last-child td { border-bottom: none; }
   <div class="dv-intro">
     <div class="eyebrow">Real output, not mockups</div>
     <h1>The gallery</h1>
-    <p class="gallery-stat"><strong>5</strong> diagram recipes · <strong>16</strong> presentation icons · <strong>8</strong> validated palette slots · <strong>16</strong> accent themes · a <strong>50-show</strong> recognition catalog. Every specimen below is real output the plugin actually produces, mounted in its own frame — the deck's own navy theme inside deck-visuals' own chrome.</p>
+    <p class="gallery-stat"><strong>5</strong> diagram recipes · <strong>16</strong> presentation icons · <strong>8</strong> validated palette slots · <strong>16</strong> accent themes · a <strong>50-show</strong> recognition catalog. Every specimen below is real output the plugin actually produces, mounted in its own frame — the deck's own theme inside deck-visuals' own chrome. Each theme's surface is hue-coordinated to its accent, not a fixed navy — the specimens below deliberately span six different themes to show the range.</p>
   </div>
 
   <section class="gallery-section" id="diagrams">
@@ -202,22 +202,22 @@ tr:last-child td { border-bottom: none; }
     <p class="eyebrow" style="margin-bottom:16px">3 of 5 recipes, drawing the same triage-automation system</p>
     <div class="gallery-grid" style="margin-bottom:18px">
       <div class="specimen-card">
-        <iframe class="specimen-frame" src="assets/gallery/flow-mounted.html" title="Flow diagram specimen" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">Flow</div><div class="desc">Request → Validate → Commit. Linear process, A → B → C.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/flow-mounted.html" title="Flow diagram specimen"></iframe>
+        <div class="specimen-caption"><div class="name">Flow</div><div class="desc">Request → Validate → Commit. Linear process, A → B → C. House theme.</div></div>
       </div>
       <div class="specimen-card">
-        <iframe class="specimen-frame" src="assets/gallery/diagram-hub-spoke.html" title="Hub and spoke diagram specimen" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">Relationship</div><div class="desc">One system, five things touching it — hub and spokes.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/diagram-hub-spoke.html" title="Hub and spoke diagram specimen"></iframe>
+        <div class="specimen-caption"><div class="name">Relationship</div><div class="desc">One system, five things touching it — hub and spokes. The Matrix theme.</div></div>
       </div>
       <div class="specimen-card">
-        <iframe class="specimen-frame" src="assets/gallery/diagram-layered.html" title="Layered architecture diagram specimen" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">Architecture</div><div class="desc">Client / Service / Data bands, edges only between neighbors.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/diagram-layered.html" title="Layered architecture diagram specimen"></iframe>
+        <div class="specimen-caption"><div class="name">Architecture</div><div class="desc">Client / Service / Data bands, edges only between neighbors. Wes Anderson theme — a warm surface, not navy.</div></div>
       </div>
     </div>
     <div class="gallery-grid gallery-grid--featured">
       <div class="specimen-card">
-        <iframe class="specimen-frame specimen-frame--tall" src="assets/gallery/beforeafter.html" title="Before and after specimen" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">Before / after</div><div class="desc">The same real numbers — a plain bullet slide, then charted and reframed as a claim.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/beforeafter.html" title="Before and after specimen"></iframe>
+        <div class="specimen-caption"><div class="name">Before / after</div><div class="desc">The same real numbers — a plain bullet slide, then charted and reframed as a claim. Breaking Bad theme — the bars take the accent, not a fixed blue.</div></div>
       </div>
     </div>
   </section>
@@ -229,8 +229,8 @@ tr:last-child td { border-bottom: none; }
     <p class="eyebrow" style="margin-bottom:16px">Every chart ships a reachable table twin — this one's toggle is live</p>
     <div class="gallery-grid">
       <div class="specimen-card">
-        <iframe class="specimen-frame" src="assets/gallery/chart-mounted.html" title="Chart specimen with live table toggle" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">Deploys per quarter</div><div class="desc">Real Signal Blue bars — click "Show as table" inside the frame.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/chart-mounted.html" title="Chart specimen with live table toggle"></iframe>
+        <div class="specimen-caption"><div class="name">Deploys per quarter</div><div class="desc">Mario Kart theme — the bars take the accent, not a fixed blue. Click "Show as table" inside the frame.</div></div>
       </div>
     </div>
   </section>
@@ -250,8 +250,8 @@ tr:last-child td { border-bottom: none; }
     <p class="eyebrow" style="margin-bottom:16px">A real, verified GIF — never a guessed URL</p>
     <div class="gallery-grid">
       <div class="specimen-card">
-        <iframe class="specimen-frame" src="assets/gallery/levity.html" title="Levity GIF specimen" loading="lazy"></iframe>
-        <div class="specimen-caption"><div class="name">"The Homer"</div><div class="desc">Claim: too many features isn't always fantastic. The Simpsons' unsellable, everything-bolted-on car.</div></div>
+        <iframe class="specimen-frame" src="assets/gallery/levity.html" title="Levity GIF specimen"></iframe>
+        <div class="specimen-caption"><div class="name">"The Homer"</div><div class="desc">Claim: too many features isn't always fantastic. The Simpsons' unsellable, everything-bolted-on car. The Simpsons theme.</div></div>
       </div>
       <div class="picker-shot">
         <div class="placeholder">Levity picker screenshot<br>— pending —</div>
@@ -264,7 +264,7 @@ tr:last-child td { border-bottom: none; }
 
   <section class="gallery-section" id="palette">
     <h2>Palette &amp; personalization</h2>
-    <p class="eyebrow" style="margin-bottom:16px">One validated data palette. The accent is the only thing that changes.</p>
+    <p class="eyebrow" style="margin-bottom:16px">One validated data palette. The accent and its coordinated surface change together.</p>
 
     <div class="switcher-preview">
       <div class="switcher-preview__heading">Slide heading</div>
@@ -274,7 +274,7 @@ tr:last-child td { border-bottom: none; }
       <div class="switcher-preview__bars"><span style="height:28px"></span><span style="height:20px;opacity:.6"></span><span style="height:13px;opacity:.35"></span></div>
     </div>
     <div class="switcher-swatches" id="accent-switcher" role="radiogroup" aria-label="Accent theme"></div>
-    <p class="switcher-note">The 8-slot data palette below never changes — only this accent does. Recognized shows unlock the ones that match what you love.</p>
+    <p class="switcher-note">The 8-slot data palette below never changes — only the accent and its coordinated surface do, hue-matched so a warm theme never lands on a cold navy floor. Recognized shows unlock the ones that match what you love.</p>
 
     <table style="margin-top:24px">
       <thead><tr><th>Slot</th><th>Color</th><th>Name</th></tr></thead>
@@ -315,6 +315,25 @@ tr:last-child td { border-bottom: none; }
 </div>
 
 <script>
+// Auto-size every mounted specimen iframe to its real content height (same
+// origin, so this is safe) instead of forcing a fixed aspect-ratio box — a
+// rigid box left large empty navy margins around content that doesn't fill
+// it. This makes every card hug its actual content.
+function autosizeSpecimenFrames() {
+  document.querySelectorAll('.specimen-frame').forEach(function (frame) {
+    function resize() {
+      try {
+        var doc = frame.contentWindow.document;
+        var h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+        if (h > 0) frame.style.height = h + 'px';
+      } catch (e) { /* cross-origin or not yet ready — leave the CSS min-height fallback */ }
+    }
+    if (frame.contentWindow && frame.contentWindow.document.readyState === 'complete') resize();
+    frame.addEventListener('load', resize);
+  });
+}
+autosizeSpecimenFrames();
+
 // Staged intro — identical timing to index.html/reference.html.
 (function () {
   function prefersReduced() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
@@ -340,18 +359,21 @@ tr:last-child td { border-bottom: none; }
   });
 })();
 
-// Live accent switcher — real hexes from assets/palette-presets.md. Only the
-// accent CSS custom property changes; the 8-slot data palette above stays fixed.
+// Live accent switcher — real hexes from assets/palette-presets.md. The accent
+// AND its coordinated surface change together (hue-rotated from the navy
+// tokens at the same OKLCH lightness/chroma — see assets/gallery specimen
+// header comments for the derivation); the 8-slot data palette above stays
+// fixed regardless of theme.
 (function () {
   var themes = [
-    { id: "house", label: "House", accent: "#3ea6ff" },
-    { id: "wes-anderson", label: "Wes Anderson", accent: "#f4a8b9" },
-    { id: "the-matrix", label: "The Matrix", accent: "#22e06a" },
-    { id: "breaking-bad", label: "Breaking Bad", accent: "#7cb518" },
-    { id: "the-simpsons", label: "The Simpsons", accent: "#ffd90f" },
-    { id: "star-wars", label: "Star Wars", accent: "#3bd6ff" },
-    { id: "severance", label: "Severance", accent: "#6ab7e6" },
-    { id: "mario-kart", label: "Mario Kart", accent: "#ff5a4d" }
+    { id: "house", label: "House", accent: "#3ea6ff", surface: "#041627" },
+    { id: "wes-anderson", label: "Wes Anderson", accent: "#f4a8b9", surface: "#240b12" },
+    { id: "the-matrix", label: "The Matrix", accent: "#22e06a", surface: "#051a09" },
+    { id: "breaking-bad", label: "Breaking Bad", accent: "#7cb518", surface: "#0e1803" },
+    { id: "the-simpsons", label: "The Simpsons", accent: "#ffd90f", surface: "#1b1400" },
+    { id: "star-wars", label: "Star Wars", accent: "#3bd6ff", surface: "#001922" },
+    { id: "severance", label: "Severance", accent: "#6ab7e6", surface: "#001726" },
+    { id: "mario-kart", label: "Mario Kart", accent: "#ff5a4d", surface: "#250c09" }
   ];
   var wrap = document.getElementById("accent-switcher");
   var preview = document.querySelector(".switcher-preview");
@@ -368,9 +390,14 @@ tr:last-child td { border-bottom: none; }
       wrap.querySelectorAll(".switcher-swatch").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
       btn.setAttribute("aria-pressed", "true");
       preview.style.setProperty("--specimen-accent", t.accent);
+      preview.style.setProperty("--specimen-surface", t.surface);
     });
     wrap.appendChild(btn);
   });
+  // Match the initial state (house, pre-selected above) instead of falling
+  // back to the CSS default navy for the first paint.
+  preview.style.setProperty("--specimen-accent", themes[0].accent);
+  preview.style.setProperty("--specimen-surface", themes[0].surface);
 })();
 </script>
 </body>

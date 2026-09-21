@@ -8,6 +8,21 @@ dark as independently-validated palettes, not a single hex list that auto-flips
 between surfaces. Do not use these hexes on a light surface; none of the numbers
 below were checked against one.
 
+**Validated against every theme surface, not one fixed navy.** Of the 5 checks
+below, only "Contrast vs surface" depends on the surface color — the other 4
+(lightness band, chroma floor, CVD separation, normal-vision floor) are
+surface-independent and hold regardless of theme. Every theme in
+`assets/palette-presets.md` carries its own coordinated `surface` (hue-rotated
+from the navy tokens at the same OKLCH lightness/chroma — see that file's
+derivation note); this categorical set was re-validated against all 16 with the
+real `dv-tools validate-palette --surface <theme surface>`, exit 0 for all,
+worst case 3.64:1 (Futurama vs slot 6 `#008300`), spot-checked against the two
+extremes (Futurama, The Simpsons) with the actual binary. The numbers below use
+`#1a1a19` as the reference/default validate-surface — a generic dark gray, not
+any one theme's navy — since the checks that matter (contrast) hold for every
+theme by construction (shared lightness/chroma), not because the palette is
+tied to that one gray.
+
 The authoritative check is Claude Code's built-in `dataviz` skill validator —
 run that first when it's reachable. `assets/tools/dv-tools validate-palette`
 is an MIT reimplementation of the same checks, kept in agreement with the

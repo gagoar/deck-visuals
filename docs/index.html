@@ -16,8 +16,12 @@
   design — touching one means touching all three.
 
   The mounted specimens under assets/gallery/ use a SEPARATE token system (the
-  deck's own navy theme, references/brand.md) — that's intentional. Only this
-  page's own chrome uses Aurora Depth.
+  deck's own theme, references/brand.md) — that's intentional. Only this
+  page's own chrome uses Aurora Depth. Each specimen sits on its own
+  per-theme coordinated dark surface (assets/palette-presets.md) — the accent
+  and its surface are hue-matched, so a warm theme never lands on a cold navy
+  floor. The shared 8-slot categorical data palette stays fixed across every
+  theme; only the surface/panel/text and the accent vary.
 */
 :root{
   --bg:      #1b1f22;
@@ -101,13 +105,20 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
 .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .15rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; font-weight: 400; }
 code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); padding: 1px 6px; border-radius: 3px; color: var(--text); }
 
-.pillar-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
+.pillar-cards { display: grid; grid-template-columns: repeat(3, 1fr); align-items: start; gap: 14px; margin-bottom: 8px; }
 @media (max-width: 640px) { .pillar-cards { grid-template-columns: 1fr; } }
 .pillar-card { background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); padding: 18px 20px; transition: filter var(--dur-rack) ease-in-out, transform var(--dur-rack) ease-in-out, opacity var(--dur-rack) ease-in-out, border-color .2s; }
 .pillar-card:hover { border-color: var(--border-strong); }
 .pillar-card .pillar-name { font-family: var(--sans); font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 6px; }
 .pillar-card .pillar-desc { font-size: 13.5px; font-weight: 300; color: var(--text-dim); line-height: 1.55; }
-.pillar-card .pillar-frame { width: 100%; aspect-ratio: 16/10; border: 0; display: block; background: #0a1428; border-radius: var(--radius-row); margin-bottom: 12px; }
+.pillar-card .pillar-frame { width: 100%; min-height: 160px; border: 0; display: block; background: #0a1428; border-radius: var(--radius-row); margin-bottom: 12px; }
+
+/* The hero's specimen — framed in a charcoal panel like every specimen in the
+   gallery, so it reads as "one real output, contained," not a floating block
+   dominating the top of the page. */
+.hero-specimen { max-width: 480px; background: var(--panel); border: var(--border-rule); border-radius: var(--radius-panel); overflow: hidden; }
+.hero-specimen__frame { width: 100%; min-height: 200px; border: 0; display: block; background: #0a1428; }
+.hero-specimen__caption { padding: 12px 16px; font-size: 12.5px; color: var(--text-dim); font-weight: 300; border-top: var(--border-rule); }
 .pillar-cards:hover .pillar-card:not(:hover) { filter: blur(var(--blur-focus)); transform: scale(.97); opacity: .55; }
 
 .install-card { background: var(--panel-2); border: var(--border-rule); border-radius: var(--radius-panel); padding: 20px 24px; margin-bottom: 16px; position: relative; }
@@ -200,7 +211,10 @@ code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); pa
     </div>
     <p style="margin-bottom:28px"><a href="gallery.html" style="color:var(--text);text-decoration:underline">See the gallery →</a></p>
 
-    <iframe class="pillar-frame" style="width:100%;max-width:480px;aspect-ratio:16/10;border:0;display:block;background:#0a1428;border-radius:var(--radius-panel)" src="assets/gallery/chart-mounted.html" title="A real chart the plugin generates" loading="lazy"></iframe>
+    <div class="hero-specimen">
+      <iframe class="hero-specimen__frame" src="assets/gallery/chart-mounted.html" title="A real chart the plugin generates"></iframe>
+      <div class="hero-specimen__caption">Real output — a chart the plugin generates, table-view twin included.</div>
+    </div>
   </div>
 
   <hr class="rule">
@@ -212,17 +226,17 @@ code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); pa
     <p style="margin-bottom:24px"><strong style="color:var(--text)">5</strong> diagram recipes · <strong style="color:var(--text)">16</strong> presentation icons · <strong style="color:var(--text)">8</strong> validated palette slots.</p>
     <div class="pillar-cards">
       <div class="pillar-card">
-        <iframe class="pillar-frame" src="assets/gallery/diagram-hub-spoke.html" title="Concept diagram specimen" loading="lazy"></iframe>
+        <iframe class="pillar-frame" src="assets/gallery/diagram-hub-spoke.html" title="Concept diagram specimen"></iframe>
         <div class="pillar-name">Impactful visuals</div>
         <div class="pillar-desc">Inline-SVG concept diagrams for relationships and flows. Icon anchors for single ideas.</div>
       </div>
       <div class="pillar-card">
-        <iframe class="pillar-frame" src="assets/gallery/beforeafter.html" title="Chart specimen" loading="lazy"></iframe>
+        <iframe class="pillar-frame" src="assets/gallery/beforeafter.html" title="Chart specimen"></iframe>
         <div class="pillar-name">Data-viz principles</div>
-        <div class="pillar-desc">Chart form and color come from a validated brand palette. Every chart ships a table twin.</div>
+        <div class="pillar-desc">Chart form and color come from a validated brand palette; the surface is hue-matched to the theme, not a fixed navy. Every chart ships a table twin.</div>
       </div>
       <div class="pillar-card">
-        <iframe class="pillar-frame" src="assets/gallery/levity.html" title="Levity specimen" loading="lazy"></iframe>
+        <iframe class="pillar-frame" src="assets/gallery/levity.html" title="Levity specimen"></iframe>
         <div class="pillar-name">Levity</div>
         <div class="pillar-desc">Real GIFs by direct media URL, at a deliberate cadence, verified before they ship.</div>
       </div>
@@ -273,7 +287,7 @@ code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); pa
   <section id="personalization">
     <div class="eyebrow">It knows what you'd reference</div>
     <h2>Matches the shows you love</h2>
-    <p>Swipe through <strong style="color:var(--text)">50 shows</strong> and mark what you recognize — recognizing one means you'd get the jokes built around it. What you recognize unlocks accent themes matched to it: <strong style="color:var(--text)">house</strong> default, a pinned <strong style="color:var(--text)">Wes Anderson</strong> theme, and <strong style="color:var(--text)">14 more</strong> matched to shows like The Matrix, Breaking Bad, and Star Wars. It never asks you to name a color — you pick from swatches.</p>
+    <p>Swipe through <strong style="color:var(--text)">50 shows</strong> and mark what you recognize — recognizing one means you'd get the jokes built around it. What you recognize unlocks accent themes matched to it: <strong style="color:var(--text)">house</strong> default, a pinned <strong style="color:var(--text)">Wes Anderson</strong> theme, and <strong style="color:var(--text)">14 more</strong> matched to shows like The Matrix, Breaking Bad, and Star Wars. Each theme carries its own coordinated dark surface, hue-matched to the accent — a warm theme never sits on a cold navy floor. It never asks you to name a color — you pick from swatches.</p>
 
     <div class="mini-switcher" id="mini-switcher" role="radiogroup" aria-label="Accent theme preview"></div>
 
@@ -329,6 +343,26 @@ code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); pa
   function runIntro() { if (prefersReduced()) lift(); else window.setTimeout(lift, 100); }
   if (document.readyState === 'complete') runIntro(); else window.addEventListener('load', runIntro);
 })();
+
+// Auto-size every mounted specimen iframe to its real content height (same
+// origin, so this is safe) instead of forcing a fixed aspect-ratio box — a
+// rigid box left large empty navy margins around content that doesn't fill
+// it, which is exactly the "flat blue background" problem the specimens were
+// called out for. This makes every card hug its actual content.
+function autosizeSpecimenFrames() {
+  document.querySelectorAll('.hero-specimen__frame, .pillar-frame').forEach(function (frame) {
+    function resize() {
+      try {
+        var doc = frame.contentWindow.document;
+        var h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+        if (h > 0) frame.style.height = h + 'px';
+      } catch (e) { /* cross-origin or not yet ready — leave the CSS min-height fallback */ }
+    }
+    if (frame.contentWindow && frame.contentWindow.document.readyState === 'complete') resize();
+    frame.addEventListener('load', resize);
+  });
+}
+autosizeSpecimenFrames();
 
 // Copy-to-clipboard on both install blocks.
 document.querySelectorAll('.copy-btn').forEach(function (btn) {

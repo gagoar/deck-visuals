@@ -3,14 +3,21 @@
   Marketing-site specimen wrapper — mounts assets/fragments/concept-diagram.html's
   real content (copied verbatim, the "Flow" recipe) inside a standalone document
   for safe <iframe> mounting. See chart-mounted.html for why the wrapper exists.
+
+  Surface: House theme (assets/palette-presets.md) — surface/panel/text hue-
+  rotated to the accent's OKLCH hue at the SAME lightness/chroma as the
+  original navy tokens (see references/brand.md), so contrast holds by
+  construction. The node border colors below are the shared 8-slot categorical
+  data palette (assets/brand-palette.md) — that set is fixed across every
+  theme, by design; only the surface/panel/text and the accent vary.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>deck-visuals — flow diagram specimen</title>
 <style>
-  html, body { margin: 0; background: #0a1428; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  html, body { margin: 0; background: #041627; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
 </style>
 </head>
 <body>
@@ -19,23 +26,23 @@
   <svg viewBox="0 0 520 140" role="img">
     <defs>
       <marker id="dv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0L10 5L0 10z" fill="#93a8c9"></path>
+        <path d="M0 0L10 5L0 10z" fill="#8daac7"></path>
       </marker>
     </defs>
 
-    <g stroke="#93a8c9" stroke-width="2" marker-end="url(#dv-arrow)">
+    <g stroke="#8daac7" stroke-width="2" marker-end="url(#dv-arrow)">
       <line x1="150" y1="70" x2="210" y2="70"></line>
       <line x1="330" y1="70" x2="390" y2="70"></line>
     </g>
 
     <g font-family="'Inter', sans-serif" font-size="15" text-anchor="middle">
-      <rect x="20"  y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#2894eb" stroke-width="2"></rect>
+      <rect x="20"  y="40" width="130" height="60" rx="10" fill="#051f37" stroke="#2894eb" stroke-width="2"></rect>
       <text x="85" y="75" fill="#eef3fb">Request</text>
 
-      <rect x="210" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#d95926" stroke-width="2"></rect>
+      <rect x="210" y="40" width="130" height="60" rx="10" fill="#051f37" stroke="#d95926" stroke-width="2"></rect>
       <text x="275" y="75" fill="#eef3fb">Validate</text>
 
-      <rect x="390" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#199e70" stroke-width="2"></rect>
+      <rect x="390" y="40" width="130" height="60" rx="10" fill="#051f37" stroke="#199e70" stroke-width="2"></rect>
       <text x="455" y="75" fill="#eef3fb">Commit</text>
     </g>
   </svg>
@@ -57,7 +64,7 @@
     margin-top: 10px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    color: #56698a;
+    color: #4e6c88;
     text-align: center;
   }
 </style>

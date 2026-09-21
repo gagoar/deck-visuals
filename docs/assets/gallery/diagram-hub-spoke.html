@@ -5,15 +5,18 @@
   3-5 satellites. Draws the same triage-automation system as flow-mounted.html
   (references/story-discovery.md's worked example) in a different idiom, so the
   gallery's diagrams read as siblings (visual-concepts.md's coherence rule).
-  Colors: assets/brand-palette.md's validated 8 slots, in order.
+  Colors: assets/brand-palette.md's validated 8 slots, in order — fixed across
+  every theme by design. Surface: The Matrix theme (assets/palette-presets.md),
+  hue-rotated from the navy tokens at the same lightness/chroma (see
+  flow-mounted.html's header comment for the derivation).
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>deck-visuals — hub-and-spoke diagram specimen</title>
 <style>
-  html, body { margin: 0; background: #0a1428; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  html, body { margin: 0; background: #051a09; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
 </style>
 </head>
 <body>
@@ -21,7 +24,7 @@
 <figure class="dv-diagram" aria-label="Hub and spokes diagram: triage queue at the center, coordinating intake API, classifier, router, escalation, and dashboard.">
   <svg viewBox="0 0 560 400" role="img">
     <!-- edges — drawn first, sit under the nodes (same convention as the Flow recipe) -->
-    <g stroke="#93a8c9" stroke-width="2">
+    <g stroke="#90b195" stroke-width="2">
       <line x1="280" y1="200" x2="280" y2="50"></line>
       <line x1="280" y1="200" x2="422.7" y2="153.7"></line>
       <line x1="280" y1="200" x2="368.2" y2="321.3"></line>
@@ -31,25 +34,25 @@
 
     <!-- hub -->
     <g font-family="'Inter', sans-serif" font-size="15" text-anchor="middle">
-      <rect x="210" y="170" width="140" height="60" rx="10" fill="#101d38" stroke="#2894eb" stroke-width="2.5"></rect>
+      <rect x="210" y="170" width="140" height="60" rx="10" fill="#06250f" stroke="#2894eb" stroke-width="2.5"></rect>
       <text x="280" y="205" fill="#eef3fb" font-weight="600">Triage queue</text>
     </g>
 
     <!-- satellites -->
     <g font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
-      <rect x="220" y="25"  width="120" height="50" rx="10" fill="#101d38" stroke="#d95926" stroke-width="2"></rect>
+      <rect x="220" y="25"  width="120" height="50" rx="10" fill="#06250f" stroke="#d95926" stroke-width="2"></rect>
       <text x="280" y="55" fill="#eef3fb">Intake API</text>
 
-      <rect x="362.7" y="128.7" width="120" height="50" rx="10" fill="#101d38" stroke="#199e70" stroke-width="2"></rect>
+      <rect x="362.7" y="128.7" width="120" height="50" rx="10" fill="#06250f" stroke="#199e70" stroke-width="2"></rect>
       <text x="422.7" y="158.7" fill="#eef3fb">Classifier</text>
 
-      <rect x="308.2" y="296.3" width="120" height="50" rx="10" fill="#101d38" stroke="#c98500" stroke-width="2"></rect>
+      <rect x="308.2" y="296.3" width="120" height="50" rx="10" fill="#06250f" stroke="#c98500" stroke-width="2"></rect>
       <text x="368.2" y="326.3" fill="#eef3fb">Router</text>
 
-      <rect x="131.8" y="296.3" width="120" height="50" rx="10" fill="#101d38" stroke="#d55181" stroke-width="2"></rect>
+      <rect x="131.8" y="296.3" width="120" height="50" rx="10" fill="#06250f" stroke="#d55181" stroke-width="2"></rect>
       <text x="191.8" y="326.3" fill="#eef3fb">Escalation</text>
 
-      <rect x="77.3" y="128.7" width="120" height="50" rx="10" fill="#101d38" stroke="#008300" stroke-width="2"></rect>
+      <rect x="77.3" y="128.7" width="120" height="50" rx="10" fill="#06250f" stroke="#008300" stroke-width="2"></rect>
       <text x="137.3" y="158.7" fill="#eef3fb">Dashboard</text>
     </g>
   </svg>
@@ -59,7 +62,7 @@
 <style>
   .dv-diagram { margin: 0; max-width: 560px; font-family: 'Inter', sans-serif; }
   .dv-diagram svg { width: 100%; height: auto; display: block; }
-  .dv-diagram__caption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #56698a; text-align: center; }
+  .dv-diagram__caption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #517257; text-align: center; }
 </style>
 </body>
 </html>

@@ -13,14 +13,18 @@
     real bytes) for BOTH the animated rendition and the still poster
     (Giphy's "_s" still rendition, used for prefers-reduced-motion). Never a
     guessed/fabricated URL.
+
+  Surface: The Simpsons theme (assets/palette-presets.md) — chosen because
+  it's thematically apt (the specimen IS Simpsons content) and to show a warm
+  yellow accent on its own coordinated warm near-black, not cold navy.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>deck-visuals — levity specimen</title>
 <style>
-  html, body { margin: 0; background: #0a1428; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  html, body { margin: 0; background: #1b1400; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
 </style>
 </head>
 <body>
@@ -45,9 +49,9 @@
   .dv-levity__media {
     max-width: 480px; width: 100%;
     aspect-ratio: 16 / 10; min-height: 180px;
-    object-fit: contain; background: #101d38; border-radius: 12px; display: block;
+    object-fit: contain; background: #261d00; border-radius: 12px; display: block;
   }
-  .dv-levity__caption { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #93a8c9; text-align: center; max-width: 480px; }
+  .dv-levity__caption { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #b0a781; text-align: center; max-width: 480px; }
   @media (prefers-reduced-motion: reduce) { .dv-levity__media { animation: none !important; transition: none !important; } }
 </style>
 </body>

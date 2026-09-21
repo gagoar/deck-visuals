@@ -6,14 +6,20 @@
   snippet (no <html>/<body>) meant to be pasted into an existing deck page —
   iframing it directly would render on a default white background. This wrapper
   just adds the deck's own navy background/margin around the identical content.
+
+  Surface: Mario Kart theme (assets/palette-presets.md) — a warm red-hued
+  near-black instead of navy. Bars use the theme ACCENT (single-series role),
+  not the shared categorical slot 1 — see beforeafter.html's header comment
+  for why single-series charts vary per theme while multi-category diagrams
+  keep the fixed 8-slot palette.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>deck-visuals — chart specimen</title>
 <style>
-  html, body { margin: 0; background: #0a1428; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  html, body { margin: 0; background: #250c09; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
 </style>
 </head>
 <body>
@@ -23,8 +29,8 @@
 
   <div class="dv-chart__view" data-dv-view="chart">
     <svg viewBox="0 0 440 220" role="img" aria-label="Bar chart: deploys per quarter, 2025. Q1 41, Q2 58, Q3 67, Q4 89.">
-      <line x1="40" y1="180" x2="420" y2="180" stroke="#93a8c9" stroke-opacity="0.36" stroke-width="1"></line>
-      <g fill="#2894eb">
+      <line x1="40" y1="180" x2="420" y2="180" stroke="#c69b94" stroke-opacity="0.36" stroke-width="1"></line>
+      <g fill="#ff5a4d">
         <rect x="60"  y="139" width="60" height="41"></rect>
         <rect x="160" y="106" width="60" height="74"></rect>
         <rect x="260" y="86"  width="60" height="94"></rect>
@@ -36,7 +42,7 @@
         <text x="290" y="77">67</text>
         <text x="390" y="46">89</text>
       </g>
-      <g fill="#93a8c9" font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
+      <g fill="#c69b94" font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
         <text x="90"  y="198">Q1</text>
         <text x="190" y="198">Q2</text>
         <text x="290" y="198">Q3</text>
@@ -90,13 +96,13 @@
   .dv-chart th, .dv-chart td {
     text-align: left;
     padding: 8px 12px;
-    border-bottom: 1px solid rgba(147,168,201,0.18);
+    border-bottom: 1px solid rgba(198,155,148,0.18);
   }
   .dv-chart__toggle {
     margin-top: 12px;
-    background: #101d38;
+    background: #34120f;
     color: #eef3fb;
-    border: 1px solid rgba(147,168,201,0.36);
+    border: 1px solid rgba(198,155,148,0.36);
     border-radius: 8px;
     padding: 6px 14px;
     font-family: 'JetBrains Mono', monospace;
@@ -104,7 +110,7 @@
     cursor: pointer;
   }
   .dv-chart__toggle:hover {
-    border-color: #3ea6ff;
+    border-color: #ff5a4d;
   }
 </style>
 

@@ -4,28 +4,38 @@
   A chart + its reachable table-view twin, toggled by a visible control. Example
   data below (quarterly deploy count) shows the shape; replace with the slide's
   real numbers. Chart form, marks, and interaction follow the built-in `dataviz`
-  skill (see references/charts.md) — colors come from assets/brand-palette.md.
+  skill (see references/charts.md).
+
+  Colors: a genuinely multi-category chart's series colors come from
+  assets/brand-palette.md's fixed 8-slot palette (unchanged by theme). A
+  single-series chart like this example is a highlight/callout role instead —
+  it uses the chosen theme's ACCENT (--dv-accent, house blue as fallback), which
+  is why the bars below vary per theme rather than always rendering blue. Panel/
+  border/text use --dv-panel/--dv-border-subtle/--dv-border-strong/--dv-text/
+  --dv-text-secondary custom properties (house navy values as fallback) so the
+  theme's coordinated surface (references/brand.md, assets/palette-presets.md)
+  applies once the host page sets them.
 -->
 <figure class="dv-chart" data-dv-chart>
   <figcaption class="dv-chart__title">Deploys per quarter, 2025</figcaption>
 
   <div class="dv-chart__view" data-dv-view="chart">
     <svg viewBox="0 0 440 220" role="img" aria-label="Bar chart: deploys per quarter, 2025. Q1 41, Q2 58, Q3 67, Q4 89.">
-      <line x1="40" y1="180" x2="420" y2="180" stroke="#93a8c9" stroke-opacity="0.36" stroke-width="1"></line>
-      <!-- bars: brand-palette slot 1 (Signal Blue) for the primary series -->
-      <g fill="#2894eb">
+      <line x1="40" y1="180" x2="420" y2="180" stroke="var(--dv-text-secondary, #93a8c9)" stroke-opacity="0.36" stroke-width="1"></line>
+      <!-- bars: single series -> theme accent, not the fixed categorical palette -->
+      <g fill="var(--dv-accent, #3ea6ff)">
         <rect x="60"  y="139" width="60" height="41"></rect>
         <rect x="160" y="106" width="60" height="74"></rect>
         <rect x="260" y="86"  width="60" height="94"></rect>
         <rect x="360" y="55"  width="60" height="125"></rect>
       </g>
-      <g fill="#eef3fb" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">
+      <g fill="var(--dv-text, #eef3fb)" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">
         <text x="90"  y="130">41</text>
         <text x="190" y="97">58</text>
         <text x="290" y="77">67</text>
         <text x="390" y="46">89</text>
       </g>
-      <g fill="#93a8c9" font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
+      <g fill="var(--dv-text-secondary, #93a8c9)" font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
         <text x="90"  y="198">Q1</text>
         <text x="190" y="198">Q2</text>
         <text x="290" y="198">Q3</text>
@@ -57,7 +67,7 @@
   .dv-chart {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    color: #eef3fb;
+    color: var(--dv-text, #eef3fb);
     max-width: 460px;
   }
   .dv-chart__title {
@@ -79,13 +89,13 @@
   .dv-chart th, .dv-chart td {
     text-align: left;
     padding: 8px 12px;
-    border-bottom: 1px solid rgba(147,168,201,0.18);
+    border-bottom: 1px solid var(--dv-border-subtle, rgba(147,168,201,0.18));
   }
   .dv-chart__toggle {
     margin-top: 12px;
-    background: #101d38;
-    color: #eef3fb;
-    border: 1px solid rgba(147,168,201,0.36);
+    background: var(--dv-panel, #101d38);
+    color: var(--dv-text, #eef3fb);
+    border: 1px solid var(--dv-border-strong, rgba(147,168,201,0.36));
     border-radius: 8px;
     padding: 6px 14px;
     font-family: 'JetBrains Mono', monospace;
@@ -93,7 +103,7 @@
     cursor: pointer;
   }
   .dv-chart__toggle:hover {
-    border-color: #3ea6ff;
+    border-color: var(--dv-accent, #3ea6ff);
   }
 </style>
 
