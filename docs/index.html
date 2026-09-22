@@ -283,6 +283,28 @@ code { font-family: var(--mono); font-size: .9em; background: var(--panel-2); pa
 
   <hr class="rule">
 
+  <!-- Levity -->
+  <section id="levity-rigor">
+    <div class="eyebrow">The joke is optional. The accuracy isn't.</div>
+    <h2>Never a guessed GIF</h2>
+    <p>Levity starts from the slide's <strong style="color:var(--text)">claim</strong>, not "which GIF." Strip the claim to the shape underneath it — excess, momentum without control, fragility, over-engineering, recurrence, and more — then match one named scene that embodies it, prioritized against what the presenter's own swipe profile says they'd actually recognize.</p>
+    <div class="stat-tiles">
+      <div class="stat-tile"><div class="num">25</div><div class="label">concept-shape analogies in the seed library</div></div>
+      <div class="stat-tile"><div class="num">2-3</div><div class="label">GIF slides per 12-slide deck — never every slide</div></div>
+      <div class="stat-tile"><div class="num">0</div><div class="label">guessed URLs — every link is search-sourced, then verified</div></div>
+      <div class="stat-tile"><div class="num">100%</div><div class="label">alt text + reduced-motion poster on every GIF</div></div>
+    </div>
+    <ul class="credibility-list">
+      <li>Every GIF is resolved to a direct media URL by search, then run through <code>dv-tools check-media-url</code> — a dead or guessed link never ships.</li>
+      <li>Cadence is disciplined: one at the open, one at a section break, one at the payoff — not one per slide.</li>
+      <li><code>prefers-reduced-motion</code> swaps in a verified still poster; no GIF is left animating regardless.</li>
+      <li>The picker is the same "Claude proposes, you approve" surface as the palette picker — pick side by side, watch the alternative rack out of focus.</li>
+    </ul>
+    <p style="margin-top:16px"><a href="gallery.html#levity" style="color:var(--text);text-decoration:underline">See the levity picker and a real sourced GIF →</a></p>
+  </section>
+
+  <hr class="rule">
+
   <!-- Personalization -->
   <section id="personalization">
     <div class="eyebrow">It knows what you'd reference</div>
