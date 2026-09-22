@@ -3,23 +3,18 @@ name: onboarding-server
 # Prove the onboarding picker server still works whenever its source, the picker
 # page, the catalog, or the coverage check changes. No secrets or external auth:
 # this only builds Go and smoke-tests a local loopback server.
+#
+# Triggers unconditionally on every push to main and every pull request, so this
+# job can be a required status check for branch protection — a required check
+# that only sometimes runs (path-filtered) leaves unrelated PRs permanently
+# unmergeable. The path relevance check below instead runs INSIDE the job: if
+# nothing under the watched paths changed, the real steps are skipped and the
+# job still reports success quickly.
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'skills/deck-visuals/assets/onboarding/**'
-      - 'skills/deck-visuals/assets/tools/**'
-      - 'skills/deck-visuals/assets/show-catalog.md'
-      - 'skills/deck-visuals/references/levity.md'
-      - '.github/workflows/onboarding-server.yml'
-  pull_request:
-    paths:
-      - 'skills/deck-visuals/assets/onboarding/**'
-      - 'skills/deck-visuals/assets/tools/**'
-      - 'skills/deck-visuals/assets/show-catalog.md'
-      - 'skills/deck-visuals/references/levity.md'
-      - '.github/workflows/onboarding-server.yml'
+  pull_request: {}
   workflow_dispatch: {}
 
 permissions:
@@ -30,28 +25,67 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check whether watched paths changed
+        id: filter
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ -z "$BASE_SHA" ] || ! git cat-file -e "$BASE_SHA" 2>/dev/null; then
+            # Manual run, or no usable base (e.g. a new branch's first push) —
+            # can't safely compute a diff, so run for real rather than skip.
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+            echo "reason=no base to diff against ($EVENT_NAME) — running for real" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+          echo "Changed files:"
+          echo "$changed"
+          if echo "$changed" | grep -qE '^(skills/deck-visuals/assets/onboarding/|skills/deck-visuals/assets/tools/|skills/deck-visuals/assets/show-catalog\.md$|skills/deck-visuals/references/levity\.md$|\.github/workflows/onboarding-server\.yml$)'; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+            echo "reason=watched paths changed" >> "$GITHUB_OUTPUT"
+          else
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+            echo "reason=no watched paths changed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skipped — no reason to run
+        if: steps.filter.outputs.relevant != 'true'
+        run: |
+          echo "Skipping smoke test: ${{ steps.filter.outputs.reason }}."
 
       - uses: actions/setup-go@v5
+        if: steps.filter.outputs.relevant == 'true'
         with:
           go-version-file: skills/deck-visuals/assets/onboarding/server/go.mod
 
       - uses: actions/setup-go@v5
+        if: steps.filter.outputs.relevant == 'true'
         with:
           go-version-file: skills/deck-visuals/assets/tools/go.mod
 
       - name: Smoke test the server (serve → submit → shutdown)
+        if: steps.filter.outputs.relevant == 'true'
         run: skills/deck-visuals/assets/onboarding/server/smoke_test.sh
 
       - name: Cross-compile all target binaries (verify they still build)
+        if: steps.filter.outputs.relevant == 'true'
         run: skills/deck-visuals/assets/onboarding/server/build.sh
 
       - name: dv-tools — vet and test
+        if: steps.filter.outputs.relevant == 'true'
         working-directory: skills/deck-visuals/assets/tools
         run: |
           go vet ./...
           go test ./...
 
       - name: Catalog coverage — >=3 options per concept shape, no drift
+        if: steps.filter.outputs.relevant == 'true'
         working-directory: skills/deck-visuals/assets/tools
         run: |
           go run . coverage \
