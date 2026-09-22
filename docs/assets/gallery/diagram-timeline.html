@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+  Marketing-site specimen — NEW, built for the gallery. The "Timeline" recipe
+  from references/visual-concepts.md: a single horizontal line, chamfered
+  (not circular) milestone markers, labels alternating above/below to avoid
+  collision, amber/pharos-family status color for "you are here". Stays flat
+  (no isometric projection) — a timeline has no structural hierarchy for
+  depth to communicate, per visual-concepts.md.
+
+  Same real quarterly numbers as the before/after and hero chart specimens
+  (41 -> 58 -> 67 -> 89/day), read here as a timeline instead of a chart or a
+  bar comparison — the fourth of 5 recipes, still the same triage-automation
+  system, so the gallery's diagrams keep reading as siblings (coherence rule).
+
+  Surface: Mario Kart theme (assets/palette-presets.md) — a warm red-hued
+  near-black, distinct from the other three diagram specimens (House/Matrix/
+  Wes Anderson) for visual range across the gallery.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck-visuals — timeline diagram specimen</title>
+<style>
+  html, body { margin: 0; background: #250c09; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
+</style>
+</head>
+<body>
+
+<figure class="dv-diagram" aria-label="Timeline: quarterly triage volume, Q1 41 per day through Q4 89 per day, you are here at Q4.">
+  <svg viewBox="0 0 720 200" role="img">
+    <line x1="60" y1="110" x2="660" y2="110" stroke="#c69b94" stroke-width="2" stroke-opacity="0.4"></line>
+
+    <!-- Q1 -->
+    <g font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+      <polygon points="78,98 102,98 110,106 110,114 102,122 78,122 70,114 70,106" fill="#34120f" stroke="#2894eb" stroke-width="3"></polygon>
+      <text x="90" y="76" fill="#eef3fb">Q1</text>
+      <text x="90" y="146" fill="#875c56" font-size="11" font-weight="400">41/day</text>
+    </g>
+
+    <!-- Q2 -->
+    <g font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+      <polygon points="278,98 302,98 310,106 310,114 302,122 278,122 270,114 270,106" fill="#34120f" stroke="#d95926" stroke-width="3"></polygon>
+      <text x="290" y="146" fill="#eef3fb">Q2</text>
+      <text x="290" y="76" fill="#875c56" font-size="11" font-weight="400">58/day</text>
+    </g>
+
+    <!-- Q3 -->
+    <g font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+      <polygon points="478,98 502,98 510,106 510,114 502,122 478,122 470,114 470,106" fill="#34120f" stroke="#199e70" stroke-width="3"></polygon>
+      <text x="490" y="76" fill="#eef3fb">Q3</text>
+      <text x="490" y="146" fill="#875c56" font-size="11" font-weight="400">67/day</text>
+    </g>
+
+    <!-- Q4 — "you are here": amber/pharos status color, slightly larger marker -->
+    <g font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+      <polygon points="626,96 654,96 664,106 664,114 654,124 626,124 616,114 616,106" fill="#34120f" stroke="#ffb020" stroke-width="4"></polygon>
+      <text x="640" y="146" fill="#ffb020">You are here</text>
+      <text x="640" y="76" fill="#875c56" font-size="11" font-weight="400">89/day</text>
+    </g>
+  </svg>
+  <figcaption class="dv-diagram__caption">The "Timeline" recipe — chamfered milestones, amber marks "you are here." Same real quarterly numbers as the hero chart.</figcaption>
+</figure>
+
+<style>
+  .dv-diagram { margin: 0; max-width: 640px; font-family: 'Inter', sans-serif; }
+  .dv-diagram svg { width: 100%; height: auto; display: block; }
+  .dv-diagram__caption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #875c56; text-align: center; }
+</style>
+</body>
+</html>
