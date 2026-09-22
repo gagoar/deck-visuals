@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <!--
-  Marketing-site specimen — NEW, built for the gallery. The "Relationship
-  (hub and spokes)" recipe from references/visual-concepts.md: one central node,
-  3-5 satellites. Draws the same triage-automation system as flow-mounted.html
-  (references/story-discovery.md's worked example) in a different idiom, so the
-  gallery's diagrams read as siblings (visual-concepts.md's coherence rule).
+  Marketing-site specimen — REBUILT in the new house default isometric
+  construction (references/visual-concepts.md, "Relationship" recipe): the
+  hub is an elevated, larger isometric plate; satellites sit on a shared
+  lower tier in a fan, connected by straight struts. Each plate has a real
+  depth cue — two extruded rim faces (same slot hex as the stroke, at
+  reduced opacity, never a new hex) under the flat top diamond, not a bare
+  outline. Struts originate at each shape's rim-bottom tip, not its center,
+  so they never bleed through the translucent rim. Tag gap clears the rim
+  depth with a real margin. See
+  assets/fragments/architecture-diagram.html's header for the full
+  construction rationale. Draws the same triage-automation system as
+  flow-mounted.html/diagram-layered.html so the gallery's diagrams read as
+  siblings (visual-concepts.md's coherence rule).
   Colors: assets/brand-palette.md's validated 8 slots, in order — fixed across
   every theme by design. Surface: The Matrix theme (assets/palette-presets.md),
   hue-rotated from the navy tokens at the same lightness/chroma (see
@@ -22,45 +30,70 @@
 <body>
 
 <figure class="dv-diagram" aria-label="Hub and spokes diagram: triage queue at the center, coordinating intake API, classifier, router, escalation, and dashboard.">
-  <svg viewBox="0 0 560 400" role="img">
-    <!-- edges — drawn first, sit under the nodes (same convention as the Flow recipe) -->
-    <g stroke="#90b195" stroke-width="2">
-      <line x1="280" y1="200" x2="280" y2="50"></line>
-      <line x1="280" y1="200" x2="422.7" y2="153.7"></line>
-      <line x1="280" y1="200" x2="368.2" y2="321.3"></line>
-      <line x1="280" y1="200" x2="191.8" y2="321.3"></line>
-      <line x1="280" y1="200" x2="137.3" y2="153.7"></line>
+  <svg viewBox="0 0 740 440" role="img">
+    <!-- struts, drawn first so plates cover their endpoints. Each starts at
+         the hub's rim-bottom tip (cy+ph/2+d), not its center. -->
+    <g stroke="#90b195" stroke-width="2.5" stroke-opacity="0.55">
+      <line x1="370" y1="169.5" x2="90" y2="300"></line>
+      <line x1="370" y1="169.5" x2="230" y2="330"></line>
+      <line x1="370" y1="169.5" x2="370" y2="340"></line>
+      <line x1="370" y1="169.5" x2="510" y2="330"></line>
+      <line x1="370" y1="169.5" x2="650" y2="300"></line>
     </g>
 
-    <!-- hub -->
-    <g font-family="'Inter', sans-serif" font-size="15" text-anchor="middle">
-      <rect x="210" y="170" width="140" height="60" rx="10" fill="#06250f" stroke="#2894eb" stroke-width="2.5"></rect>
-      <text x="280" y="205" fill="#eef3fb" font-weight="600">Triage queue</text>
+    <!-- hub: elevated, larger, bolder stroke, with a real depth cue -->
+    <g>
+      <polygon points="285,110 370,152.5 370,169.5 285,127" fill="#2894eb" fill-opacity="0.35" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="370,152.5 455,110 455,127 370,169.5" fill="#2894eb" fill-opacity="0.2" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="370,67.5 455,110 370,152.5 285,110" fill="#06250f" stroke="#2894eb" stroke-width="4.5"></polygon>
+      <rect x="362" y="63.5" width="16" height="16" fill="#2894eb" transform="rotate(45 370 70.5)"></rect>
+      <rect x="306" y="173.5" width="128" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="370" y="191.5" text-anchor="middle" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#eef3fb">Triage queue</text>
     </g>
 
-    <!-- satellites -->
-    <g font-family="'Inter', sans-serif" font-size="13" text-anchor="middle">
-      <rect x="220" y="25"  width="120" height="50" rx="10" fill="#06250f" stroke="#d95926" stroke-width="2"></rect>
-      <text x="280" y="55" fill="#eef3fb">Intake API</text>
+    <!-- satellites: shared lower tier, each with the same depth cue -->
+    <g font-family="'Inter', sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+      <polygon points="25,300 90,332.5 90,345.5 25,313" fill="#d95926" fill-opacity="0.35" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="90,332.5 155,300 155,313 90,345.5" fill="#d95926" fill-opacity="0.2" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="90,267.5 155,300 90,332.5 25,300" fill="#06250f" stroke="#d95926" stroke-width="3"></polygon>
+      <rect x="83" y="263.5" width="14" height="14" fill="#d95926" transform="rotate(45 90 270.5)"></rect>
+      <rect x="40" y="349.5" width="100" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="90" y="367.5" fill="#eef3fb">Intake API</text>
 
-      <rect x="362.7" y="128.7" width="120" height="50" rx="10" fill="#06250f" stroke="#199e70" stroke-width="2"></rect>
-      <text x="422.7" y="158.7" fill="#eef3fb">Classifier</text>
+      <polygon points="165,330 230,362.5 230,375.5 165,343" fill="#199e70" fill-opacity="0.35" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,362.5 295,330 295,343 230,375.5" fill="#199e70" fill-opacity="0.2" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,297.5 295,330 230,362.5 165,330" fill="#06250f" stroke="#199e70" stroke-width="3"></polygon>
+      <rect x="223" y="293.5" width="14" height="14" fill="#199e70" transform="rotate(45 230 300.5)"></rect>
+      <rect x="180" y="379.5" width="100" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="230" y="397.5" fill="#eef3fb">Classifier</text>
 
-      <rect x="308.2" y="296.3" width="120" height="50" rx="10" fill="#06250f" stroke="#c98500" stroke-width="2"></rect>
-      <text x="368.2" y="326.3" fill="#eef3fb">Router</text>
+      <polygon points="305,340 370,372.5 370,385.5 305,353" fill="#c98500" fill-opacity="0.35" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="370,372.5 435,340 435,353 370,385.5" fill="#c98500" fill-opacity="0.2" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="370,307.5 435,340 370,372.5 305,340" fill="#06250f" stroke="#c98500" stroke-width="3"></polygon>
+      <rect x="363" y="303.5" width="14" height="14" fill="#c98500" transform="rotate(45 370 310.5)"></rect>
+      <rect x="328" y="389.5" width="84" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="370" y="407.5" fill="#eef3fb">Router</text>
 
-      <rect x="131.8" y="296.3" width="120" height="50" rx="10" fill="#06250f" stroke="#d55181" stroke-width="2"></rect>
-      <text x="191.8" y="326.3" fill="#eef3fb">Escalation</text>
+      <polygon points="445,330 510,362.5 510,375.5 445,343" fill="#d55181" fill-opacity="0.35" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="510,362.5 575,330 575,343 510,375.5" fill="#d55181" fill-opacity="0.2" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="510,297.5 575,330 510,362.5 445,330" fill="#06250f" stroke="#d55181" stroke-width="3"></polygon>
+      <rect x="503" y="293.5" width="14" height="14" fill="#d55181" transform="rotate(45 510 300.5)"></rect>
+      <rect x="460" y="379.5" width="100" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="510" y="397.5" fill="#eef3fb">Escalation</text>
 
-      <rect x="77.3" y="128.7" width="120" height="50" rx="10" fill="#06250f" stroke="#008300" stroke-width="2"></rect>
-      <text x="137.3" y="158.7" fill="#eef3fb">Dashboard</text>
+      <polygon points="585,300 650,332.5 650,345.5 585,313" fill="#008300" fill-opacity="0.35" stroke="#008300" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="650,332.5 715,300 715,313 650,345.5" fill="#008300" fill-opacity="0.2" stroke="#008300" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="650,267.5 715,300 650,332.5 585,300" fill="#06250f" stroke="#008300" stroke-width="3"></polygon>
+      <rect x="643" y="263.5" width="14" height="14" fill="#008300" transform="rotate(45 650 270.5)"></rect>
+      <rect x="604" y="349.5" width="92" height="28" rx="6" fill="#06250f" stroke="rgba(144,177,149,0.36)" stroke-width="1.5"></rect>
+      <text x="650" y="367.5" fill="#eef3fb">Dashboard</text>
     </g>
   </svg>
-  <figcaption class="dv-diagram__caption">The "Relationship" recipe — one system, many things touching it.</figcaption>
+  <figcaption class="dv-diagram__caption">The "Relationship" recipe — one system, many things touching it. Elevated isometric hub, satellites on a shared lower tier.</figcaption>
 </figure>
 
 <style>
-  .dv-diagram { margin: 0; max-width: 560px; font-family: 'Inter', sans-serif; }
+  .dv-diagram { margin: 0; max-width: 640px; font-family: 'Inter', sans-serif; }
   .dv-diagram svg { width: 100%; height: auto; display: block; }
   .dv-diagram__caption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #517257; text-align: center; }
 </style>
