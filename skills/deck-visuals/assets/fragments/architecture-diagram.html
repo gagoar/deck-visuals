@@ -1,0 +1,126 @@
+<!--
+  INJECTABLE FRAGMENT — paste into a rendered slide; do not use as a full page.
+
+  An on-brand inline-SVG concept diagram. This is the "architecture (layered
+  boxes)" recipe from references/visual-concepts.md, in the house default
+  ISOMETRIC construction: each band is an elevation tier of flat "plates" —
+  a top diamond PLUS two extruded rim faces beneath it (the rim is what
+  actually sells the depth; a bare diamond outline just reads as a rotated
+  2D shape, not as dimensional — see visual-concepts.md's "Mistakes to never
+  repeat", #2). The rim uses the plate's own categorical hex at reduced
+  fill-opacity, never a derived/shaded tint, so no unvalidated hex is ever
+  needed. Plates are stacked with a consistent per-tier offset to suggest a
+  rising stack, tied together with a faint dashed guideline per tier. Struts
+  connect adjacent tiers only, departing from the UPPER tier's rim-bottom tip
+  (not its center — see "Mistakes to never repeat" #3, or the strut visibly
+  bleeds through that tier's own translucent rim). Swap labels/counts for the
+  real slide; keep the plate/tag construction and the brand-palette stroke
+  colors (each plate's stroke is a distinct slot from the fixed 8-slot
+  categorical palette — that set never changes per theme).
+
+  Plate fill, struts, guides, tags, and caption use --dv-panel/--dv-text/
+  --dv-text-secondary/--dv-text-dim/--dv-border-strong custom properties
+  (house navy as fallback) so the chosen theme's coordinated surface
+  (references/brand.md, assets/palette-presets.md) applies once the host page
+  sets them — never hardcode navy as if it were universal.
+
+  Text always stays flat/unrotated in its own small tag below each plate —
+  never skewed with the plate — so the isometric treatment is exactly as
+  legible as a flat diagram (see visual-concepts.md's "Text stays flat" rule).
+-->
+<figure class="dv-diagram" aria-label="Layered architecture diagram: client band with the slide deck, service band with intake API and classifier, data band with the triage queue and case store. Edges only between adjacent bands.">
+  <svg viewBox="0 0 640 420" role="img">
+    <!-- tier guides, drawn first -->
+    <g stroke="var(--dv-text-secondary, #93a8c9)" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 4">
+      <line x1="60" y1="130" x2="600" y2="130"></line>
+      <line x1="60" y1="230" x2="600" y2="230"></line>
+      <line x1="60" y1="330" x2="600" y2="330"></line>
+    </g>
+
+    <!-- struts, drawn before plates so plates cover their endpoints. Each
+         starts at the UPPER tier's rim-bottom tip (cy+ph/2+d), not its
+         center — otherwise the strut bleeds through that tier's own
+         translucent rim faces below it (the opaque top face hides it fine;
+         the rim doesn't). -->
+    <g stroke="var(--dv-text-secondary, #93a8c9)" stroke-width="2.5" stroke-opacity="0.55">
+      <line x1="390" y1="172" x2="230" y2="230"></line>
+      <line x1="390" y1="172" x2="470" y2="230"></line>
+      <line x1="230" y1="272" x2="190" y2="330"></line>
+      <line x1="470" y1="272" x2="430" y2="330"></line>
+    </g>
+
+    <!-- tier labels -->
+    <g font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1" fill="var(--dv-text-dim, #56698a)" text-anchor="end">
+      <text x="316" y="134">CLIENT</text>
+      <text x="156" y="234">SERVICE</text>
+      <text x="116" y="334">DATA</text>
+    </g>
+
+    <!-- Client tier. Each plate: two extruded rim faces (same slot hex as the
+         stroke, at reduced opacity — no new hex introduced) UNDER the flat
+         top diamond, giving a genuine depth cue instead of a bare outline. -->
+    <g>
+      <polygon points="330,130 390,160 390,172 330,142" fill="#2894eb" fill-opacity="0.35" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="390,160 450,130 450,142 390,172" fill="#2894eb" fill-opacity="0.2" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="390,100 450,130 390,160 330,130" fill="var(--dv-panel, #101d38)" stroke="#2894eb" stroke-width="3.5"></polygon>
+      <rect x="383" y="96" width="14" height="14" fill="#2894eb" transform="rotate(45 390 103)"></rect>
+      <rect x="340" y="176" width="100" height="28" rx="6" fill="var(--dv-panel, #101d38)" stroke="var(--dv-border-strong, rgba(147,168,201,0.36))" stroke-width="1.5"></rect>
+      <text x="390" y="194" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="var(--dv-text, #eef3fb)">Slide deck</text>
+    </g>
+
+    <!-- Service tier -->
+    <g>
+      <polygon points="170,230 230,260 230,272 170,242" fill="#d95926" fill-opacity="0.35" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,260 290,230 290,242 230,272" fill="#d95926" fill-opacity="0.2" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,200 290,230 230,260 170,230" fill="var(--dv-panel, #101d38)" stroke="#d95926" stroke-width="3.5"></polygon>
+      <rect x="223" y="196" width="14" height="14" fill="#d95926" transform="rotate(45 230 203)"></rect>
+      <rect x="176" y="276" width="108" height="28" rx="6" fill="var(--dv-panel, #101d38)" stroke="var(--dv-border-strong, rgba(147,168,201,0.36))" stroke-width="1.5"></rect>
+      <text x="230" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="var(--dv-text, #eef3fb)">Intake API</text>
+
+      <polygon points="410,230 470,260 470,272 410,242" fill="#199e70" fill-opacity="0.35" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="470,260 530,230 530,242 470,272" fill="#199e70" fill-opacity="0.2" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="470,200 530,230 470,260 410,230" fill="var(--dv-panel, #101d38)" stroke="#199e70" stroke-width="3.5"></polygon>
+      <rect x="463" y="196" width="14" height="14" fill="#199e70" transform="rotate(45 470 203)"></rect>
+      <rect x="420" y="276" width="100" height="28" rx="6" fill="var(--dv-panel, #101d38)" stroke="var(--dv-border-strong, rgba(147,168,201,0.36))" stroke-width="1.5"></rect>
+      <text x="470" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="var(--dv-text, #eef3fb)">Classifier</text>
+    </g>
+
+    <!-- Data tier -->
+    <g>
+      <polygon points="130,330 190,360 190,372 130,342" fill="#c98500" fill-opacity="0.35" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="190,360 250,330 250,342 190,372" fill="#c98500" fill-opacity="0.2" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="190,300 250,330 190,360 130,330" fill="var(--dv-panel, #101d38)" stroke="#c98500" stroke-width="3.5"></polygon>
+      <rect x="183" y="296" width="14" height="14" fill="#c98500" transform="rotate(45 190 303)"></rect>
+      <rect x="132" y="376" width="116" height="28" rx="6" fill="var(--dv-panel, #101d38)" stroke="var(--dv-border-strong, rgba(147,168,201,0.36))" stroke-width="1.5"></rect>
+      <text x="190" y="394" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="var(--dv-text, #eef3fb)">Triage queue</text>
+
+      <polygon points="370,330 430,360 430,372 370,342" fill="#d55181" fill-opacity="0.35" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="430,360 490,330 490,342 430,372" fill="#d55181" fill-opacity="0.2" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="430,300 490,330 430,360 370,330" fill="var(--dv-panel, #101d38)" stroke="#d55181" stroke-width="3.5"></polygon>
+      <rect x="423" y="296" width="14" height="14" fill="#d55181" transform="rotate(45 430 303)"></rect>
+      <rect x="380" y="376" width="100" height="28" rx="6" fill="var(--dv-panel, #101d38)" stroke="var(--dv-border-strong, rgba(147,168,201,0.36))" stroke-width="1.5"></rect>
+      <text x="430" y="394" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="var(--dv-text, #eef3fb)">Case store</text>
+    </g>
+  </svg>
+  <figcaption class="dv-diagram__caption">Replace with the slide's real bands and node names.</figcaption>
+</figure>
+
+<style>
+  .dv-diagram {
+    margin: 0;
+    max-width: 640px;
+    font-family: 'Inter', sans-serif;
+  }
+  .dv-diagram svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dv-diagram__caption {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dv-text-dim, #56698a);
+    text-align: center;
+  }
+</style>

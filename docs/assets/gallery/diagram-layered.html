@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <!--
-  Marketing-site specimen — NEW, built for the gallery. The "Architecture
-  (layered boxes)" recipe from references/visual-concepts.md: horizontal bands,
-  edges only between adjacent bands. Same triage-automation system as the other
-  two diagram specimens, drawn in a third idiom (coherence rule).
+  Marketing-site specimen — REBUILT in the new house default isometric
+  construction (references/visual-concepts.md, "Architecture" recipe): each
+  band is an elevation tier of flat isometric plates. Each plate has a real
+  depth cue — two extruded rim faces (same slot hex as the stroke, at
+  reduced opacity, never a new hex) under the flat top diamond, not a bare
+  outline. Struts originate at the upper tier's rim-bottom tip, not its
+  center, so they never bleed through the translucent rim. Tag gap clears
+  the rim depth with a real margin. Same triage-automation system as the
+  other two diagram specimens, drawn in a third idiom (coherence rule). See
+  assets/fragments/architecture-diagram.html's header for the full
+  construction rationale — same exact coordinates, this theme's colors.
 
   Surface: Wes Anderson theme (assets/palette-presets.md) — a warm pastel
   accent sitting on a warm-hued near-black instead of navy, the direct proof
@@ -22,55 +29,78 @@
 <body>
 
 <figure class="dv-diagram" aria-label="Layered architecture diagram: client band with the slide deck, service band with intake API and classifier, data band with the triage queue and case store. Edges only between adjacent bands.">
-  <svg viewBox="0 0 560 250" role="img">
-    <!-- band dividers -->
-    <g stroke="#c599a2" stroke-opacity="0.18" stroke-width="1">
-      <line x1="10" y1="90" x2="550" y2="90"></line>
-      <line x1="10" y1="170" x2="550" y2="170"></line>
-    </g>
-    <!-- band labels -->
-    <g font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1" fill="#855b64">
-      <text x="16" y="49">CLIENT</text>
-      <text x="16" y="129">SERVICE</text>
-      <text x="16" y="209">DATA</text>
+  <svg viewBox="0 0 640 420" role="img">
+    <!-- tier guides -->
+    <g stroke="#c599a2" stroke-opacity="0.14" stroke-width="1" stroke-dasharray="2 4">
+      <line x1="60" y1="130" x2="600" y2="130"></line>
+      <line x1="60" y1="230" x2="600" y2="230"></line>
+      <line x1="60" y1="330" x2="600" y2="330"></line>
     </g>
 
-    <!-- edges — adjacent bands only, drawn first -->
-    <g stroke="#c599a2" stroke-width="2">
-      <line x1="280" y1="70" x2="160" y2="100"></line>
-      <line x1="160" y1="150" x2="160" y2="180"></line>
-      <line x1="400" y1="150" x2="400" y2="180"></line>
+    <!-- struts: each starts at the upper tier's rim-bottom tip (cy+30+12=cy+42) -->
+    <g stroke="#c599a2" stroke-width="2.5" stroke-opacity="0.55">
+      <line x1="390" y1="172" x2="230" y2="230"></line>
+      <line x1="390" y1="172" x2="470" y2="230"></line>
+      <line x1="230" y1="272" x2="190" y2="330"></line>
+      <line x1="470" y1="272" x2="430" y2="330"></line>
     </g>
 
-    <!-- Client band -->
-    <g font-family="'Inter', sans-serif" font-size="14" text-anchor="middle">
-      <rect x="220" y="20" width="120" height="50" rx="10" fill="#33111b" stroke="#2894eb" stroke-width="2"></rect>
-      <text x="280" y="50" fill="#eef3fb">Slide deck</text>
+    <!-- tier labels -->
+    <g font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1" fill="#855b64" text-anchor="end">
+      <text x="316" y="134">CLIENT</text>
+      <text x="156" y="234">SERVICE</text>
+      <text x="116" y="334">DATA</text>
     </g>
 
-    <!-- Service band -->
-    <g font-family="'Inter', sans-serif" font-size="14" text-anchor="middle">
-      <rect x="100" y="100" width="120" height="50" rx="10" fill="#33111b" stroke="#d95926" stroke-width="2"></rect>
-      <text x="160" y="130" fill="#eef3fb">Intake API</text>
-
-      <rect x="340" y="100" width="120" height="50" rx="10" fill="#33111b" stroke="#199e70" stroke-width="2"></rect>
-      <text x="400" y="130" fill="#eef3fb">Classifier</text>
+    <!-- Client tier -->
+    <g>
+      <polygon points="330,130 390,160 390,172 330,142" fill="#2894eb" fill-opacity="0.35" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="390,160 450,130 450,142 390,172" fill="#2894eb" fill-opacity="0.2" stroke="#2894eb" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="390,100 450,130 390,160 330,130" fill="#33111b" stroke="#2894eb" stroke-width="3.5"></polygon>
+      <rect x="383" y="96" width="14" height="14" fill="#2894eb" transform="rotate(45 390 103)"></rect>
+      <rect x="340" y="176" width="100" height="28" rx="6" fill="#33111b" stroke="rgba(197,153,162,0.36)" stroke-width="1.5"></rect>
+      <text x="390" y="194" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="#eef3fb">Slide deck</text>
     </g>
 
-    <!-- Data band -->
-    <g font-family="'Inter', sans-serif" font-size="14" text-anchor="middle">
-      <rect x="100" y="180" width="120" height="50" rx="10" fill="#33111b" stroke="#c98500" stroke-width="2"></rect>
-      <text x="160" y="210" fill="#eef3fb">Triage queue</text>
+    <!-- Service tier -->
+    <g>
+      <polygon points="170,230 230,260 230,272 170,242" fill="#d95926" fill-opacity="0.35" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,260 290,230 290,242 230,272" fill="#d95926" fill-opacity="0.2" stroke="#d95926" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="230,200 290,230 230,260 170,230" fill="#33111b" stroke="#d95926" stroke-width="3.5"></polygon>
+      <rect x="223" y="196" width="14" height="14" fill="#d95926" transform="rotate(45 230 203)"></rect>
+      <rect x="176" y="276" width="108" height="28" rx="6" fill="#33111b" stroke="rgba(197,153,162,0.36)" stroke-width="1.5"></rect>
+      <text x="230" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="#eef3fb">Intake API</text>
 
-      <rect x="340" y="180" width="120" height="50" rx="10" fill="#33111b" stroke="#d55181" stroke-width="2"></rect>
-      <text x="400" y="210" fill="#eef3fb">Case store</text>
+      <polygon points="410,230 470,260 470,272 410,242" fill="#199e70" fill-opacity="0.35" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="470,260 530,230 530,242 470,272" fill="#199e70" fill-opacity="0.2" stroke="#199e70" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="470,200 530,230 470,260 410,230" fill="#33111b" stroke="#199e70" stroke-width="3.5"></polygon>
+      <rect x="463" y="196" width="14" height="14" fill="#199e70" transform="rotate(45 470 203)"></rect>
+      <rect x="420" y="276" width="100" height="28" rx="6" fill="#33111b" stroke="rgba(197,153,162,0.36)" stroke-width="1.5"></rect>
+      <text x="470" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="#eef3fb">Classifier</text>
+    </g>
+
+    <!-- Data tier -->
+    <g>
+      <polygon points="130,330 190,360 190,372 130,342" fill="#c98500" fill-opacity="0.35" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="190,360 250,330 250,342 190,372" fill="#c98500" fill-opacity="0.2" stroke="#c98500" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="190,300 250,330 190,360 130,330" fill="#33111b" stroke="#c98500" stroke-width="3.5"></polygon>
+      <rect x="183" y="296" width="14" height="14" fill="#c98500" transform="rotate(45 190 303)"></rect>
+      <rect x="132" y="376" width="116" height="28" rx="6" fill="#33111b" stroke="rgba(197,153,162,0.36)" stroke-width="1.5"></rect>
+      <text x="190" y="394" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="#eef3fb">Triage queue</text>
+
+      <polygon points="370,330 430,360 430,372 370,342" fill="#d55181" fill-opacity="0.35" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="430,360 490,330 490,342 430,372" fill="#d55181" fill-opacity="0.2" stroke="#d55181" stroke-opacity="0.5" stroke-width="1.5"></polygon>
+      <polygon points="430,300 490,330 430,360 370,330" fill="#33111b" stroke="#d55181" stroke-width="3.5"></polygon>
+      <rect x="423" y="296" width="14" height="14" fill="#d55181" transform="rotate(45 430 303)"></rect>
+      <rect x="380" y="376" width="100" height="28" rx="6" fill="#33111b" stroke="rgba(197,153,162,0.36)" stroke-width="1.5"></rect>
+      <text x="430" y="394" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" font-weight="600" fill="#eef3fb">Case store</text>
     </g>
   </svg>
-  <figcaption class="dv-diagram__caption">The "Architecture" recipe — bands, edges only between neighbors.</figcaption>
+  <figcaption class="dv-diagram__caption">The "Architecture" recipe — bands as elevation tiers, edges only between neighbors.</figcaption>
 </figure>
 
 <style>
-  .dv-diagram { margin: 0; max-width: 560px; font-family: 'Inter', sans-serif; }
+  .dv-diagram { margin: 0; max-width: 640px; font-family: 'Inter', sans-serif; }
   .dv-diagram svg { width: 100%; height: auto; display: block; }
   .dv-diagram__caption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #855b64; text-align: center; }
 </style>
