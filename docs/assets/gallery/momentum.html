@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  Marketing-site specimen — NEW, built for the gallery. A second real, filled-in
+  levity instance, from references/levity.md's own documented pair: claim
+  "Moving fast with no brakes" -> shape "momentum without control" -> Wile E.
+  Coyote running off the cliff (assets/familiar-sources.md; the doc's other
+  listed candidate is a Formula 1 crash — both shown, side by side, mid-pick,
+  in the levity picker screenshot in gallery.html).
+
+  GIF sourced and verified per references/levity.md's exact procedure:
+    WebSearch "wile e coyote running off cliff giphy gif" -> resolved direct
+    media URL -> verified via assets/tools/dv-tools check-media-url (exit 0,
+    image/gif, real bytes) for BOTH the animated rendition and the still
+    poster (Giphy's "_s" still rendition, used for prefers-reduced-motion).
+    Never a guessed/fabricated URL.
+
+  Surface: Severance theme (assets/palette-presets.md) — hue-rotated from the
+  navy tokens at the same OKLCH lightness/chroma as every other specimen.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck-visuals — momentum-without-control levity specimen</title>
+<style>
+  html, body { margin: 0; background: #001726; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
+</style>
+</head>
+<body>
+
+<figure class="dv-levity" role="group" aria-label="Levity beat">
+  <picture>
+    <!-- prefers-reduced-motion: verified still poster, not a guessed URL -->
+    <source srcset="https://media.giphy.com/media/9S3FT1Lt3iaCQoUXEn/200w_s.gif" media="(prefers-reduced-motion: reduce)">
+    <img
+      class="dv-levity__media"
+      src="https://media.giphy.com/media/9S3FT1Lt3iaCQoUXEn/200w.gif"
+      alt="Wile E. Coyote running straight off a cliff and continuing on thin air until he looks down — momentum and confidence that outran the ground under it."
+      loading="lazy"
+    >
+    <!-- search term kept for re-sourcing on link-rot: "wile e coyote running off cliff giphy gif" -->
+  </picture>
+  <figcaption class="dv-levity__caption">Claim: "we shipped too fast and it broke in prod." Shape: momentum without control. Scene: Wile E. Coyote, past the edge.</figcaption>
+</figure>
+
+<style>
+  .dv-levity { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .dv-levity__media {
+    max-width: 480px; width: 100%;
+    aspect-ratio: 16 / 10; min-height: 180px;
+    object-fit: contain; background: #002135; border-radius: 12px; display: block;
+  }
+  .dv-levity__caption { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #87acc5; text-align: center; max-width: 480px; }
+  @media (prefers-reduced-motion: reduce) { .dv-levity__media { animation: none !important; transition: none !important; } }
+</style>
+</body>
+</html>
