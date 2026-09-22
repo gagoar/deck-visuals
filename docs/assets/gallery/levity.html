@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+  Marketing-site specimen — NEW, built for the gallery. A real, filled-in
+  instance of assets/fragments/levity-slide.html's structure (which ships as a
+  placeholder template) — the flagship worked example from
+  references/levity.md: claim "Too many features isn't always fantastic" ->
+  shape "excess/over-engineering" -> The Simpsons "The Homer" car
+  (assets/familiar-sources.md).
+
+  GIF sourced and verified per references/levity.md's exact procedure:
+    WebSearch "simpsons the homer car giphy" -> resolved direct media URL
+    -> verified via assets/tools/dv-tools check-media-url (exit 0, image/gif,
+    real bytes) for BOTH the animated rendition and the still poster
+    (Giphy's "_s" still rendition, used for prefers-reduced-motion). Never a
+    guessed/fabricated URL.
+
+  Surface: The Simpsons theme (assets/palette-presets.md) — chosen because
+  it's thematically apt (the specimen IS Simpsons content) and to show a warm
+  yellow accent on its own coordinated warm near-black, not cold navy.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck-visuals — levity specimen</title>
+<style>
+  html, body { margin: 0; background: #1b1400; }
+  body { display: flex; align-items: center; justify-content: center; padding: 24px; }
+</style>
+</head>
+<body>
+
+<figure class="dv-levity" role="group" aria-label="Levity beat">
+  <picture>
+    <!-- prefers-reduced-motion: verified still poster, not a guessed URL -->
+    <source srcset="https://media.giphy.com/media/xT5LMwyISje8U23D9K/200w_s.gif" media="(prefers-reduced-motion: reduce)">
+    <img
+      class="dv-levity__media"
+      src="https://media.giphy.com/media/xT5LMwyISje8U23D9K/200w.gif"
+      alt="Homer Simpson's car 'The Homer' — every conceivable feature bolted on, unsellable as a result."
+      loading="lazy"
+    >
+    <!-- search term kept for re-sourcing on link-rot: "simpsons the homer car giphy" -->
+  </picture>
+  <figcaption class="dv-levity__caption">Claim: "too many features isn't always fantastic." Shape: excess. Scene: The Homer.</figcaption>
+</figure>
+
+<style>
+  .dv-levity { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .dv-levity__media {
+    max-width: 480px; width: 100%;
+    aspect-ratio: 16 / 10; min-height: 180px;
+    object-fit: contain; background: #261d00; border-radius: 12px; display: block;
+  }
+  .dv-levity__caption { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #b0a781; text-align: center; max-width: 480px; }
+  @media (prefers-reduced-motion: reduce) { .dv-levity__media { animation: none !important; transition: none !important; } }
+</style>
+</body>
+</html>

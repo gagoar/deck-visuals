@@ -4,32 +4,38 @@
   An on-brand inline-SVG concept diagram. This example is the "flow" recipe from
   references/visual-concepts.md (three stages, connected left to right). Swap
   labels and node count for the real slide; keep the marker/arrow reuse pattern
-  and the brand-palette stroke colors.
+  and the brand-palette stroke colors (each node's stroke is a distinct slot from
+  the fixed 8-slot categorical palette — that set never changes per theme).
+
+  Node fill, edges, and caption use --dv-panel/--dv-text-secondary/--dv-text-dim
+  custom properties (house navy as fallback) so the chosen theme's coordinated
+  surface (references/brand.md, assets/palette-presets.md) applies once the host
+  page sets them — never hardcode navy as if it were universal.
 -->
 <figure class="dv-diagram" aria-label="Flow diagram: request, validate, commit.">
   <svg viewBox="0 0 520 140" role="img">
     <defs>
       <marker id="dv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0L10 5L0 10z" fill="#93a8c9"></path>
+        <path d="M0 0L10 5L0 10z" fill="var(--dv-text-secondary, #93a8c9)"></path>
       </marker>
     </defs>
 
     <!-- edges (drawn first, sit under the nodes) -->
-    <g stroke="#93a8c9" stroke-width="2" marker-end="url(#dv-arrow)">
+    <g stroke="var(--dv-text-secondary, #93a8c9)" stroke-width="2" marker-end="url(#dv-arrow)">
       <line x1="150" y1="70" x2="210" y2="70"></line>
       <line x1="330" y1="70" x2="390" y2="70"></line>
     </g>
 
-    <!-- nodes -->
+    <!-- nodes: fill is the theme surface panel; stroke is a fixed categorical slot -->
     <g font-family="'Inter', sans-serif" font-size="15" text-anchor="middle">
-      <rect x="20"  y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#2894eb" stroke-width="2"></rect>
-      <text x="85" y="75" fill="#eef3fb">Request</text>
+      <rect x="20"  y="40" width="130" height="60" rx="10" fill="var(--dv-panel, #101d38)" stroke="#2894eb" stroke-width="2"></rect>
+      <text x="85" y="75" fill="var(--dv-text, #eef3fb)">Request</text>
 
-      <rect x="210" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#d95926" stroke-width="2"></rect>
-      <text x="275" y="75" fill="#eef3fb">Validate</text>
+      <rect x="210" y="40" width="130" height="60" rx="10" fill="var(--dv-panel, #101d38)" stroke="#d95926" stroke-width="2"></rect>
+      <text x="275" y="75" fill="var(--dv-text, #eef3fb)">Validate</text>
 
-      <rect x="390" y="40" width="130" height="60" rx="10" fill="#101d38" stroke="#199e70" stroke-width="2"></rect>
-      <text x="455" y="75" fill="#eef3fb">Commit</text>
+      <rect x="390" y="40" width="130" height="60" rx="10" fill="var(--dv-panel, #101d38)" stroke="#199e70" stroke-width="2"></rect>
+      <text x="455" y="75" fill="var(--dv-text, #eef3fb)">Commit</text>
     </g>
   </svg>
   <figcaption class="dv-diagram__caption">Replace with the slide's real stage names.</figcaption>
@@ -50,7 +56,7 @@
     margin-top: 10px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    color: #56698a;
+    color: var(--dv-text-dim, #56698a);
     text-align: center;
   }
 </style>

@@ -4,6 +4,11 @@
   A GIF levity beat. Pin the direct media URL (not a page URL — see
   references/levity.md). Swap the example content below for the real GIF, alt
   text, and caption before shipping. Do not ship the example verbatim.
+
+  Colors use --dv-panel/--dv-text-secondary custom properties (house navy as
+  fallback) so the chosen theme's coordinated surface (references/brand.md,
+  assets/palette-presets.md) applies once the host page sets them — never
+  hardcode navy as if it were universal.
 -->
 <figure class="dv-levity" role="group" aria-label="Levity beat">
   <picture>
@@ -37,14 +42,14 @@
     aspect-ratio: 16 / 10;
     min-height: 180px;
     object-fit: contain;
-    background: #101d38;
+    background: var(--dv-panel, #101d38);
     border-radius: 12px;
     display: block;
   }
   .dv-levity__caption {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
-    color: #93a8c9;
+    color: var(--dv-text-secondary, #93a8c9);
     text-align: center;
     max-width: 480px;
   }

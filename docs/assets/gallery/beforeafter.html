@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+  Marketing-site specimen — NEW, built for the gallery. The "Before/after
+  (two-state)" recipe from references/visual-concepts.md, applied honestly to
+  real numbers already in the repo (assets/fragments/chart-figure.html's
+  41/58/67/89) and the triage-automation worked example
+  (references/story-discovery.md, "Manual triage doesn't scale past our
+  current volume"). This is the project's own recipe demonstrating itself.
+
+  Surface: Breaking Bad theme (assets/palette-presets.md) — an olive-warm
+  near-black instead of navy. The after-chart's bars and the arrow use the
+  theme's ACCENT (single-series/highlight role), not the shared categorical
+  slot 1 — per assets/palette-presets.md, the 8-slot data palette is reserved
+  for genuinely multi-category charts/diagrams; a single series takes the
+  accent, which is exactly what makes it vary per theme instead of always
+  rendering blue.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck-visuals — before/after specimen</title>
+<style>
+  html, body { margin: 0; background: #0e1803; }
+  body {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 28px; padding: 24px;
+    font-family: 'Inter', sans-serif;
+  }
+  .slide {
+    width: 280px; min-height: 320px;
+    background: #162304;
+    border: 1px solid rgba(156,174,138,0.18);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex; flex-direction: column;
+  }
+  .slide__label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px;
+    color: #5e6f4c; margin-bottom: 10px;
+  }
+  .slide__title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; color: #eef3fb; line-height: 1.35; margin-bottom: 16px; }
+  .slide--before ul { list-style: none; margin: 0; padding: 0; color: #9cae8a; font-size: 14px; line-height: 2.1; }
+  .slide--before li::before { content: "— "; color: #5e6f4c; }
+  .arrow { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: #7cb518; align-self: center; }
+  .slide--after svg { width: 100%; height: auto; margin-top: auto; }
+</style>
+</head>
+<body>
+
+  <div class="slide slide--before" aria-label="Before: a plain bullet slide">
+    <div class="slide__label">BEFORE</div>
+    <div class="slide__title">Triage volume, 2025</div>
+    <ul>
+      <li>Q1 — 41/day</li>
+      <li>Q2 — 58/day</li>
+      <li>Q3 — 67/day</li>
+      <li>Q4 — 89/day</li>
+    </ul>
+  </div>
+
+  <div class="arrow" aria-hidden="true">→</div>
+
+  <div class="slide slide--after" aria-label="After: the same numbers, charted, with a claim">
+    <div class="slide__label">AFTER</div>
+    <div class="slide__title">Triage volume more than doubled — manual triage won't scale</div>
+    <svg viewBox="0 0 240 140" role="img" aria-label="Bar chart: Q1 41, Q2 58, Q3 67, Q4 89.">
+      <line x1="20" y1="115" x2="230" y2="115" stroke="#9cae8a" stroke-opacity="0.36" stroke-width="1"></line>
+      <g fill="#7cb518">
+        <rect x="32" y="89"  width="32" height="26"></rect>
+        <rect x="88" y="68"  width="32" height="47"></rect>
+        <rect x="144" y="55" width="32" height="60"></rect>
+        <rect x="200" y="35" width="32" height="80"></rect>
+      </g>
+      <g fill="#9cae8a" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">
+        <text x="48" y="128">Q1</text>
+        <text x="104" y="128">Q2</text>
+        <text x="160" y="128">Q3</text>
+        <text x="216" y="128">Q4</text>
+      </g>
+    </svg>
+  </div>
+
+</body>
+</html>
