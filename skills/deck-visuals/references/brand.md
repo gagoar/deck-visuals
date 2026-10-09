@@ -48,7 +48,7 @@ Being "on-brand" here has two layers, and they must not be confused:
   overrides the tokens or the legibility bar.
 
 **What varies per deck: accent *and* a coordinated surface.** The user picks a
-**validated theme** from shown swatches (`dv-onboard --form palette`, themes in
+**validated theme** from shown swatches (`assets/onboarding/dv-onboard --form palette`, themes in
 `assets/palette-presets.md`) — not just an accent color anymore. Each theme
 carries `accent` **and** matching `surface`/`panel` tokens: the same
 `--bg-primary`/`--bg-panel` values, re-rendered at the accent's hue while holding

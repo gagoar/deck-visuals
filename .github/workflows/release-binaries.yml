@@ -1,0 +1,49 @@
+name: release-binaries
+
+# Publishes the dv-tools and dv-onboard binaries as GitHub Release assets when a
+# version tag is pushed. The plugin does not commit binaries: its wrappers download
+# the asset for their own version and accept it only if it matches the SHA256SUMS
+# committed in the repo. Uses the workflow's own GITHUB_TOKEN; no PAT.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: skills/deck-visuals/assets/tools/go.mod
+
+      - name: Tag matches VERSION and plugin.json
+        run: |
+          set -euo pipefail
+          have="$(tr -d '[:space:]' < skills/deck-visuals/assets/VERSION)"
+          want="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' .claude-plugin/plugin.json | head -1)"
+          [ "$GITHUB_REF_NAME" = "v$have" ] || { echo "tag $GITHUB_REF_NAME != v$have (VERSION)"; exit 1; }
+          [ "$have" = "$want" ] || { echo "VERSION $have != plugin.json $want"; exit 1; }
+
+      - name: Build and check against the committed SHA256SUMS
+        run: |
+          set -euo pipefail
+          skills/deck-visuals/assets/onboarding/server/build.sh
+          skills/deck-visuals/assets/tools/build.sh
+          git diff --exit-code -- \
+            skills/deck-visuals/assets/onboarding/SHA256SUMS \
+            skills/deck-visuals/assets/tools/SHA256SUMS
+
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            skills/deck-visuals/assets/onboarding/bin/* \
+            skills/deck-visuals/assets/tools/bin/* \
+            --title "$GITHUB_REF_NAME" --generate-notes

@@ -46,7 +46,7 @@ jobs:
           changed="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
           echo "Changed files:"
           echo "$changed"
-          if echo "$changed" | grep -qE '^(skills/deck-visuals/assets/onboarding/|skills/deck-visuals/assets/tools/|skills/deck-visuals/assets/show-catalog\.md$|skills/deck-visuals/references/levity\.md$|\.github/workflows/onboarding-server\.yml$)'; then
+          if echo "$changed" | grep -qE '^(skills/deck-visuals/assets/onboarding/|skills/deck-visuals/assets/tools/|skills/deck-visuals/assets/(VERSION|run-binary\.sh|test_run_binary\.sh)$|skills/deck-visuals/assets/show-catalog\.md$|skills/deck-visuals/references/levity\.md$|\.github/workflows/onboarding-server\.yml$)'; then
             echo "relevant=true" >> "$GITHUB_OUTPUT"
             echo "reason=watched paths changed" >> "$GITHUB_OUTPUT"
           else
@@ -73,9 +73,30 @@ jobs:
         if: steps.filter.outputs.relevant == 'true'
         run: skills/deck-visuals/assets/onboarding/server/smoke_test.sh
 
-      - name: Cross-compile all target binaries (verify they still build)
+      - name: Rebuild every binary; the committed SHA256SUMS must reproduce
         if: steps.filter.outputs.relevant == 'true'
-        run: skills/deck-visuals/assets/onboarding/server/build.sh
+        run: |
+          set -euo pipefail
+          skills/deck-visuals/assets/onboarding/server/build.sh
+          skills/deck-visuals/assets/tools/build.sh
+          # The binaries are not committed; the sums are what the wrapper trusts.
+          # A source change without regenerated sums (or a non-reproducible build)
+          # fails here instead of shipping a pin that rejects the real release.
+          git diff --exit-code -- \
+            skills/deck-visuals/assets/onboarding/SHA256SUMS \
+            skills/deck-visuals/assets/tools/SHA256SUMS
+
+      - name: Wrapper tests (download + checksum pin, cache, tamper, build fallback)
+        if: steps.filter.outputs.relevant == 'true'
+        run: skills/deck-visuals/assets/test_run_binary.sh
+
+      - name: VERSION matches plugin.json
+        if: steps.filter.outputs.relevant == 'true'
+        run: |
+          set -euo pipefail
+          want="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' .claude-plugin/plugin.json | head -1)"
+          have="$(tr -d '[:space:]' < skills/deck-visuals/assets/VERSION)"
+          [ "$want" = "$have" ] || { echo "VERSION ($have) != plugin.json ($want)"; exit 1; }
 
       - name: dv-tools — vet and test
         if: steps.filter.outputs.relevant == 'true'

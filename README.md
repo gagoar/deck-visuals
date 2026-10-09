@@ -66,23 +66,39 @@ skills/deck-visuals/
     show-catalog.md           the ~50-title swipe catalog (onboarding)
     meme-library.md           evergreen meme fallback for levity
     familiar-sources.md       the presenter's curated analogy pool
+    VERSION                   release tag the wrappers download from
+    run-binary.sh             shared fetch + verify + cache + build-fallback
     tools/                    dv-tools: Go source for the palette validator,
                               media-URL check, and coverage report
-      dv-tools                POSIX wrapper, picks the right prebuilt binary
-      bin/                    prebuilt dv-tools binaries (no runtime needed)
+      dv-tools                POSIX wrapper: fetches the pinned binary for this
+                              machine on first use, then runs it
+      SHA256SUMS              pinned hashes of the released dv-tools binaries
+      build.sh                reproducible cross-compile; rewrites SHA256SUMS
     icons/                    curated Lucide-style icon set
     fragments/                injectable HTML fragments
     onboarding/
       picker.html             onboarding swipe page (local tool)
       levity-picker.html      deck-time levity GIF chooser (local tool)
       picker.css              shared premium dark styling for both
-      server/                 Go source for the runtime-free picker binary
-      bin/                    prebuilt picker binaries (no runtime needed)
+      dv-onboard              POSIX wrapper for the picker binary (same scheme)
+      SHA256SUMS              pinned hashes of the released dv-onboard binaries
+      server/                 Go source for the picker binary
 ```
 
-The same runtime-free binary also powers a **deck-time levity picker**: once Claude
+The same picker server also powers a **deck-time levity picker**: once Claude
 proposes 2-3 candidate GIFs per slide, run it with `--form levity` to choose each one
 visually instead of in chat.
+
+## Helper binaries
+
+`dv-tools` (palette validator, media-URL check, coverage) and `dv-onboard` (the picker
+server) are Go programs. Their binaries are **not committed**. The wrappers
+(`assets/tools/dv-tools`, `assets/onboarding/dv-onboard`) download the binary for the
+installed release on first use, run it only if it matches the pinned `SHA256SUMS`, and
+cache it. They need **network access to GitHub, or Go installed** the first time; after
+that they work offline. Maintainers: bump `assets/VERSION`, `.claude-plugin/plugin.json`
+and the `SHA256SUMS` files (run both `build.sh` scripts) together, then push a `v<version>`
+tag so `release-binaries.yml` publishes the assets.
 
 ## Onboard your references
 
@@ -100,3 +116,18 @@ per concept shape.
 
 MIT. See `LICENSE`. The icon set carries its own provenance note and license
 text in `skills/deck-visuals/assets/icons/LICENSE`.
+
+## Automated gate
+
+CI runs `scripts/check-plugin-safety.ts` and `claude plugin validate --strict` on every PR. Run both before you push:
+
+```
+node scripts/check-plugin-safety.ts .
+claude plugin validate . --strict
+```
+
+The gate fails on three things the plugin-directory upload scanner holds for review:
+
+- A skill, agent, or command that pre-approves `Write`, `Edit`, or `Bash` with no path scope. Write `Write(./docs/**)`, not `Write`.
+- Shipped code that copies the whole environment (`...process.env`, `Object.keys(process.env)`). Read the named variables you need.
+- A committed native executable. The scanner cannot read it.

@@ -76,7 +76,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
    Pin the direct media URL, add alt text, respect `prefers-reduced-motion`. Inject
    `assets/fragments/levity-slide.html`. Let the human pick among the 2-3 candidates
    per slot either in chat or via the visual levity picker
-   (`dv-onboard --form levity`) — see `references/levity.md`.
+   (`assets/onboarding/dv-onboard --form levity`) — see `references/levity.md`.
 6. **Deliver (existing).** Ship through the user's `deliver-doc` flow. This skill
    does not deliver.
 
@@ -93,7 +93,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 - Visuals render in the deck's subject idiom (concept-map `visual through-line`) so
   they read as one set — but the idiom drives form/metaphor only, never color or
   legibility. Never ask the user to name colors; a per-deck theme is picked from
-  swatches (`dv-onboard --form palette`) — every theme shares the same validated
+  swatches (`assets/onboarding/dv-onboard --form palette`) — every theme shares the same validated
   8-slot data palette, but the accent **and a coordinated surface** vary together
   (hue-matched, same pinned lightness/chroma as the house navy tokens — see
   `references/brand.md` and `assets/palette-presets.md`). Never hardcode the house
@@ -107,6 +107,21 @@ the refreshed profile. Full flow: `references/onboarding.md`.
   tools, never deck artifacts, never injected or delivered. The "fragments only" rule
   governs deck output, not these tools.
 
+## Helper binaries (`dv-tools`, `dv-onboard`)
+
+Run them by their wrapper path, never as a bare command: `assets/tools/dv-tools …` and
+`assets/onboarding/dv-onboard …`. The compiled Go binaries are not stored in this
+repo. On first use the wrapper downloads the binary for this release and runs it only
+if its SHA-256 matches the committed `SHA256SUMS`; it then caches it, so later runs are
+instant and work offline. If the download fails and Go is installed, it builds from the
+committed source instead.
+
+If a wrapper exits with `no verified binary and no Go toolchain`, or with
+`checksum mismatch`, stop and tell the user: they need network access to GitHub, or Go
+installed, and a checksum mismatch means the release asset was altered, so do not work
+around it. Never skip validation (`validate-palette`, `check-media-url`) or invent its
+output because a binary is unavailable.
+
 ## Reference map
 
 | Need | Read |
@@ -116,7 +131,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | Meme fallback for when no familiar source fits | `assets/meme-library.md` |
 | The onboarding + levity picker pages (local tools) | `assets/onboarding/picker.html`, `assets/onboarding/levity-picker.html` |
 | Shared picker styling (both pages) | `assets/onboarding/picker.css` |
-| The runtime-free picker server (`--form onboard`/`levity`) + prebuilt binaries | `assets/onboarding/server/`, `assets/onboarding/bin/` |
+| The picker server (`--form onboard`/`levity`/`palette`): Go source + the `dv-onboard` wrapper that fetches the pinned binary | `assets/onboarding/server/`, `assets/onboarding/dv-onboard` |
 | Coverage check — 3 options per concept shape | `assets/tools/dv-tools coverage` |
 | Building the concept map (interview vs extract) | `references/story-discovery.md` |
 | Chart vs diagram vs icon vs placeholder | `references/visual-concepts.md` |
@@ -125,7 +140,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
 | The user's curated analogy source list | `assets/familiar-sources.md` |
 | Deck theme tokens, layer boundaries, subject-idiom layer | `references/brand.md` |
 | Validated 8-slot palette + ramps | `assets/brand-palette.md` |
-| Per-deck themes — accent + coordinated surface (swatch-picked, validated, shared data palette) | `assets/palette-presets.md`, `dv-onboard --form palette` |
+| Per-deck themes — accent + coordinated surface (swatch-picked, validated, shared data palette) | `assets/palette-presets.md`, `assets/onboarding/dv-onboard --form palette` |
 | Icon set | `assets/icons/` |
 | Injectable fragments | `assets/fragments/` |
 | Verify a GIF/media URL resolves | `assets/tools/dv-tools check-media-url` |
