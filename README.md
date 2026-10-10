@@ -19,6 +19,7 @@ before they ship. It does not render decks.
 *Four bullets in, one chart out. The numbers are the same; the argument lands.*
 
 See it live: [gallery](https://gagoar.github.io/deck-visuals/gallery.html) ·
+[showcase](https://gagoar.github.io/deck-visuals/showcase.html) ·
 [how it decides](https://gagoar.github.io/deck-visuals/reference.html) ·
 [site](https://gagoar.github.io/deck-visuals/)
 
