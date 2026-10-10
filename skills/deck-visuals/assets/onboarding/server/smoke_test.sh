@@ -10,9 +10,10 @@ set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 work="$(mktemp -d)"
-embedded=(picker.html levity-picker.html palette-picker.html picker.css bg.jpg)
+embedded=(picker.html levity-picker.html palette-picker.html picker.css)
 cleanup() {
   for f in "${embedded[@]}"; do rm -f "$here/$f"; done
+  rm -rf "$here/fonts"
   [ -n "${srvpid:-}" ] && kill "$srvpid" 2>/dev/null || true
   rm -rf "$work"
 }
@@ -23,6 +24,15 @@ fail() { echo "SMOKE FAIL: $*" >&2; exit 1; }
 # go:embed can't reach a parent dir, so copy the canonical assets in before any tool
 # that compiles the package.
 for f in "${embedded[@]}"; do cp "$here/../$f" "$here/$f"; done
+cp -R "$here/../fonts" "$here/fonts"
+
+# The pickers promise "nothing leaves the machine": no page or stylesheet may point at an
+# external URL (the SVG xmlns namespace string is not a request).
+for f in picker.html levity-picker.html palette-picker.html picker.css; do
+  if grep -Eo 'https?://[^"'"'"' )]+' "$here/../$f" | grep -v 'www.w3.org/2000/svg' | grep -q .; then
+    fail "$f references an external URL; the pickers must be fully offline"
+  fi
+done
 
 echo "==> go vet"
 ( cd "$here" && go vet ./... )
@@ -70,9 +80,11 @@ run_form() {
   local css; css="$(curl -fsS "$base/picker.css")"
   [ -n "$css" ] || fail "[$form] picker.css empty or missing"
 
-  echo "==> [$form] GET /bg.jpg — background photo served"
-  local bg_type; bg_type="$(curl -fsSI "$base/bg.jpg" | tr -d '\r' | grep -i '^content-type:' | awk '{print $2}')"
-  [ "$bg_type" = "image/jpeg" ] || fail "[$form] bg.jpg wrong or missing content-type (got: $bg_type)"
+  echo "==> [$form] GET /fonts — embedded fonts served"
+  local font_type; font_type="$(curl -fsSI "$base/fonts/Fraunces.woff2" | tr -d '' | grep -i '^content-type:' | awk '{print $2}')"
+  [ "$font_type" = "font/woff2" ] || fail "[$form] Fraunces.woff2 wrong or missing content-type (got: $font_type)"
+  [ "$(curl -fsS "$base/fonts/Fraunces.woff2" | head -c4)" = "wOF2" ] || fail "[$form] Fraunces.woff2 is not a woff2 file"
+  [ "$(curl -s -o /dev/null -w '%{http_code}' "$base/fonts/nope.woff2")" = "404" ] || fail "[$form] a missing font did not 404"
 
   echo "==> [$form] POST /submit — accepted"
   local resp; resp="$(curl -fsS -X POST "$base/submit" -H 'Content-Type: application/json' -d "$body")"

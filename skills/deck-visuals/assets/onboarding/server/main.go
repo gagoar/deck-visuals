@@ -10,7 +10,7 @@
 // 127.0.0.1, accepts one POST of the user's answers, writes them to a results JSON
 // file, and shuts down. Nothing leaves the machine: loopback only, no outbound
 // calls, no interpreter or runtime needed on the machine that runs it. The picker
-// HTML/CSS/photo are compiled in via go:embed, so the shipped binary needs no
+// HTML/CSS/fonts are compiled in via go:embed, so the shipped binary needs no
 // companion files. build.sh copies the canonical assets next to this source before
 // building (embed can't reach a parent directory).
 //
@@ -23,7 +23,7 @@ package main
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -48,8 +48,8 @@ var paletteHTML string
 //go:embed picker.css
 var pickerCSS string
 
-//go:embed bg.jpg
-var bgJPEG []byte
+//go:embed fonts/*.woff2
+var fontsFS embed.FS
 
 const (
 	dataToken    = "REPLACE_DATA_JSON"
@@ -115,9 +115,20 @@ func main() {
 		w.Header().Set("Content-Type", "text/css; charset=utf-8")
 		_, _ = w.Write([]byte(pickerCSS))
 	})
-	mux.HandleFunc("/bg.jpg", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "image/jpeg")
-		_, _ = w.Write(bgJPEG)
+	// Fonts are compiled in too, so the pages never reach for a CDN. Only the embedded
+	// .woff2 files can be read: embed.FS rejects any path that tries to leave fonts/.
+	mux.HandleFunc("/fonts/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet && r.Method != http.MethodHead {
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		data, err := fontsFS.ReadFile(strings.TrimPrefix(r.URL.Path, "/"))
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "font/woff2")
+		_, _ = w.Write(data)
 	})
 	mux.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
