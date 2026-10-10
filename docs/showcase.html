@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>deck-visuals — showcase</title>
+<meta name="description" content="Six demo decks in six designs, with invented content from classic TV: the range of themes deck-visuals adapts its visuals to.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Barlow+Condensed:wght@700&family=Space+Grotesk:wght@500;700&family=Sora:wght@700&family=Fraunces:ital,wght@0,600;1,600&family=Newsreader:wght@500&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root { --hero-bg:#0e1013; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background:var(--hero-bg); color:#f2f3f5; font:16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing:antialiased; }
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+a { color:inherit; }
+a:focus-visible { outline:2px solid currentColor; outline-offset:4px; border-radius:4px; }
+
+/* fixed chrome: inverts against whatever chapter is behind it */
+.topbar { position:fixed; inset:0 0 auto 0; display:flex; justify-content:space-between; align-items:center; padding:18px 28px; z-index:50; color:#fff; mix-blend-mode:difference; font:500 12px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; pointer-events:none; }
+.topbar a { pointer-events:auto; text-decoration:none; }
+.topbar a:hover { text-decoration:underline; text-underline-offset:4px; }
+.rail { position:fixed; right:22px; top:50%; transform:translateY(-50%); z-index:50; list-style:none; margin:0; padding:0; display:grid; gap:14px; mix-blend-mode:difference; }
+.rail a { display:block; width:12px; height:12px; border:1.5px solid #fff; border-radius:50%; opacity:.5; transition:transform .25s, opacity .25s, background .25s; position:relative; }
+.rail a.is-active { background:#fff; opacity:1; transform:scale(1.35); }
+
+/* hero */
+.hero { position:relative; min-height:100vh; display:grid; place-items:center; text-align:center; padding:16vh 6vw 12vh; overflow:clip; }
+.hero__copy { position:relative; z-index:2; max-width:980px; }
+.eyebrow { font:500 13px/1 var(--mono); letter-spacing:.22em; text-transform:uppercase; color:#9aa0a8; margin:0 0 28px; }
+.hero h1 { margin:0; font-size:clamp(52px, 10vw, 148px); line-height:.92; letter-spacing:-.035em; font-weight:650; }
+.hero h1 span { background:linear-gradient(90deg,#57c7d4,#d8f858 40%,#f5b53a 70%,#f0471a); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero .sub { margin:30px auto 0; max-width:34em; font-size:clamp(17px,1.6vw,21px); color:#b4b9c0; }
+.hero .count { margin-top:34px; font:500 12px/1 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:#7d838b; }
+.cue { display:inline-block; margin-top:44px; font:500 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:#cfd3d8; text-decoration:none; animation:nudge 2.2s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { transform:translateY(0) } 50% { transform:translateY(6px) } }
+.float { position:absolute; margin:0; width:var(--w,20%); border-radius:10px; overflow:hidden; z-index:1; opacity:.92; transform:translate3d(0,var(--py,0px),0) rotate(var(--r,0deg)); will-change:transform; box-shadow:0 30px 60px -22px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.09); }
+.float img { display:block; width:100%; height:auto; }
+.f1 { left:5%;  top:12%; --w:22%; --r:-5deg; }
+.f2 { right:6%; top:9%;  --w:20%; --r:4deg; }
+.f3 { left:12%; bottom:9%; --w:19%; --r:3deg; }
+.f4 { right:10%; bottom:7%; --w:24%; --r:-4deg; }
+.f5 { left:1%;  top:50%; --w:15%; --r:6deg; }
+.f6 { right:4.5%; top:46%; --w:14%; --r:-6deg; }
+
+/* chapters */
+.chapter { position:relative; min-height:112vh; display:flex; align-items:center; padding:11vh 6vw; overflow:clip; background:var(--bg); color:var(--ink); }
+.chapter::before { content:""; position:absolute; inset:0 0 auto 0; height:24vh; background:linear-gradient(var(--prev), var(--bg)); pointer-events:none; z-index:0; }
+.chapter__glow { position:absolute; right:-18vw; top:-6%; width:72vw; height:72vw; background:radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent), transparent); transform:translate3d(0,var(--py,0px),0); pointer-events:none; z-index:0; }
+.chapter--flip .chapter__glow { right:auto; left:-18vw; }
+.chapter__inner { position:relative; z-index:1; width:min(1280px,100%); margin:0 auto; display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:4vw; align-items:center; }
+.chapter--flip .chapter__inner { grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr); }
+.chapter--flip .stack { order:-1; }
+.chapter__copy { transform:translate3d(0,var(--py,0px),0); }
+.kicker { margin:0 0 6px; font:500 12px/1.4 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.kicker .num { color:var(--accent); }
+.chapter h2 { margin:.35em 0 .4em; font-family:var(--disp); font-weight:var(--dispw); text-transform:var(--caps); font-size:clamp(40px,5.4vw,88px); line-height:1; letter-spacing:-.02em; }
+.desc { margin:0 0 28px; max-width:30em; font-size:clamp(16px,1.35vw,19px); color:var(--dim); }
+.meta { display:grid; gap:12px; margin:0 0 30px; }
+.meta div { display:grid; grid-template-columns:84px 1fr; align-items:center; }
+.meta dt { font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.meta dd { margin:0; font-size:14px; }
+.swatches { display:flex; gap:8px; list-style:none; margin:0; padding:0; }
+.swatches li { width:20px; height:20px; border-radius:50%; background:var(--c); box-shadow:0 0 0 1.5px rgba(127,127,127,.45); }
+.open { display:inline-flex; gap:10px; align-items:center; padding:13px 22px; border:1.5px solid var(--accent); border-radius:999px; text-decoration:none; font-weight:600; font-size:15px; color:var(--ink); transition:background .2s, color .2s, gap .2s; }
+.open:hover, .open:focus-visible { background:var(--accent); color:var(--bg); gap:14px; }
+
+.stack { position:relative; aspect-ratio:1 / .88; perspective:1700px; }
+.card { position:absolute; margin:0; border-radius:12px; overflow:hidden; background:var(--panel); box-shadow:0 44px 80px -32px rgba(0,0,0,.6), 0 0 0 1px rgba(127,127,127,.25); transform:translate3d(0,var(--py,0px),0) rotateY(var(--ry)) rotateZ(var(--rz)); will-change:transform; }
+.card img { display:block; width:100%; height:auto; }
+.card figcaption { position:absolute; inset:auto 0 0 0; padding:26px 14px 10px; font:500 11px/1.2 var(--mono); letter-spacing:.06em; color:#fff; background:linear-gradient(transparent, rgba(0,0,0,.72)); opacity:0; transition:opacity .3s; }
+.card:hover figcaption { opacity:1; }
+@media (hover:none) { .card figcaption { opacity:1; } }
+.card--back  { top:0;   left:30%; width:66%; z-index:1; --ry:-9deg; --rz:1.5deg; }
+.card--mid   { top:27%; left:0;   width:60%; z-index:2; --ry:-7deg; --rz:-2deg; }
+.card--front { top:52%; left:34%; width:62%; z-index:3; --ry:-5deg; --rz:1deg; }
+.chapter--flip .card--back  { left:4%; --ry:9deg;  --rz:-1.5deg; }
+.chapter--flip .card--mid   { left:40%; --ry:7deg;  --rz:2deg; }
+.chapter--flip .card--front { left:0;  --ry:5deg;  --rz:-1deg; }
+
+/* outro */
+.outro { position:relative; padding:18vh 6vw 14vh; background:var(--hero-bg); }
+.outro::before { content:""; position:absolute; inset:0 0 auto 0; height:24vh; background:linear-gradient(var(--prev), var(--hero-bg)); pointer-events:none; }
+.outro__inner { position:relative; width:min(1180px,100%); margin:0 auto; }
+.outro h2 { margin:0 0 10px; font-size:clamp(34px,4.4vw,64px); line-height:1.02; letter-spacing:-.025em; font-weight:650; }
+.outro p.lead { margin:0 0 44px; color:#9aa0a8; max-width:34em; }
+.tiles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+.tile { position:relative; display:block; border-radius:12px; overflow:hidden; text-decoration:none; box-shadow:0 0 0 1px rgba(255,255,255,.1); transition:transform .3s, box-shadow .3s; }
+.tile img { display:block; width:100%; height:auto; }
+.tile::after { content:""; position:absolute; inset:0; background:linear-gradient(transparent 45%, rgba(0,0,0,.82)); }
+.tile__t, .tile__m { position:absolute; left:16px; z-index:1; }
+.tile__t { bottom:34px; font-weight:650; font-size:18px; color:#fff; }
+.tile__m { bottom:14px; font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.7); }
+.tile:hover, .tile:focus-visible { transform:translateY(-4px); box-shadow:0 0 0 2px var(--accent), 0 24px 50px -20px rgba(0,0,0,.7); }
+.foot { margin-top:64px; color:#6f757d; font:500 12px/1.6 var(--mono); letter-spacing:.04em; }
+
+@media (max-width:860px) {
+  .rail { display:none; }
+  .topbar { padding:14px 18px; }
+  .hero { padding:18vh 6vw 10vh; }
+  .f5, .f6 { display:none; }
+  .chapter { min-height:0; padding:14vh 6vw 10vh; }
+  .chapter__inner, .chapter--flip .chapter__inner { grid-template-columns:1fr; gap:36px; }
+  .chapter--flip .stack { order:0; }
+  .stack { aspect-ratio:auto; display:grid; gap:16px; perspective:none; }
+  .card, .chapter--flip .card { position:relative; inset:auto; width:100%; transform:none; }
+  .tiles { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  .cue { animation:none; }
+  * { transition:none !important; }
+  .float, .card, .chapter__glow, .chapter__copy { transform:none !important; }
+  .float { position:relative; inset:auto; }
+}
+</style>
+</head>
+<body>
+<nav class="topbar" aria-label="Page"><a href="index.html">← deck-visuals</a><span>Deck showcase</span></nav>
+<ol class="rail" aria-label="Decks"><li><a href="#arch" data-for="arch"><span class="sr">The Planet Express Standard</span></a></li><li><a href="#infra" data-for="infra"><span class="sr">Starship Vision</span></a></li><li><a href="#pawnee" data-for="pawnee"><span class="sr">Pawnee</span></a></li><li><a href="#loop" data-for="loop"><span class="sr">The Dundie Loop</span></a></li><li><a href="#mono" data-for="mono"><span class="sr">One towel. One galaxy.</span></a></li><li><a href="#perk" data-for="perk"><span class="sr">Central Perk</span></a></li></ol>
+
+<header class="hero" id="top" style="--prev:#0e1013">
+  <figure class="float f1" data-speed="-60"><img src="showcase/img/arch-00.jpg" width="1280" height="720" alt="" decoding="async"></figure><figure class="float f2" data-speed="90"><img src="showcase/img/infra-00.jpg" width="1280" height="720" alt="" decoding="async"></figure><figure class="float f3" data-speed="30"><img src="showcase/img/pawnee-00.jpg" width="1280" height="720" alt="" decoding="async"></figure><figure class="float f4" data-speed="150"><img src="showcase/img/loop-00.jpg" width="1280" height="720" alt="" decoding="async"></figure><figure class="float f5" data-speed="-20"><img src="showcase/img/mono-00.jpg" width="1280" height="720" alt="" decoding="async"></figure><figure class="float f6" data-speed="70"><img src="showcase/img/perk-00.jpg" width="1280" height="720" alt="" decoding="async"></figure>
+  <div class="hero__copy">
+    <p class="eyebrow">Deck showcase</p>
+    <h1>Six decks.<br><span>Six looks.</span></h1>
+    <p class="sub">Six demo decks in six designs, with made-up content from classic TV. This is the range of themes deck-visuals matches its visuals to. Every name, number and diagram is invented. Open any one in full.</p>
+    <p class="count">6 demo decks · 18 slides · all content invented</p>
+    <a class="cue" href="#arch">Scroll ↓</a>
+  </div>
+</header>
+
+<main>
+<section class="chapter" id="arch" data-bg="#0a0d10" data-ink="#eef3f5" data-dim="#93a7b0" aria-labelledby="arch-t"
+  style="--prev:#0e1013;--bg:#0a0d10;--ink:#eef3f5;--dim:#93a7b0;--accent:#57c7d4;--panel:#10151a;--disp:'Archivo', system-ui, sans-serif;--dispw:800;--caps:uppercase">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">01</span> / 06 · Architecture · demo deck</p>
+      <h2 id="arch-t">The Planet Express Standard</h2>
+      <p class="desc">Futurama as a documentation standard: Galaxy, Ship, Package. A dark blueprint theme: cyan for the galaxy, green for the ship, amber for the package.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#57c7d4" title="#57c7d4"><span class="sr">#57c7d4</span></li><li style="--c:#78d19a" title="#78d19a"><span class="sr">#78d19a</span></li><li style="--c:#e8a33d" title="#e8a33d"><span class="sr">#e8a33d</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Archivo · IBM Plex</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/arch.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/arch-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Planet Express Standard: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/arch-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Planet Express Standard: slide 2, Three layers. One question each."><figcaption>Slide 2 · Three layers. One question each.</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/arch-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Planet Express Standard: slide 3, Same diagram, two checks."><figcaption>Slide 3 · Same diagram, two checks.</figcaption></figure></div>
+  </div>
+</section>
+<section class="chapter chapter--flip" id="infra" data-bg="#0a1020" data-ink="#e8f1ff" data-dim="#8aa0c0" aria-labelledby="infra-t"
+  style="--prev:#0a0d10;--bg:#0a1020;--ink:#e8f1ff;--dim:#8aa0c0;--accent:#58d8e8;--panel:#101a30;--disp:'Barlow Condensed', system-ui, sans-serif;--dispw:700;--caps:uppercase">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">02</span> / 06 · Operations · demo deck</p>
+      <h2 id="infra-t">Starship Vision</h2>
+      <p class="desc">Star Trek: one warp core for four decks. A navy stage, condensed capitals, cyan highlights, and red for what breaks.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#58d8e8" title="#58d8e8"><span class="sr">#58d8e8</span></li><li style="--c:#ff5a6e" title="#ff5a6e"><span class="sr">#ff5a6e</span></li><li style="--c:#0a1020" title="#0a1020"><span class="sr">#0a1020</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Oxanium · Barlow Condensed</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/infra.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/infra-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Starship Vision: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/infra-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Starship Vision: slide 2, One warp core, three claims"><figcaption>Slide 2 · One warp core, three claims</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/infra-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Starship Vision: slide 3, What changes per deck"><figcaption>Slide 3 · What changes per deck</figcaption></figure></div>
+  </div>
+</section>
+<section class="chapter" id="pawnee" data-bg="#0a1428" data-ink="#eaf0ff" data-dim="#8fa3c7" aria-labelledby="pawnee-t"
+  style="--prev:#0a1020;--bg:#0a1428;--ink:#eaf0ff;--dim:#8fa3c7;--accent:#f5b53a;--panel:#101d38;--disp:'Space Grotesk', system-ui, sans-serif;--dispw:700;--caps:none">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">03</span> / 06 · Release · demo deck</p>
+      <h2 id="pawnee-t">Pawnee</h2>
+      <p class="desc">Parks and Recreation: one signal for what is open, across every park. An indigo glow, an amber signal light, and timelines as the main diagram.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#f5b53a" title="#f5b53a"><span class="sr">#f5b53a</span></li><li style="--c:#5aa0ff" title="#5aa0ff"><span class="sr">#5aa0ff</span></li><li style="--c:#0a1428" title="#0a1428"><span class="sr">#0a1428</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Space Grotesk · Inter</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/pawnee.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/pawnee-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Pawnee: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/pawnee-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Pawnee: slide 2, It promotes toward the park"><figcaption>Slide 2 · It promotes toward the park</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/pawnee-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Pawnee: slide 3, The map should show where you are"><figcaption>Slide 3 · The map should show where you are</figcaption></figure></div>
+  </div>
+</section>
+<section class="chapter chapter--flip" id="loop" data-bg="#0a0b10" data-ink="#f3f5ee" data-dim="#9a9ea6" aria-labelledby="loop-t"
+  style="--prev:#0a1428;--bg:#0a0b10;--ink:#f3f5ee;--dim:#9a9ea6;--accent:#d8f858;--panel:#13151c;--disp:'Sora', system-ui, sans-serif;--dispw:700;--caps:none">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">04</span> / 06 · Automation · demo deck</p>
+      <h2 id="loop-t">The Dundie Loop</h2>
+      <p class="desc">The Office: automation teams opt into, not a tax they carry. A near-black stage, one lime accent, and a glow that follows the story.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#d8f858" title="#d8f858"><span class="sr">#d8f858</span></li><li style="--c:#0a0b10" title="#0a0b10"><span class="sr">#0a0b10</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Sora · Space Grotesk</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/loop.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/loop-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Dundie Loop: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/loop-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Dundie Loop: slide 2, A review that fixes, not just flags"><figcaption>Slide 2 · A review that fixes, not just flags</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/loop-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The Dundie Loop: slide 3, Safety, by Dwight"><figcaption>Slide 3 · Safety, by Dwight</figcaption></figure></div>
+  </div>
+</section>
+<section class="chapter" id="mono" data-bg="#f3efe6" data-ink="#141413" data-dim="#6b665b" aria-labelledby="mono-t"
+  style="--prev:#0a0b10;--bg:#f3efe6;--ink:#141413;--dim:#6b665b;--accent:#e83e12;--panel:#ffffff;--disp:'Fraunces', Georgia, serif;--dispw:600;--caps:none">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">05</span> / 06 · Guide · demo deck</p>
+      <h2 id="mono-t">One towel. One galaxy.</h2>
+      <p class="desc">The Hitchhiker&#x27;s Guide: a two-part case for travelling together. Cream and near-black halves, orange numerals, and an italic serif for the turn in each headline.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#e83e12" title="#e83e12"><span class="sr">#e83e12</span></li><li style="--c:#141413" title="#141413"><span class="sr">#141413</span></li><li style="--c:#f3efe6" title="#f3efe6"><span class="sr">#f3efe6</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Fraunces · IBM Plex Mono</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/mono.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/mono-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="One towel. One galaxy.: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/mono-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="One towel. One galaxy.: slide 2, Part 02: how we hitchhike"><figcaption>Slide 2 · Part 02: how we hitchhike</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/mono-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="One towel. One galaxy.: slide 3, Six towels, one decision"><figcaption>Slide 3 · Six towels, one decision</figcaption></figure></div>
+  </div>
+</section>
+<section class="chapter chapter--flip" id="perk" data-bg="#f1ebdf" data-ink="#1a1d3a" data-dim="#5d6070" aria-labelledby="perk-t"
+  style="--prev:#f3efe6;--bg:#f1ebdf;--ink:#1a1d3a;--dim:#5d6070;--accent:#1828d8;--panel:#fbf8f1;--disp:'Newsreader', Georgia, serif;--dispw:500;--caps:none">
+  <div class="chapter__glow" data-speed="-90" aria-hidden="true"></div>
+  <div class="chapter__inner">
+    <div class="chapter__copy" data-speed="22">
+      <p class="kicker"><span class="num">06</span> / 06 · Workshop · demo deck</p>
+      <h2 id="perk-t">Central Perk</h2>
+      <p class="desc">Friends: a workshop deck for a coffee shop and two apartments. Warm paper, blue ink, coral for what to look at, and diagrams in blue line work.</p>
+      <dl class="meta">
+        <div><dt>Palette</dt><dd><ul class="swatches"><li style="--c:#1828d8" title="#1828d8"><span class="sr">#1828d8</span></li><li style="--c:#e8512a" title="#e8512a"><span class="sr">#e8512a</span></li><li style="--c:#f1ebdf" title="#f1ebdf"><span class="sr">#f1ebdf</span></li></ul></dd></div>
+        <div><dt>Type</dt><dd>Newsreader · Hanken Grotesk</dd></div>
+      </dl>
+      <a class="open" href="showcase/decks/perk.html">Open the deck <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stack"><figure class="card card--back" data-speed="-28"><img src="showcase/img/perk-00.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Central Perk: slide 1, Cover"><figcaption>Slide 1 · Cover</figcaption></figure><figure class="card card--mid" data-speed="46"><img src="showcase/img/perk-01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Central Perk: slide 2, The map"><figcaption>Slide 2 · The map</figcaption></figure><figure class="card card--front" data-speed="120"><img src="showcase/img/perk-02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Central Perk: slide 3, Couch footprint"><figcaption>Slide 3 · Couch footprint</figcaption></figure></div>
+  </div>
+</section></main>
+
+<section class="outro" id="all" style="--prev:#f1ebdf">
+  <div class="outro__inner">
+    <h2>Open a deck in full.</h2>
+    <p class="lead">Each demo deck runs full-screen. Arrow keys move between slides, and Esc brings you back here.</p>
+    <div class="tiles"><a class="tile" href="showcase/decks/arch.html" style="--accent:#57c7d4"><img src="showcase/img/arch-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">The Planet Express Standard</span><span class="tile__m">3 slides · demo</span></a><a class="tile" href="showcase/decks/infra.html" style="--accent:#58d8e8"><img src="showcase/img/infra-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">Starship Vision</span><span class="tile__m">3 slides · demo</span></a><a class="tile" href="showcase/decks/pawnee.html" style="--accent:#f5b53a"><img src="showcase/img/pawnee-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">Pawnee</span><span class="tile__m">3 slides · demo</span></a><a class="tile" href="showcase/decks/loop.html" style="--accent:#d8f858"><img src="showcase/img/loop-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">The Dundie Loop</span><span class="tile__m">3 slides · demo</span></a><a class="tile" href="showcase/decks/mono.html" style="--accent:#e83e12"><img src="showcase/img/mono-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">One towel. One galaxy.</span><span class="tile__m">3 slides · demo</span></a><a class="tile" href="showcase/decks/perk.html" style="--accent:#1828d8"><img src="showcase/img/perk-01.jpg" width="1280" height="720" loading="lazy" alt=""><span class="tile__t">Central Perk</span><span class="tile__m">3 slides · demo</span></a></div>
+    <p class="foot">Every name, number and diagram on this page is invented: Futurama, Star Trek, Parks and Recreation, The Office, The Hitchhiker's Guide and Friends. The decks reuse real designs; the content is made up. Snapshots come from <code>docs/capture-slides.ts</code>.</p>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const narrow = matchMedia('(max-width: 860px)');
+  const layers = [...document.querySelectorAll('[data-speed]')].map((el) => ({
+    el, speed: Number(el.dataset.speed), host: el.closest('.chapter, .hero'),
+  }));
+  let queued = false;
+  const paint = () => {
+    queued = false;
+    if (narrow.matches) { layers.forEach(({ el }) => el.style.removeProperty('--py')); return; }
+    const vh = innerHeight;
+    const progress = new Map();
+    layers.forEach(({ el, speed, host }) => {
+      if (!progress.has(host)) {
+        const r = host.getBoundingClientRect();
+        progress.set(host, (r.top + r.height / 2 - vh / 2) / vh);
+      }
+      el.style.setProperty('--py', (progress.get(host) * speed).toFixed(1) + 'px');
+    });
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(paint); } };
+  if (!reduce) {
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue);
+    paint();
+  }
+
+  const dots = new Map([...document.querySelectorAll('.rail a')].map((a) => [a.dataset.for, a]));
+  const seen = new IntersectionObserver((entries) => {
+    entries.filter((e) => e.isIntersecting).forEach((e) => {
+      dots.forEach((a, id) => a.classList.toggle('is-active', id === e.target.id));
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  document.querySelectorAll('.chapter').forEach((c) => seen.observe(c));
+})();
+</script>
+</body>
+</html>

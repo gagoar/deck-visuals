@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Central Perk — demo deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000)}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000)}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff)}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff);transition:opacity .28s ease}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+img,video,canvas,svg{max-width:100%;max-height:100%}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+@media print{
+  html,body{width:1920px;height:auto;overflow:visible;background:#fff}
+  .deck-viewport{position:static;overflow:visible;background:#fff}
+  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
+  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
+  .slide:last-child{break-after:auto;page-break-after:auto}
+  .deck-controls{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+
+:root{
+  --paper:#F0EBDE; --paper-2:#E6E0CE;
+  --ink:#1F2BE0; --ink-soft:#5560E5;
+  --grid:rgba(31,43,224,.10); --faint:rgba(31,43,224,.18);
+  
+  --accent:#F0522F; --accent-soft:rgba(240,82,47,.16);
+  --stage-bg:#D8D2C0; --slide-bg:var(--paper);
+  --edge:80px; --padtop:120px; --padbot:130px;
+}
+
+.deck-stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(to right,var(--grid) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--grid) 1px,transparent 1px);
+  background-size:44px 44px;}
+.slide{color:var(--ink);font-family:'Hanken Grotesk',sans-serif}
+
+
+.hair-t,.hair-b{position:absolute;left:var(--edge);right:var(--edge);height:1.5px;background:var(--ink);z-index:6}
+.hair-t{top:28px}.hair-b{bottom:22px}
+.pagenum{position:absolute;right:var(--edge);bottom:52px;z-index:6;
+  font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--ink)}
+.navhint{position:absolute;left:var(--edge);bottom:52px;z-index:6;display:flex;align-items:center;gap:24px;
+  font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--ink)}
+.navhint .nh{opacity:.4}
+.navhint .wb{color:var(--ink);opacity:.62;text-decoration:none;
+  border-bottom:1px solid transparent;transition:color .12s,opacity .12s,border-color .12s}
+.navhint .wb:hover{color:var(--accent);opacity:1;border-bottom-color:var(--accent)}
+
+
+.slide a.lnk{color:var(--accent);text-decoration:none;border-bottom:1.5px solid var(--accent);
+  transition:background .12s}
+.slide a.lnk:hover{background:var(--accent-soft)}
+.slide a.lnk::after{content:" \2197";font-size:.82em}
+
+
+.mtx{width:100%;border-collapse:collapse;font-family:'Hanken Grotesk',sans-serif}
+.mtx th,.mtx td{text-align:left;padding:13px 14px;vertical-align:top;border-bottom:1px solid var(--faint)}
+.mtx thead th{font-family:'DM Mono',monospace;font-size:14px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink);border-bottom:1.5px solid var(--ink);padding-bottom:10px}
+.mtx tbody th{font-family:'DM Mono',monospace;font-weight:400;font-size:18px;color:var(--ink);white-space:nowrap}
+.mtx td{font-size:20px;line-height:1.34;color:var(--ink)}
+.mtx td b{font-weight:700}
+.mtx .hot{color:var(--accent);font-weight:700}
+.mtx .dim{opacity:.45}
+.mtx tbody tr:last-child th,.mtx tbody tr:last-child td{border-bottom:none}
+.mtx col.sep{border-left:1.5px solid var(--ink)}
+
+
+.micro{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.micro-s{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+.mono{font-family:'DM Mono',monospace;font-size:19px;letter-spacing:.04em;color:var(--ink)}
+.mono-c{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;color:var(--ink)}
+.serif{font-family:'Newsreader',Georgia,serif;font-weight:400;color:var(--ink)}
+.body{font-family:'Hanken Grotesk',sans-serif;font-weight:400;font-size:27px;line-height:1.5;color:var(--ink)}
+.lede{font-family:'Hanken Grotesk',sans-serif;font-weight:400;font-size:37px;line-height:1.38;color:var(--ink)}
+
+
+.frame{position:absolute;inset:var(--padtop) var(--edge) var(--padbot);z-index:5;
+  display:flex;flex-direction:column}
+.frame > .topbar{flex:0 0 auto}
+
+.frame > .split,.frame > .rows,.frame > .topowrap{flex:1 1 auto;align-content:center}
+
+.frame > .mtx{flex:0 0 auto;margin-block:auto}
+.frame > .cat,.frame > .mods{flex:0 0 auto}
+.frame > .topowrap{display:flex;flex-direction:column;justify-content:center}
+.frame > .split{align-items:center}
+.topbar{display:flex;justify-content:space-between;align-items:flex-end;
+  border-bottom:1.5px solid var(--ink);padding-bottom:20px;margin-bottom:44px}
+.topbar h2{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:90px;line-height:.95;margin:0;letter-spacing:-.005em}
+.topbar .tag{font-family:'DM Mono',monospace;font-size:18px;letter-spacing:.04em;padding-bottom:8px;white-space:nowrap;color:var(--accent)}
+
+
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:96px 1fr;gap:34px;align-items:start;
+  border-bottom:1px solid var(--faint);padding:22px 0}
+.row:last-child{border-bottom:0}
+.row .n{font-family:'DM Mono',monospace;font-size:19px;padding-top:11px;color:var(--accent);font-weight:500}
+.row h3{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:44px;line-height:1.04;margin:0 0 8px}
+.row p{margin:0;font-size:23px;line-height:1.45;max-width:1440px}
+.row p code{font-family:'DM Mono',monospace;font-size:21px;background:var(--grid);padding:1px 6px}
+
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.split.wide-l{grid-template-columns:1.35fr 1fr}
+.split.wide-r{grid-template-columns:1fr 1.35fr}
+
+
+.stats{display:grid;gap:0}
+.stat{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--faint);padding:24px 0;gap:26px}
+.stat:first-child{border-top:1.5px solid var(--ink)}
+.stat span{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:18px;letter-spacing:.14em;text-transform:uppercase}
+.stat b{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:62px;line-height:1;letter-spacing:-.015em}
+.stat b.sm{font-size:41px}
+
+
+.vbig{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:236px;color:var(--accent);line-height:.9;letter-spacing:-.015em;margin:0}
+.vbig.mid{font-size:150px}
+
+
+.callout{border:1.5px solid var(--ink);padding:38px 42px}
+.callout .micro{margin-bottom:16px;display:block}
+.callout p{margin:0;font-size:26px;line-height:1.48}
+.callout p+p{margin-top:16px}
+
+
+.glitch{position:absolute;right:0;top:0;bottom:0;width:var(--edge);z-index:2;pointer-events:none}
+.glitch i{position:absolute;right:0;display:block;background:var(--ink)}
+
+.qr{display:grid;grid-template-columns:repeat(8,11px);grid-template-rows:repeat(8,11px);gap:2px;
+  background:var(--paper);padding:4px;box-shadow:0 0 0 1.5px var(--paper)}
+.qr b{background:var(--ink);display:block}
+.qr b.o{background:var(--grid)}
+
+.coverfoot{display:flex;align-items:flex-end;flex-wrap:wrap;gap:18px 20px}
+.coverfoot .topolabel{margin:0}
+.coverfoot .qr{grid-template-columns:repeat(8,8px);grid-template-rows:repeat(8,8px)}
+
+
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center;
+  border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:34px 0;margin-bottom:26px}
+.vs .side{text-align:center}
+.vs .side b{display:block;font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:112px;line-height:.9;letter-spacing:-.02em}
+.vs .side.low b{color:var(--accent)}
+.vs .side span{display:block;font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:.16em;text-transform:uppercase;margin-top:12px}
+.vs .side em{display:block;font-style:normal;font-family:'DM Mono',monospace;font-size:15px;opacity:.6;margin-top:6px}
+.vs .mid{font-family:'DM Mono',monospace;font-size:17px;letter-spacing:.16em;text-transform:uppercase;opacity:.5}
+.vs.tight{padding:26px 0;margin-bottom:0}
+.vs.tight .side b{font-size:82px}
+
+
+.bars{display:flex;gap:26px;align-items:flex-end;height:300px}
+.bar{display:flex;flex-direction:column-reverse;gap:3px;flex:1}
+.bar i{display:block;height:11px;background:var(--grid)}
+.bar i.on{background:var(--ink)}
+.bar.hot i.on{background:var(--accent)}
+.barlab{margin-top:14px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.04em;text-align:center}
+
+
+.topo{width:100%;height:auto}
+.topo text{font-family:'DM Mono',monospace;font-size:18px;fill:var(--ink)}
+.topo text.lab{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase}
+.topo rect.unit{fill:var(--paper);stroke:var(--ink);stroke-width:1.5}
+.topo rect.zone{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:5 4;opacity:.5}
+.topo rect.warn{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.5}
+.topo rect.hot{fill:var(--accent);stroke:var(--accent);stroke-width:2}
+
+.topo rect.gap{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4}
+.topo text.on-hot{fill:var(--paper)}
+.topo path.acc{stroke:var(--accent);stroke-width:2.5}
+.topo line,.topo path{stroke:var(--ink);stroke-width:1.5;fill:none}
+.topo path.dash{stroke-dasharray:6 5;opacity:.6}
+
+
+.cover-body{position:absolute;left:var(--edge);top:196px;right:560px;z-index:5}
+.cover-body h1{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:180px;line-height:.9;letter-spacing:-.008em;margin:0}
+.cover-rule{height:1.5px;background:var(--ink);margin:44px 0 34px}
+.cover-index{position:absolute;right:var(--edge);top:220px;width:392px;z-index:5}
+
+
+.chapter{position:absolute;left:var(--edge);right:var(--edge);top:50%;transform:translateY(-50%);z-index:5}
+.chapter h2{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:126px;line-height:1;letter-spacing:-.005em;margin:0}
+
+
+
+.acc{color:var(--accent)}
+mark{background:var(--accent-soft);color:var(--ink);padding:1px 5px}
+b.hot{color:var(--accent)}
+.rule-acc{height:5px;background:var(--accent);width:96px;margin-bottom:22px}
+
+
+.inv{background:var(--ink);color:var(--paper);padding:38px 42px}
+.inv .micro,.inv .micro-s{color:var(--paper);opacity:.72}
+.inv p{color:var(--paper);font-size:26px;line-height:1.48;margin:0}
+.inv p+p{margin-top:16px}
+.inv .micro{margin-bottom:16px;display:block}
+.inv .fig{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:104px;line-height:.9;
+  letter-spacing:-.02em;color:#fff;display:block;margin-bottom:16px}
+.inv b{color:#fff}
+.inv code{background:rgba(240,235,222,.18);color:#fff;font-family:'DM Mono',monospace;font-size:23px;padding:1px 6px}
+.inv.hot{background:var(--accent)}
+.inv.hot .micro{color:#fff;opacity:.8}
+
+
+.callout.flag{border-color:var(--accent);border-left-width:7px}
+.callout.flag .micro{color:var(--accent)}
+
+
+.dim{opacity:.62}
+
+
+.stat b.hot{color:var(--accent)}
+.stat.lead{border-bottom-color:var(--accent)}
+.stat.lead b{color:var(--accent)}
+
+
+.topolabel{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px;margin:0}
+.topolabel .arch{background:var(--ink);color:var(--paper);padding:16px 26px;display:flex;flex-direction:column;justify-content:center}
+.topolabel .arch b{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:52px;line-height:1;letter-spacing:-.01em;color:#fff}
+.topolabel .arch span{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.7;margin-top:7px}
+.topolabel .plus{font-family:'Newsreader',Georgia,serif;font-size:40px;align-self:center;color:var(--accent);padding:0 2px}
+.topolabel .mod{border:1.5px solid var(--accent);color:var(--accent);padding:16px 22px;display:flex;flex-direction:column;justify-content:center}
+.topolabel .mod b{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;letter-spacing:.02em}
+.topolabel .mod span{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.75;margin-top:6px}
+
+.topolabel .arch b s{text-decoration:line-through;text-decoration-thickness:4px;
+  text-decoration-color:var(--accent);text-decoration-skip-ink:none;
+  font:inherit;color:inherit}
+.topolabel .arch .rec{opacity:.62;letter-spacing:.14em}
+.topolabel.sm .arch b{font-size:32px}.topolabel.sm .mod b{font-size:15px}
+.topolabel.sm .arch,.topolabel.sm .mod{padding:11px 17px}
+
+
+
+.shapes{display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1.5px solid var(--ink);border-left:1.5px solid var(--ink)}
+.shapes .sh{border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);
+  padding:13px 16px 8px}
+.shapes .sh .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.shapes .sh .tok{font-family:'DM Mono',monospace;font-size:20px;font-weight:500}
+.shapes .sh .nm{font-family:'Newsreader',Georgia,serif;font-size:20px;opacity:.78}
+.shapes .sh svg{display:block;width:100%;height:auto}
+.shapes 
+.sh.near{background:var(--accent-soft);box-shadow:inset 0 0 0 2.5px var(--accent)}
+.sh.near .tok{color:var(--accent)}
+.sh.near .flag,.cat .c.near .flag{display:block;font-family:'DM Mono',monospace;
+  font-size:12px;letter-spacing:.05em;color:var(--accent);margin-top:2px}
+.cat .c.near{background:var(--accent-soft);box-shadow:inset 0 0 0 2.5px var(--accent)}
+.cat .c.near .tok{color:var(--accent)}
+.sh.on{background:var(--accent)}
+.shapes .sh.on .tok,.shapes .sh.on .nm{color:#fff;opacity:1}
+.shapes .sh.on svg .u{fill:var(--accent);stroke:#fff}
+.shapes .sh.on svg text{fill:#fff}
+.shapes .sh.on svg .ln{stroke:#fff}
+.shapes svg .u{fill:var(--paper);stroke:var(--ink);stroke-width:1.5}
+.shapes svg .s{fill:var(--paper);stroke:var(--ink);stroke-width:1.5;rx:13}
+.shapes svg text{font-family:'Hanken Grotesk',sans-serif;font-size:13px;font-weight:600;fill:var(--ink)}
+.shapes svg .ln{stroke:var(--ink);stroke-width:1.4;fill:none}
+.shapes svg .ln.dot{stroke-dasharray:4 3;opacity:.6}
+
+
+.cat{display:grid;grid-template-columns:repeat(4,1fr);gap:0 0;border-top:1.5px solid var(--ink);border-left:1.5px solid var(--ink)}
+.cat .c{border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:13px 18px;min-height:88px}
+.cat .c .tok{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;display:block}
+.cat .c .nm{font-family:'Newsreader',Georgia,serif;font-size:25px;line-height:1.1;display:block;margin-top:3px}
+.cat .c .ds{font-size:14px;line-height:1.32;opacity:.66;margin-top:7px;display:block}
+.cat .c.on{background:var(--accent)}
+.cat .c.on .tok,.cat .c.on .nm,.cat .c.on .ds{color:#fff;opacity:1}
+.cat .c.on .ds{opacity:.88}
+.mods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.mods .m{border:1.5px solid var(--ink);padding:10px 15px}
+.mods .m b{font-family:'DM Mono',monospace;font-size:18px;display:block}
+.mods .m span{font-size:14px;line-height:1.32;opacity:.66;display:block;margin-top:5px}
+.mods .m.on{background:var(--accent);border-color:var(--accent)}
+.mods .m.on b,.mods .m.on span{color:#fff;opacity:1}
+
+
+.cmp{width:100%;border-collapse:collapse;font-family:'Hanken Grotesk',sans-serif}
+.cmp td{border-bottom:1px solid var(--faint);padding:14px 10px;font-size:20px}
+.cmp tr:first-child td{font-weight:700;border-bottom:1.5px solid var(--ink);font-size:18px;
+  letter-spacing:.1em;text-transform:uppercase}
+.cmp tr td:first-child{font-weight:600;font-size:17px;letter-spacing:.1em;text-transform:uppercase;opacity:.72}
+.cmp tr:last-child td{border-bottom:0}
+
+
+.rv{opacity:0;transform:translateY(18px)}
+.slide.active .rv{animation:rise .72s cubic-bezier(.2,.75,.3,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+
+
+.deck-controls{display:flex;align-items:center;gap:2px;
+  background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;
+  padding:4px;box-shadow:0 2px 0 var(--ink);font-family:'DM Mono',monospace}
+.deck-controls button{appearance:none;-webkit-appearance:none;background:none;border:0;
+  cursor:pointer;font:inherit;font-size:22px;line-height:1;color:var(--ink);
+  width:46px;height:38px;border-radius:999px;display:grid;place-items:center;
+  transition:background .12s,color .12s}
+.deck-controls button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+.deck-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.deck-controls button:disabled{opacity:.26;cursor:default}
+.deck-controls .cnt{font-size:13px;letter-spacing:.09em;color:var(--ink);
+  min-width:78px;text-align:center;user-select:none}
+@media (max-width:700px){
+  .deck-controls button{width:56px;height:46px;font-size:26px}
+  .deck-controls .cnt{min-width:88px;font-size:14px}
+}
+#editToggle{position:fixed;left:10px;top:10px;z-index:2000;width:26px;height:26px;border:1.5px solid var(--ink);
+  background:var(--paper);cursor:pointer;opacity:0;transition:opacity .2s;font:600 11px 'Hanken Grotesk',sans-serif;color:var(--ink)}
+#editToggle:hover,body.editing #editToggle{opacity:1}
+body.editing [contenteditable]{outline:1px dashed var(--ink);outline-offset:3px}
+
+</style>
+</head>
+<body>
+<button id="editToggle" title="Toggle inline editing (E)">E</button>
+<div class="deck-viewport"><div class="deck-stage" id="stage">
+
+<section class="slide active">
+<div class="hair-t"></div><div class="hair-b"></div><div class="navhint"><a class="wb" href="../../showcase.html">← Showcase</a><span class="nh">← → or the buttons below</span></div><div class="pagenum">01 / 03</div>
+<div class="glitch" data-seed="11"></div>
+<div class="micro rv" style="position:absolute;left:var(--edge);top:76px;z-index:5;animation-delay:.05s">Session 06 of 16 · Central Perk · Infrastructure</div>
+<div class="micro-s rv" style="position:absolute;right:var(--edge);top:78px;z-index:5;animation-delay:.05s">Thu 22 Sep · 9:00–10:00</div>
+<div class="cover-body">
+  <h1 class="rv" style="animation-delay:.14s">Central<br>Perk</h1>
+  <div class="cover-rule rv" style="animation-delay:.30s"></div>
+  <p class="lede rv" style="animation-delay:.38s">A coffee pair held together by a shared couch — and a second apartment that is <b>built but unoccupied</b>.</p>
+  <div class="coverfoot rv" style="margin-top:38px;animation-delay:.5s">
+    <div class="topolabel sm"><div class="arch"><b>COUCH</b><span>Orange Couch</span></div><div class="plus">+</div><div class="mod"><b>two-couch-dr</b><span>modifier</span></div><div class="plus">+</div><div class="mod"><b>per-friend-shards</b><span>modifier</span></div><div class="plus">+</div><div class="mod"><b>shared-couch-coupling</b><span>modifier</span></div></div>
+    <div class="qr" data-seed="14"></div>
+  </div>
+</div>
+<div class="cover-index"><div class="stats"><div class="stat rv" style="animation-delay:0.45s"><span>Archetype</span><b class="sm">sofa</b></div><div class="stat rv" style="animation-delay:0.51s"><span>Nodes</span><b class="sm">6</b></div><div class="stat rv" style="animation-delay:0.57s"><span>Edges</span><b class="sm">14</b></div><div class="stat rv" style="animation-delay:0.63s"><span>Named flows</span><b class="sm">9</b></div><div class="stat rv" style="animation-delay:0.69s"><span>Cafés</span><b class="sm">2</b></div><div class="stat rv lead" style="animation-delay:0.75s"><span>Guests at Joey's</span><b class="sm hot">4 of 6</b></div></div></div>
+<div class="micro-s rv" style="position:absolute;right:var(--edge);bottom:150px;z-index:5;animation-delay:.9s">Ross Geller · Chandler</div>
+</section>
+<section class="slide">
+<div class="hair-t"></div><div class="hair-b"></div><div class="navhint"><a class="wb" href="../../showcase.html">← Showcase</a><span class="nh">← → or the buttons below</span></div><div class="pagenum">02 / 03</div>
+<div class="frame">
+  <div class="topbar"><h2>The Map</h2><div class="tag">11 rooms · 17 doors · 9 flows</div></div>
+  <div class="topowrap">
+    <div class="rv" style="animation-delay:.14s"><svg class="topo" viewBox="0 0 1760 470" preserveAspectRatio="xMidYMid meet"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1F2BE0" stroke="none"/></marker></defs>
+<rect class="zone" x="0" y="0" width="1760" height="92"/><text class="lab" x="12" y="22">public / front — both apartments</text>
+<rect class="unit" x="40" y="26" width="190" height="48"/><text x="135.0" y="42.0" text-anchor="middle">front-door</text><text x="135.0" y="66.0" text-anchor="middle" style="font-size:12px;opacity:.7">Monica's key · lock</text>
+<rect class="unit" x="250" y="26" width="190" height="48"/><text x="345.0" y="42.0" text-anchor="middle">fire-escape</text><text x="345.0" y="66.0" text-anchor="middle" style="font-size:12px;opacity:.7">Balcony ingress</text>
+<rect class="unit" x="470" y="26" width="180" height="48"/><text x="560.0" y="42.0" text-anchor="middle">hallway</text><text x="560.0" y="66.0" text-anchor="middle" style="font-size:12px;opacity:.7">the nosy neighbour seam</text>
+<rect class="unit" x="680" y="26" width="150" height="48"/><text x="755.0" y="50.0" text-anchor="middle">kitchen</text>
+<rect class="unit" x="850" y="26" width="150" height="48"/><text x="925.0" y="50.0" text-anchor="middle">pantry</text>
+
+<rect class="zone" x="0" y="118" width="1080" height="150"/><text class="lab" x="12" y="140">room / closet pair</text>
+<rect class="unit" x="40" y="150" width="230" height="88"/><text x="155.0" y="186.0" text-anchor="middle">monica-apt</text><text x="155.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">Apt 20 · Soup · peak 18-30</text>
+<rect class="unit" x="300" y="150" width="230" height="88"/><text x="415.0" y="186.0" text-anchor="middle">joey-apt</text><text x="415.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">Apt 19 · Foosball</text>
+<rect class="warn" x="570" y="150" width="220" height="88"/><text x="680.0" y="186.0" text-anchor="middle">roommate pair</text><text x="680.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">APT 20 ONLY</text>
+<rect class="warn" x="820" y="150" width="230" height="88"/><text x="935.0" y="186.0" text-anchor="middle">4 of 6 friends</text><text x="935.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">APT 20 ONLY</text>
+
+<rect class="zone" x="1130" y="118" width="630" height="150"/><text class="lab" x="1142" y="140">data — shared on both couches</text>
+<rect class="warn" x="1170" y="150" width="270" height="88"/><text x="1305.0" y="186.0" text-anchor="middle">couch-orange</text><text x="1305.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">2 cushions · both apts</text>
+<rect class="unit" x="1470" y="150" width="250" height="88"/><text x="1595.0" y="186.0" text-anchor="middle">coffee-pot</text><text x="1595.0" y="210.0" text-anchor="middle" style="font-size:12px;opacity:.7">2 mugs / 1 mug</text>
+
+<rect class="zone" x="0" y="294" width="1760" height="150"/><text class="lab" x="12" y="316">data</text>
+<rect class="unit" x="40" y="326" width="268" height="88"/><text x="174.0" y="362.0" text-anchor="middle">central-perk-db</text><text x="174.0" y="386.0" text-anchor="middle" style="font-size:12px;opacity:.7">per-guest order tabs</text>
+<rect class="unit" x="334" y="326" width="236" height="88"/><text x="452.0" y="362.0" text-anchor="middle">Gunther</text><text x="452.0" y="386.0" text-anchor="middle" style="font-size:12px;opacity:.7">orders + tips → DB</text>
+<rect class="unit" x="596" y="326" width="214" height="88"/><text x="703.0" y="362.0" text-anchor="middle">fridge-main</text><text x="703.0" y="386.0" text-anchor="middle" style="font-size:12px;opacity:.7">apt 20 only</text>
+<rect class="unit" x="836" y="326" width="248" height="88"/><text x="960.0" y="362.0" text-anchor="middle">leftovers / jobs / jam</text><text x="960.0" y="386.0" text-anchor="middle" style="font-size:12px;opacity:.7">apt 20 only</text>
+<rect class="unit" x="1110" y="326" width="196" height="88"/><text x="1208.0" y="362.0" text-anchor="middle">rumor-bus</text><text x="1208.0" y="386.0" text-anchor="middle" style="font-size:12px;opacity:.7">apt 20 only</text>
+<rect class="unit" x="1332" y="326" width="202" height="88"/><text x="1433.0" y="370.0" text-anchor="middle">cupboard + cabinet</text>
+<rect class="unit" x="1560" y="326" width="160" height="88"/><text x="1640.0" y="370.0" text-anchor="middle">lockbox</text>
+
+<path d="M135 74 L135 150" marker-end="url(#a)"/>
+<path d="M560 74 V112 H415 V150" marker-end="url(#a)"/><path d="M560 74 V124 H155 V150" marker-end="url(#a)"/>
+<path d="M155 238 L150 326" marker-end="url(#a)"/><path d="M415 238 L230 326" marker-end="url(#a)"/><path class="dash" d="M480 238 L452 326" marker-end="url(#a)"/>
+<path d="M230 238 V276 H1240 V238" marker-end="url(#a)"/><path d="M490 238 V286 H1330 V238" marker-end="url(#a)"/>
+<path class="dash" d="M935 238 V276 H1208 V326" marker-end="url(#a)"/>
+</svg></div>
+    <div class="rv mono" style="animation-delay:.4s;margin-top:30px;display:flex;gap:44px;flex-wrap:wrap"><span>▭ a room that locks on its own</span><span>▨ one apartment only — nothing at Joey's</span><span>⇢ dashed = inferred door</span><span style="color:var(--accent)">⬚ in the script, not in the Sketch — not counted above</span><span>full graph: friends/docs/the-map</span></div>
+  </div>
+</div>
+</section>
+<section class="slide">
+<div class="hair-t"></div><div class="hair-b"></div><div class="navhint"><a class="wb" href="../../showcase.html">← Showcase</a><span class="nh">← → or the buttons below</span></div><div class="pagenum">03 / 03</div>
+<div class="frame">
+  <div class="topbar"><h2>Couch footprint</h2><div class="tag">what is shared, and what is not</div></div>
+  <div class="split wide-r">
+    <div class="rv" style="animation-delay:.14s">
+      <p class="vbig">4<span style="font-size:.42em"> of 6</span></p>
+      <div class="micro" style="margin-top:22px">friends who made it to Joey's</div>
+    </div>
+    <div class="rv" style="animation-delay:.28s">
+      <p class="lede"><b>Two-apartment DR is true only of the main couch.</b></p>
+      <p class="body" style="margin-top:22px">Shared: both doors, the hallway and the pantry, monica-apt, joey-apt, <code>central-perk-db</code>.</p>
+      <p class="body" style="margin-top:16px"><b>Four made it across:</b> <code>Ross</code>,
+      <code>Rachel</code>, <code>Phoebe</code> and <code>Chandler</code>.</p>
+      <p class="body" style="margin-top:16px"><b>The other two did not</b> — a lobster, a monkey named Marcel, and the entire Thanksgiving turkey saga; none of it fits through the door to <code>joey-apt</code>, or the fire escape.</p></div>
+  </div>
+</div>
+</section>
+</div></div>
+<div class="deck-controls">
+  <button id="navPrev" type="button" aria-label="Previous slide" title="Previous (←)">&#8249;</button>
+  <span class="cnt" id="navCount">01 / 03</span>
+  <button id="navNext" type="button" aria-label="Next slide" title="Next (→)">&#8250;</button>
+</div>
+<script>
+
+
+function fitStage(){
+  var s=Math.min(innerWidth/1920,innerHeight/1080);
+  var st=document.getElementById('stage');
+  st.style.transform='translate('+((innerWidth-1920*s)/2)+'px,'+((innerHeight-1080*s)/2)+'px) scale('+s+')';
+}
+addEventListener('resize',fitStage);fitStage();
+
+
+var slides=[].slice.call(document.querySelectorAll('.slide')),cur=0;
+function pad(n){return (n<10?'0':'')+n;}
+function syncNav(){
+  var c=document.getElementById('navCount');
+  if(!c)return;
+  c.textContent=pad(cur+1)+' / '+pad(slides.length);
+  document.getElementById('navPrev').disabled=(cur===0);
+  document.getElementById('navNext').disabled=(cur===slides.length-1);
+}
+function go(i){
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');
+  cur=i;slides[cur].classList.add('active');
+  location.hash='s'+(cur+1);
+  syncNav();
+}
+addEventListener('keydown',function(e){
+  if(document.body.classList.contains('editing'))return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  if(e.key==='Home')go(0);
+  if(e.key==='End')go(slides.length-1);
+  if(e.key==='e'||e.key==='E')toggleEdit();
+});
+
+var tx=0;
+addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;},{passive:true});
+addEventListener('touchend',function(e){
+  var d=e.changedTouches[0].clientX-tx;
+  if(Math.abs(d)>60)go(d<0?cur+1:cur-1);
+},{passive:true});
+
+if(location.hash){var n=parseInt(location.hash.replace('#s',''),10);if(n>0&&n<=slides.length){slides[0].classList.remove('active');cur=n-1;slides[cur].classList.add('active');}}
+
+document.getElementById('navPrev').addEventListener('click',function(){go(cur-1);});
+document.getElementById('navNext').addEventListener('click',function(){go(cur+1);});
+syncNav();
+
+
+document.querySelectorAll('.glitch').forEach(function(g){
+  var y=120,seed=parseInt(g.dataset.seed||'1',10);
+  function rnd(){seed=(seed*9301+49297)%233280;return seed/233280;}
+  for(var i=0;i<24;i++){
+    var b=document.createElement('i');
+    var w=[10,18,30,46,62][Math.floor(rnd()*5)];
+    b.style.width=w+'px';b.style.height=(6+rnd()*15|0)+'px';b.style.top=y+'px';
+    b.style.opacity=(.22+rnd()*.72).toFixed(2);
+    g.appendChild(b);y+=(20+rnd()*26|0);
+    if(y>980)break;
+  }
+});
+document.querySelectorAll('.qr').forEach(function(q){
+  var seed=parseInt(q.dataset.seed||'7',10);
+  function rnd(){seed=(seed*9301+49297)%233280;return seed/233280;}
+  for(var i=0;i<64;i++){var b=document.createElement('b');if(rnd()>.5)b.className='o';q.appendChild(b);}
+});
+
+
+function toggleEdit(){
+  var on=document.body.classList.toggle('editing');
+  document.querySelectorAll('.slide h1,.slide h2,.slide h3,.slide p,.slide span,.slide b,.slide td')
+    .forEach(function(el){on?el.setAttribute('contenteditable','true'):el.removeAttribute('contenteditable');});
+  document.getElementById('editToggle').textContent=on?'✓':'E';
+}
+document.getElementById('editToggle').addEventListener('click',toggleEdit);
+addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&e.key==='s'&&document.body.classList.contains('editing')){
+    e.preventDefault();
+    var blob=new Blob(['<!DOCTYPE html>\n'+document.documentElement.outerHTML],{type:'text/html'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=document.title.replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.html';a.click();
+  }
+});
+
+</script>
+</body>
+</html>
