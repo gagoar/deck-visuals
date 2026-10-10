@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1200px;height:630px;position:relative;overflow:hidden;background:#1b1f22 url(bg.jpg) center/cover;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#fff}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,31,34,.94) 0%,rgba(27,31,34,.82) 55%,rgba(27,31,34,.55) 100%)}
+.copy{position:absolute;left:96px;top:0;bottom:0;width:780px;display:flex;flex-direction:column;justify-content:center}
+.eyebrow{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:26px}
+h1{font-weight:650;font-size:112px;letter-spacing:-.025em;line-height:1;margin-bottom:30px}
+p{font-size:38px;line-height:1.25;color:rgba(255,255,255,.78);white-space:nowrap}
+.cmd{position:absolute;left:96px;bottom:54px;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:24px;color:rgba(255,255,255,.45)}
+.mark{position:absolute;right:80px;top:145px;width:340px;height:340px}
+</style></head><body>
+<div class="shade"></div>
+<div class="copy"><div class="eyebrow">Claude Code plugin</div><h1>deck-visuals</h1><p>Your deck already reads. Make it land.</p></div>
+<svg class="mark" viewBox="0 0 64 64"><rect x="9" y="13" width="46" height="38" rx="5" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="3"/><path d="M28 33L21 40M36 33L43 40" stroke="#7c8288" stroke-width="2.5" stroke-linecap="round"/><path d="M32 19L40 27L32 35L24 27Z" fill="#1b1f22" stroke="#2894eb" stroke-width="3" stroke-linejoin="round"/><path d="M21 37L25 41L21 45L17 41Z" fill="#d95926" stroke="#d95926" stroke-width="1.5" stroke-linejoin="round"/><path d="M43 37L47 41L43 45L39 41Z" fill="#199e70" stroke="#199e70" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<div class="cmd">/plugin install deck-visuals@gago-plugins</div>
+</body></html>
