@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One towel. One galaxy. — demo deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+
+:root{--paper:#f3efe6;--ink:#16140f;--acc:#ff4a1c;--slide-bg:var(--paper);--stage-bg:#16140f;
+  --grid:#16140f12;--disp:'Fraunces',serif;--mono:'IBM Plex Mono',monospace;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}
+body{font-family:var(--mono);color:var(--ink)}
+
+.slide{background-color:var(--paper);color:var(--ink);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:60px 60px}
+
+.slide.p2{--paper:#16140f;--ink:#f3efe6;--grid:#f3efe612}
+.top{position:absolute;left:120px;right:120px;top:70px;display:flex;justify-content:space-between;font-size:24px;letter-spacing:4px;text-transform:uppercase}
+.top b{color:var(--acc);font-weight:500}
+
+h1{position:absolute;left:120px;top:300px;margin:0;font:600 200px/.95 var(--disp);letter-spacing:-6px}
+h1 i,h2 i{color:var(--acc);font-weight:700}
+.sub{position:absolute;left:126px;top:770px;width:900px;margin:0;font-size:32px;line-height:1.5}
+h2{margin:0;font:600 112px/1.02 var(--disp);letter-spacing:-4px}
+.col{position:absolute;left:120px;top:150px;width:960px}
+.col.wide{width:1500px}
+.lede{margin:34px 0 0;font-size:30px;line-height:1.5;max-width:900px}
+.col.wide .lede{max-width:1500px}
+
+.art{position:absolute}
+.art.side{left:1120px;top:150px;width:700px;height:780px}
+.art.wide{left:120px;top:540px;width:1680px;height:420px}
+.hero{position:absolute;right:60px;top:180px;width:760px;height:760px}
+
+svg text{font-family:var(--mono);fill:var(--ink)}
+.t{font-size:24px}.halo{paint-order:stroke;stroke:var(--paper);stroke-width:10px;stroke-linejoin:round}.c{font-size:20px;letter-spacing:3px;text-transform:uppercase}.c:not(.a){fill-opacity:.75}
+.a{fill:var(--acc)!important}.tw{fill:var(--paper)!important;font-family:var(--disp);font-weight:600}
+.big{font:600 56px var(--disp)}.st{font:600 46px var(--disp)}.ss{font-size:22px;fill-opacity:.8}
+.aiT{font:italic 700 44px var(--disp);fill:var(--acc)}
+.pr{font-size:36px}.pr.a{font-weight:500}.pr.b{font-weight:500}
+.bx{fill:var(--paper);stroke:var(--ink);stroke-width:3}.bxa{fill:var(--acc);stroke:var(--ink);stroke-width:3}
+.dash{stroke-dasharray:10 8}.dashA{stroke:var(--acc);stroke-dasharray:8 6}
+.nd{fill:var(--paper);stroke:var(--ink);stroke-width:3}.hub{fill:var(--acc)}.hubs{fill:var(--acc);stroke:none}
+.ring{fill:none;stroke:var(--acc);stroke-width:3;stroke-dasharray:10 8}
+.ln{stroke:var(--ink);stroke-width:2;fill:none;stroke-dasharray:6 8}.ln.a{stroke:var(--acc);fill:none}
+.ai{stroke:var(--acc);stroke-width:3;fill:none}
+
+.orow{position:absolute;left:120px;right:120px;height:130px;display:flex;align-items:center;gap:60px;border-top:2px solid var(--ink)}
+.ob{width:520px;font:italic 600 46px/1.1 var(--disp)}
+.oa{flex:1;font-size:28px;line-height:1.45}
+.ov{width:220px;text-align:center;font-size:24px;letter-spacing:4px;text-transform:uppercase;padding:14px 0;border:3px solid var(--ink)}
+.ov.no{background:var(--acc);color:var(--paper);border-color:var(--ink)}
+
+.lv{position:absolute;left:120px;top:190px;margin:0;width:1000px;border:3px solid var(--ink);box-shadow:16px 16px 0 var(--acc);background:var(--paper)}
+.lv img{display:block;width:100%;height:auto;object-fit:contain}
+.lvt{position:absolute;left:1220px;top:360px;width:580px}
+.lvt p{margin:18px 0 0;font:italic 700 64px/1.08 var(--disp);letter-spacing:-2px}
+.lvc{position:absolute;left:0;right:0;top:130px;bottom:110px;display:flex;align-items:center;justify-content:center}
+.lvc .lv{position:static}
+
+.top span.pill{background:var(--acc);color:var(--paper);padding:8px 22px;font-weight:500}
+.divider .dnum{position:absolute;left:90px;top:170px;font:700 640px/1 var(--disp);color:var(--acc);letter-spacing:-24px}
+.divider .dt{left:980px;top:330px;font-size:150px;line-height:1}
+.divider .dsub{position:absolute;left:986px;top:690px;width:800px;margin:0;font-size:34px;line-height:1.5}
+.wrow{position:absolute;left:120px;right:120px;height:130px;display:flex;align-items:center;gap:50px;border-top:2px solid var(--ink)}
+.wn{font:700 100px var(--disp);color:var(--acc);width:190px}
+.wt{width:640px;font:italic 600 58px/1.05 var(--disp)}
+.wd{flex:1;font-size:30px;line-height:1.4}
+.wfoot{position:absolute;left:120px;top:830px;font:italic 700 56px var(--disp);color:var(--acc)}
+.thx{position:static;font:600 130px/1 var(--disp);letter-spacing:-4px;margin:0}
+.by{margin:30px 0 0;font-size:36px}
+.thx i{color:var(--acc);font-weight:700}
+
+.r{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:var(--d,0s)}
+.slide.visible .r{opacity:1;transform:none}
+.slide.visible .ln{animation:conv 2.2s ease-out both}
+@keyframes conv{from{stroke-dashoffset:400;opacity:0}}
+.slide.visible .hub{animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.7}}
+
+.chrome{position:absolute;right:120px;bottom:50px;z-index:50;display:flex;align-items:center;gap:22px;font-size:24px;opacity:.55}
+.chrome:hover{opacity:1}
+.home{background:none;border:0;padding:0 4px;cursor:pointer;font:500 30px var(--mono);color:var(--ink);line-height:1}
+.home:hover{color:var(--acc)}
+.chrome.hidden .home{visibility:hidden}
+.credit{position:absolute;left:120px;bottom:54px;z-index:50;font-size:20px;letter-spacing:1px;opacity:.5}
+.credit.inv{color:#f3efe6}
+.chrome.inv,.chrome.inv .home{color:#f3efe6}.chrome.inv .home:hover{color:var(--acc)}
+
+</style>
+</head>
+<body>
+<div class="deck-viewport">
+  <main class="deck-stage" id="deckStage">
+
+<section class="slide active" data-n="1">
+  <div class="top"><span>Towel guide</span><b>Towel × Galaxy</b></div>
+  <svg class="hero r" style="--d:.2s" viewBox="0 0 760 760" aria-hidden="true"><line class="ln" style="animation-delay:0.0s" x1="674" y1="440" x2="380" y2="380"/><circle class="nd" cx="674" cy="440" r="16"/><line class="ln" style="animation-delay:0.08s" x1="643" y1="579" x2="380" y2="380"/><circle class="nd" cx="643" cy="579" r="16"/><line class="ln" style="animation-delay:0.16s" x1="544" y1="700" x2="380" y2="380"/><circle class="nd" cx="544" cy="700" r="16"/><line class="ln" style="animation-delay:0.24s" x1="387" y1="680" x2="380" y2="380"/><circle class="nd" cx="387" cy="680" r="16"/><line class="ln" style="animation-delay:0.32s" x1="244" y1="681" x2="380" y2="380"/><circle class="nd" cx="244" cy="681" r="16"/><line class="ln" style="animation-delay:0.4s" x1="104" y1="611" x2="380" y2="380"/><circle class="nd" cx="104" cy="611" r="16"/><line class="ln" style="animation-delay:0.48s" x1="89" y1="454" x2="380" y2="380"/><circle class="nd" cx="89" cy="454" r="16"/><line class="ln" style="animation-delay:0.56s" x1="57" y1="314" x2="380" y2="380"/><circle class="nd" cx="57" cy="314" r="16"/><line class="ln" style="animation-delay:0.64s" x1="93" y1="163" x2="380" y2="380"/><circle class="nd" cx="93" cy="163" r="16"/><line class="ln" style="animation-delay:0.72s" x1="243" y1="113" x2="380" y2="380"/><circle class="nd" cx="243" cy="113" r="16"/><line class="ln" style="animation-delay:0.8s" x1="372" y1="50" x2="380" y2="380"/><circle class="nd" cx="372" cy="50" r="16"/><line class="ln" style="animation-delay:0.88s" x1="528" y1="52" x2="380" y2="380"/><circle class="nd" cx="528" cy="52" r="16"/><line class="ln" style="animation-delay:0.96s" x1="610" y1="187" x2="380" y2="380"/><circle class="nd" cx="610" cy="187" r="16"/><line class="ln" style="animation-delay:1.04s" x1="700" y1="299" x2="380" y2="380"/><circle class="nd" cx="700" cy="299" r="16"/><circle class="hub" cx="380" cy="380" r="38"/></svg>
+  <h1 class="r" style="--d:.05s">One towel.<br><i>One galaxy.</i></h1>
+  <p class="sub r" style="--d:.3s">Carried together. Simpler trips. A guide that sees the whole picture.</p>
+</section>
+<section class="slide p2 divider" data-n="15">
+  <div class="top"><span class="pill">Part 02 · How</span><b>Towel × Galaxy</b></div>
+  <div class="dnum r" style="--d:.05s">02</div>
+  <h1 class="r dt" style="--d:.25s">How<br><i>we hitchhike.</i></h1>
+  <p class="dsub r" style="--d:.4s">A guide for the whole galaxy.</p>
+</section>
+<section class="slide p2" data-n="17">
+  <div class="top"><span class="pill">Part 02 · How</span><b>Towel × Galaxy</b></div>
+  <div class="col ">
+    <h2 class="r" style="--d:.05s">Six towels.<br><i>One decision.</i></h2>
+    <p class="lede r" style="--d:.2s">A trip unifies when it matches on a towel. The more towels it matches, the stronger the case.</p>
+  </div>
+  <svg class="art side r" style="--d:.35s" viewBox="0 0 700 780" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#ff4a1c"/></marker></defs><line class="ln" style="animation-delay:0.0s" x1="350" y1="130" x2="350" y2="390"/><circle class="nd" cx="350" cy="130" r="22"/><text class="t halo" x="350" y="92" text-anchor="middle" >Vogons</text><line class="ln" style="animation-delay:0.1s" x1="575" y1="260" x2="350" y2="390"/><circle class="nd" cx="575" cy="260" r="22"/><text class="t halo" x="575" y="316" text-anchor="middle" >Babel fish</text><line class="ln" style="animation-delay:0.2s" x1="575" y1="520" x2="350" y2="390"/><circle class="nd" cx="575" cy="520" r="22"/><text class="t halo" x="575" y="576" text-anchor="middle" >Magrathea</text><line class="ln" style="animation-delay:0.30000000000000004s" x1="350" y1="650" x2="350" y2="390"/><circle class="nd" cx="350" cy="650" r="22"/><text class="t halo" x="350" y="706" text-anchor="middle" >Mice</text><line class="ln" style="animation-delay:0.4s" x1="125" y1="520" x2="350" y2="390"/><circle class="nd" cx="125" cy="520" r="22"/><text class="t halo" x="125" y="576" text-anchor="middle" >Answer: 42</text><line class="ln" style="animation-delay:0.5s" x1="125" y1="260" x2="350" y2="390"/><circle class="nd" cx="125" cy="260" r="22"/><text class="t halo" x="125" y="316" text-anchor="middle" >Don't Panic</text><circle class="hub" cx="350" cy="390" r="40"/></svg>
+</section>
+    <div class="credit" id="credit">by Ford Prefect 🫶</div>
+    <div class="chrome" id="chrome"><button class="home" id="home" aria-label="Back to start" title="Back to start">&#8249;&#8249;</button><span id="count"></span></div>
+  </main>
+</div>
+<script>
+
+(function(){
+  var stage=document.getElementById('deckStage'),slides=[].slice.call(document.querySelectorAll('.slide')),
+      count=document.getElementById('count'),chrome=document.getElementById('chrome'),cur=0;
+  function fit(){var k=Math.min(innerWidth/1920,innerHeight/1080);
+    stage.style.transform='translate('+(innerWidth-1920*k)/2+'px,'+(innerHeight-1080*k)/2+'px) scale('+k+')';}
+  function show(i,push){
+    cur=Math.max(0,Math.min(i,slides.length-1));
+    slides.forEach(function(s,j){s.classList.toggle('active',j===cur);s.classList.toggle('visible',j===cur);});
+    count.textContent=String(cur+1).padStart(2,'0')+' / '+slides.length;
+    chrome.classList.toggle('hidden',cur===0);chrome.classList.toggle('inv',slides[cur].classList.contains('p2'));document.getElementById('credit').classList.toggle('inv',slides[cur].classList.contains('p2'));
+    if(push!==false){history.replaceState(null,'','#'+(cur+1));}
+  }
+  function fromHash(){var n=parseInt(location.hash.slice(1),10);show(isNaN(n)?0:n-1,false);}
+  addEventListener('resize',fit);addEventListener('hashchange',fromHash);
+  document.addEventListener('keydown',function(e){
+    if(['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();show(cur+1);}
+    else if(['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key)>-1){e.preventDefault();show(cur-1);}
+    else if(e.key==='Home'){show(0);}else if(e.key==='End'){show(slides.length-1);}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));x0=null;});
+  document.getElementById('home').addEventListener('click',function(){show(0);});
+  fit();fromHash();show(cur);
+})();
+</script>
+<a class="dv-back" href="../../showcase.html">← Showcase</a>
+<style>.dv-back{position:fixed;left:14px;top:12px;z-index:2000;padding:7px 12px;border-radius:999px;font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:#fff;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.28);opacity:.75;transition:opacity .2s}.dv-back:hover,.dv-back:focus-visible{opacity:1}</style>
+<script>addEventListener('keydown',function(e){if(e.key==='Escape')location.href='../../showcase.html'});</script>
+</body>
+</html>
