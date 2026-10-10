@@ -1,0 +1,25 @@
+/* Site menu: shared by the landing, gallery, reference and showcase pages. */
+:root { --nav-h: 58px; --ink: #141413; --orange: #e83e12;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ---------- nav ---------- */
+.site-nav {
+  position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 28px;
+  background: var(--nav-bg, rgba(243, 239, 230, .97)); backdrop-filter: blur(12px) saturate(1.2); -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom: 1px solid var(--nav-line, rgba(20, 20, 19, .14));
+}
+.site-nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 20px/1 var(--serif); letter-spacing: -.02em; color: var(--nav-ink, var(--ink)); }
+.site-nav__mark { width: 26px; height: 26px; border-radius: 6px; flex: none; }
+.site-nav__links { display: flex; gap: 26px; align-items: center; }
+.site-nav__links a { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--nav-dim, #5d584d); padding: 6px 0; border-bottom: 2px solid transparent; transition: border-color .15s; }
+.site-nav__links a:hover { color: var(--nav-ink, var(--ink)); }
+.site-nav__links a[aria-current="page"] { color: var(--nav-ink, var(--ink)); border-bottom-color: var(--orange); }
+
+@media (max-width: 900px) {
+  .site-nav { padding: 0 16px; }
+  .site-nav__links { gap: 14px; }
+  .site-nav__links a { font-size: 11px; letter-spacing: .08em; }
+}
+@media (max-width: 560px) { .site-nav__links a:nth-child(n+4) { display: none; } }
