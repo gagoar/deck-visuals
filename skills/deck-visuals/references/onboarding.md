@@ -28,11 +28,12 @@ pop-culture profile" — independent of any deck.
    - **Degrade gracefully.** GIF fails → image-only card. Both fail → `degraded: true`
      title-only card. Never write an unverified URL. Write the verified set to a
      `cards.json` in an OS temp dir — that file is the per-run cache.
-3. **Launch the binary.** Pick the prebuilt binary matching the platform
-   (`uname -s` / `uname -m`) from `assets/onboarding/bin/`, e.g.
-   `dv-onboard-darwin-arm64`. Run it:
-   `dv-onboard --form onboard --data <cards.json> --out <results.json> --port 0`. It
-   needs no Go and no interpreter. Hand the user the `http://127.0.0.1:<port>/` it
+3. **Launch the binary.** Run the wrapper, which picks the binary for the platform
+   (`uname -s` / `uname -m`):
+   `assets/onboarding/dv-onboard --form onboard --data <cards.json> --out <results.json> --port 0`.
+   The first run downloads this release's binary and runs it only if it matches the
+   pinned `assets/onboarding/SHA256SUMS`; later runs use the cache. It needs no Go and
+   no interpreter (offline, with Go installed, it builds from `assets/onboarding/server/`). Hand the user the `http://127.0.0.1:<port>/` it
    prints. (The same binary serves the deck-time levity picker with
    `--form levity` — see `references/levity.md`.)
 4. **The user swipes.** Yes / No / Skip per card, then suggests anything missed. The

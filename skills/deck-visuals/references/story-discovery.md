@@ -100,7 +100,7 @@ Do not ask the user to name or describe colors — people rarely know their pale
 how to name it. The intake asks about the **subject world** (question 6), not colors.
 The default is the validated house palette (`assets/brand-palette.md`). If a per-deck
 accent theme fits the subject, it is chosen by **showing swatches to pick from**
-(the `dv-onboard --form palette` chooser, themes in `assets/palette-presets.md` —
+(the `assets/onboarding/dv-onboard --form palette` chooser, themes in `assets/palette-presets.md` —
 every theme shares the same validated data palette and only the accent color
 varies), and only the picked theme id is recorded on the concept-map header — never
 a color name.

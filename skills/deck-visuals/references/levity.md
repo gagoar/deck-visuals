@@ -204,9 +204,9 @@ per slot. Two surfaces, same rule — **Claude proposes, the human approves:**
 - **In chat (default).** List the 2-3 candidates per slot with shape/beat and the
   chosen scene; the human picks by replying. Best for a slot or two, or a quick pass.
 - **In a webpage.** For several slots, or when the GIFs should be seen side by side
-  before deciding, serve the visual picker — the same runtime-free binary and design
+  before deciding, serve the visual picker — the same picker server and design
   as onboarding, with `--form levity`:
-  `dv-onboard --form levity --data <slots.json> --out <selections.json> --port 0`.
+  `assets/onboarding/dv-onboard --form levity --data <slots.json> --out <selections.json> --port 0`.
   Hand the user the printed `127.0.0.1` URL; they pick one GIF per slide (or skip a
   slide), and it writes `selections.json`, then shuts down.
 

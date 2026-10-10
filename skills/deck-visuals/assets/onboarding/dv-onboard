@@ -1,0 +1,6 @@
+#!/bin/sh
+# dv-onboard — runs the picker server binary for this machine (downloaded and
+# checksum-verified on first use; see ../run-binary.sh).
+set -eu
+here="$(cd "$(dirname "$0")" && pwd)"
+exec "$here/../run-binary.sh" dv-onboard "$here" "$here/server/build.sh" "$@"
