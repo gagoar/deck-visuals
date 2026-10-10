@@ -1,13 +1,29 @@
 {
   "name": "deck-visuals",
+  "displayName": "deck-visuals",
   "version": "0.4.0",
   "description": "Guide and inject impactful visuals into HTML decks — inline-SVG concept diagrams, dataviz charts, icon anchors, and GIF levity — without rendering the deck itself.",
   "author": {
     "name": "gagoar",
     "url": "https://github.com/gagoar"
   },
-  "homepage": "https://github.com/gagoar/deck-visuals",
+  "homepage": "https://gagoar.github.io/deck-visuals/",
   "license": "MIT",
-  "keywords": ["presentations", "slides", "dataviz", "visuals", "gif", "icons"],
-  "skills": ["./skills/deck-visuals"]
+  "keywords": [
+    "presentations",
+    "slides",
+    "dataviz",
+    "visuals",
+    "gif",
+    "icons",
+    "html",
+    "svg",
+    "charts",
+    "diagrams",
+    "claude-code",
+    "plugin"
+  ],
+  "skills": [
+    "./skills/deck-visuals"
+  ]
 }
