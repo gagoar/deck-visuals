@@ -98,7 +98,9 @@ skills/deck-visuals/
     onboarding/
       picker.html             onboarding swipe page (local tool)
       levity-picker.html      deck-time levity GIF chooser (local tool)
-      picker.css              shared premium dark styling for both
+      palette-picker.html     accent-theme chooser (local tool)
+      picker.css              shared styling for all three: the site's cream and orange look
+      fonts/                  Fraunces + IBM Plex, compiled into the binary (OFL licenses inside)
       dv-onboard              POSIX wrapper for the picker binary (same scheme)
       SHA256SUMS              pinned hashes of the released dv-onboard binaries
       server/                 Go source for the picker binary
