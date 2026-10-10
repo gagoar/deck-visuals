@@ -13,8 +13,8 @@
 # Setting either skips writing SHA256SUMS (it would describe a partial build).
 #
 # go:embed cannot reach a parent directory, so we copy the canonical embedded assets
-# (picker.html, levity-picker.html, palette-picker.html, picker.css, bg.jpg) next to
-# main.go before building, then clean them up.
+# (picker.html, levity-picker.html, palette-picker.html, picker.css and the fonts/ dir)
+# next to main.go before building, then clean them up.
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,9 +22,10 @@ bin="${BIN_DIR:-$here/../bin}"
 targets="${TARGETS:-darwin/arm64 darwin/amd64 linux/amd64 linux/arm64 windows/amd64}"
 mkdir -p "$bin"
 
-embedded=(picker.html levity-picker.html palette-picker.html picker.css bg.jpg)
+embedded=(picker.html levity-picker.html palette-picker.html picker.css)
 for f in "${embedded[@]}"; do cp "$here/../$f" "$here/$f"; done
-trap 'for f in "${embedded[@]}"; do rm -f "$here/$f"; done' EXIT
+cp -R "$here/../fonts" "$here/fonts"
+trap 'for f in "${embedded[@]}"; do rm -f "$here/$f"; done; rm -rf "$here/fonts"' EXIT
 
 # Build from inside the module dir so `go build` finds go.mod regardless of the
 # caller's working directory (CI runs this script from the repo root).
