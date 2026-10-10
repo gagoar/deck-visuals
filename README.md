@@ -1,8 +1,34 @@
+<p><img src="docs/assets/favicon.svg" alt="deck-visuals icon" width="96" height="96"></p>
+
 # deck-visuals
 
-A Claude Code plugin that decides where a visual belongs in an HTML deck and
-which kind, then hands back a ready-to-inject fragment. It does not render
-decks.
+**Your deck already reads. Make it land.**
+
+[![Release](https://img.shields.io/github/v/release/gagoar/deck-visuals?color=2894EB)](https://github.com/gagoar/deck-visuals/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-199E70)](LICENSE)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-1B1F22)](https://gagoar.github.io/deck-visuals/)
+[![Stars](https://img.shields.io/github/stars/gagoar/deck-visuals?style=flat&color=2894EB)](https://github.com/gagoar/deck-visuals/stargazers)
+
+deck-visuals is a Claude Code plugin that decides where a visual belongs in an HTML
+deck and which kind, then hands back a ready-to-inject fragment. Inline-SVG concept
+diagrams, charts with a validated palette, icon anchors, and GIFs it checks
+before they ship. It does not render decks.
+
+![A slide of four bullet points, then the same slide with the bar chart deck-visuals injects](docs/assets/before-after.png)
+
+*Four bullets in, one chart out. The numbers are the same; the argument lands.*
+
+See it live: [gallery](https://gagoar.github.io/deck-visuals/gallery.html) ·
+[how it decides](https://gagoar.github.io/deck-visuals/reference.html) ·
+[site](https://gagoar.github.io/deck-visuals/)
+
+## Install
+
+```
+/plugin marketplace add gagoar/gago-plugins
+/plugin install deck-visuals@gago-plugins
+/reload-plugins
+```
 
 ## The three pillars
 
@@ -31,14 +57,6 @@ before it enters the deck — never on the finished `.html` file.
 
 See `skills/deck-visuals/SKILL.md` for the full six-step pipeline and
 `skills/deck-visuals/references/` for the per-flavor rules.
-
-## Install
-
-```
-/plugin marketplace add gagoar/gago-plugins
-/plugin install deck-visuals@gago-plugins
-/reload-plugins
-```
 
 ## Usage
 
