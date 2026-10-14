@@ -243,7 +243,7 @@ unchanged nodes.
 
 **Timeline:**
 Single horizontal line, chamfered (not circular) milestone markers, labels
-alternating above/below to avoid collision. Use the amber/pharos-family
+alternating above/below to avoid collision. Use the amber/marker-family
 status color for "you are here." Stays flat — a timeline has no structural
 hierarchy for depth to communicate.
 

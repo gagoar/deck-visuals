@@ -126,7 +126,7 @@ rather than inventing new ones:
 | Status | Hex | Source token |
 |---|---|---|
 | Success | `#34d399` | `--success` |
-| Warning / marker | `#ffb020` | `--pharos` |
+| Warning / marker | `#ffb020` | `--marker` |
 | Error / regression | `#ff5470` | `--drift` |
 | Info | `#3ea6ff` | `--code-line` (the deck accent itself) |
 
