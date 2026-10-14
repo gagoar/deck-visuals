@@ -77,8 +77,7 @@ the refreshed profile. Full flow: `references/onboarding.md`.
    `assets/fragments/levity-slide.html`. Let the human pick among the 2-3 candidates
    per slot either in chat or via the visual levity picker
    (`assets/onboarding/dv-onboard --form levity`) — see `references/levity.md`.
-6. **Deliver (existing).** Ship through the user's `deliver-doc` flow. This skill
-   does not deliver.
+The skill stops once the visuals are injected. It does not publish or deliver the deck.
 
 ## Hard rules
 
