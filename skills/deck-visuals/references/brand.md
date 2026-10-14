@@ -22,7 +22,7 @@ single hardcoded hex list.
 | `--text-dim` | `#56698a` | Muted text, captions |
 | `--code-line` (accent) | `#3ea6ff` | Primary accent — brand-palette slot 1 anchors here |
 | `--config-line` | `#c860f0` | Secondary accent (violet) |
-| `--pharos` | `#ffb020` | Marker / "you are here" amber |
+| `--marker` | `#ffb020` | Marker / "you are here" amber |
 | `--drift` | `#ff5470` | Warning / regression red |
 | `--success` | `#34d399` | Positive / success green |
 | `--font-display` | `'Space Grotesk', sans-serif` | Headlines |
@@ -30,7 +30,7 @@ single hardcoded hex list.
 | `--font-mono` | `'JetBrains Mono', monospace` | Data, tags, code |
 
 `assets/brand-palette.md` derives its validated 8-slot categorical palette from
-this same accent family and documents status colors that reuse `--pharos`,
+this same accent family and documents status colors that reuse `--marker`,
 `--drift`, and `--success` directly rather than inventing new ones.
 
 ## Two layers: fixed theme *shape* vs per-deck coordinated theme
