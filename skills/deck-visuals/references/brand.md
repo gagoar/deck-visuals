@@ -3,7 +3,7 @@
 The decks this plugin serves use one fixed **house** theme: dark, high-contrast,
 geometric display type. The token *shape* below — surface/panel/text roles, type,
 the categorical palette — is fixed; the house theme's specific hex values are read
-from a real shipped deck (`notes/src/pharos-pitch.html`, its `:root` block) — they
+from the `:root` block of a real shipped deck — they
 are not invented. Every other theme in `assets/palette-presets.md` carries the
 same token shape at coordinated, re-derived values (see below) — it is not a
 single hardcoded hex list.

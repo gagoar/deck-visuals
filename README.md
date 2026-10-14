@@ -56,7 +56,7 @@ fragment with its own scoped styles, and hands it back for injection into the
 slide that's already there. `iceberg` still owns the copy pass, run on prose
 before it enters the deck — never on the finished `.html` file.
 
-See `skills/deck-visuals/SKILL.md` for the full six-step pipeline and
+See `skills/deck-visuals/SKILL.md` for the full five-step pipeline and
 `skills/deck-visuals/references/` for the per-flavor rules.
 
 ## Usage
